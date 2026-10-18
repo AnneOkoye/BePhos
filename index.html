@@ -923,7 +923,7 @@ body[data-lp="dark"] .rd-sky{background:linear-gradient(#0B1626,#22334A);}
 .lp-table tbody tr:not(.cur){cursor:pointer}.lp-table tbody tr:not(.cur):hover{background:var(--lp-surface2)}.lp-table tr.cur{background:color-mix(in srgb,var(--lp-lit) 10%,transparent)}
 .lp-ledico{display:inline-block;vertical-align:middle;margin-right:6px}.lp-bar{display:inline-block;width:54px;height:6px;border-radius:3px;background:var(--lp-line);vertical-align:middle;overflow:hidden}.lp-bar i{display:block;height:100%;background:var(--lp-lit)}
 .lp-marks{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.lp-mark{display:flex;gap:10px;align-items:center;border:1px solid var(--lp-line);border-radius:12px;padding:10px;background:var(--lp-surface)}.lp-mark b{display:block;font:600 18px var(--serif)}.lp-mark span{font-size:12px;color:var(--lp-muted)}
-body[data-lp="dark"] .lp-focusbg{background:#14100B!important;}body[data-lp="dark"] .lp-focusbg .lp-wrap{background:#14100B;}
+body.lp-on[data-lp="dark"]{color-scheme:dark;}body[data-lp="dark"] .lp-focusbg{background:#14100B!important;}body[data-lp="dark"] .lp-focusbg .lp-wrap{background:#14100B;}
 .lp-focus{min-height:calc(100vh - 40px);display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--lp-ink);padding-top:6px}
 body[data-lp="dark"] .lp-focus{color:#E8DCC4}.lp-focus .lp-fcol{color:inherit}.lp-focus>.lp-row{width:100%}
 body[data-lp="dark"] .lp-ftime{color:#FFE3A8}body[data-lp="dark"] .lp-fnote{color:#BFAF92}
@@ -956,6 +956,63 @@ body[data-lp="dark"] .lp-ftime{color:#FFE3A8}body[data-lp="dark"] .lp-fnote{colo
 .pp-stamp small{font:700 8px var(--sans);letter-spacing:.08em;text-transform:uppercase;}
 .pp-stamp b{font:700 11px/1.15 var(--sans);margin:3px 0;}
 .pp-stamps{max-width:100%;}
+.pp-stamp::after{content:"";position:absolute;inset:-3px;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at 22% 30%,var(--pp-paper) 0 1.2px,transparent 2px),radial-gradient(circle at 71% 64%,var(--pp-paper) 0 1.6px,transparent 2.4px),radial-gradient(circle at 48% 86%,var(--pp-paper) 0 1px,transparent 1.8px),radial-gradient(circle at 84% 22%,var(--pp-paper) 0 1.4px,transparent 2.2px),radial-gradient(circle at 12% 74%,var(--pp-paper) 0 1px,transparent 1.6px);opacity:.9;}
+.pp-stamps{--pp-paper:#EFE9D8;}
+.pp-stamp.pp-vol,.pp-stamp.pp-visa{border-radius:10px;aspect-ratio:1.05;}
+.pp-stamp.pp-visa{box-shadow:inset 0 0 0 3px rgba(255,255,255,.35),inset 0 0 0 4.5px var(--c);}
+.pp-stamp.pp-trip{border-radius:50%/40%;aspect-ratio:1.18;}
+.pp-stamp.pp-focus{border-style:dashed;box-shadow:inset 0 0 0 5px rgba(255,255,255,.3),inset 0 0 0 6px var(--c);}
+.pp-stamp small svg{vertical-align:-2px;}
+body[data-lp="dark"] .pp-stamps{--pp-paper:#16130E;background:linear-gradient(180deg,#1A1610,#120F0B);border-color:#3A3226;}
+body[data-lp="dark"] .pp-stamp{filter:brightness(1.55) saturate(.9);box-shadow:inset 0 0 0 4px rgba(0,0,0,.25),inset 0 0 0 5.5px var(--c);}
+body[data-lp="dark"] .pp-stamp em{filter:brightness(.8);}
+.pp-shelf{display:grid;grid-auto-flow:column;grid-auto-columns:96px;gap:12px;overflow-x:auto;scrollbar-width:none;padding:14px;}
+.pp-shelf::-webkit-scrollbar{display:none;}
+.pp-stamp.pp-new{animation:ppPress .7s cubic-bezier(.2,1.4,.4,1) both;}
+@keyframes ppPress{0%{transform:scale(1.9) rotate(calc(var(--r) - 14deg));opacity:0}55%{opacity:1}100%{transform:scale(1) rotate(var(--r));opacity:.9}}
+@media (prefers-reduced-motion:reduce){.pp-stamp.pp-new{animation:none}}
+.lp-fdone{text-align:center;margin-top:10px;}
+.me-hero{display:flex;gap:16px;align-items:center;margin-top:8px;padding:18px;border:1px solid var(--lp-line);border-radius:20px;background:linear-gradient(160deg,var(--lp-surface2),var(--lp-surface));}
+.me-sig{flex:none;width:92px;height:92px;border-radius:50%;border:2px solid var(--lp-lit);padding:5px;background:var(--lp-bg);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px var(--lp-surface),0 0 26px var(--lp-glow);}
+.me-sig svg,.me-sig img{width:78px;height:78px;border-radius:50%}
+.me-id{min-width:0}.me-mantra{margin:8px 0 0;font:italic 500 16px/1.35 var(--serif);color:var(--lp-ink);}
+.me-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;}
+.me-tile{padding:12px 8px;border:1px solid var(--lp-line);border-radius:14px;background:var(--lp-surface);text-align:center;}
+.me-tile b{display:block;font:700 24px var(--serif);font-variant-numeric:tabular-nums;}.me-tile span{display:block;font-size:11.5px;color:var(--lp-muted);line-height:1.25;margin-top:2px}
+@media (max-width:420px){.me-tiles{grid-template-columns:repeat(2,1fr)}.me-hero{padding:14px;gap:12px}.me-sig{width:80px;height:80px}.me-sig svg,.me-sig img{width:66px;height:66px}}
+.me-empty{display:flex;gap:16px;align-items:center;}.me-empty .pp-stamp{width:96px;flex:none}
+.pf-orbit{position:relative;width:220px;height:220px;margin:14px auto 0;}
+.pf-orbit::before{content:"";position:absolute;inset:18px;border:1.5px dashed var(--lp-line);border-radius:50%;animation:pfSpin 60s linear infinite;}
+.pf-ring{position:absolute;left:50%;top:50%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;animation:pfPulse 2.6s ease-out infinite;}
+.pf-me{position:absolute!important;left:50%;top:50%;width:84px!important;height:84px!important;transform:translate(-50%,-50%);border:2px solid var(--lp-lit);background:var(--lp-bg);}
+.pf-seat{position:absolute;width:50px;height:50px;border:1.5px dashed var(--lp-faint);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--lp-faint);background:var(--lp-bg);font:600 18px var(--sans);animation:lgBob 2.4s ease-in-out infinite;}
+@keyframes pfSpin{to{transform:rotate(360deg)}}
+@keyframes pfPulse{0%{box-shadow:0 0 0 0 var(--lp-glow)}100%{box-shadow:0 0 0 52px rgba(0,0,0,0)}}
+@media (prefers-reduced-motion:reduce){.pf-orbit::before,.pf-ring,.pf-seat{animation:none}}
+.pf-steps{list-style:none;margin:22px 0 0;padding:0;}
+.pf-steps li{display:flex;gap:12px;position:relative;padding-bottom:16px;}
+.pf-steps li:not(:last-child)::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:var(--lp-line);}
+.pf-steps li.pf-done::before{background:var(--lp-lit);}
+.pf-dot{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--lp-line);display:flex;align-items:center;justify-content:center;font:700 12px var(--sans);background:var(--lp-bg);position:relative;z-index:1;}
+.pf-done .pf-dot{background:var(--lp-lit);border-color:var(--lp-lit);color:#000;}
+.pf-now .pf-dot{border-color:var(--lp-lit);}.pf-now .pf-dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--lp-lit);animation:pfBlink 1.4s ease-in-out infinite;}
+@keyframes pfBlink{50%{opacity:.25}}
+.pf-todo b{color:var(--lp-muted)}
+.pf-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.pf-chip{font-size:13px;padding:6px 11px;border-radius:999px;background:var(--lp-surface2);border:1px solid var(--lp-line);}
+.ch-rules{list-style:none;margin:0;padding:0;}.ch-rules li{padding:12px 0;border-bottom:1px solid var(--lp-line);}.ch-rules li:first-child{padding-top:0}.ch-rules li:last-child{border-bottom:0;padding-bottom:0}
+.ch-text{margin:6px 0 0;font:500 16px/1.4 var(--serif);}
+.ch-tally{display:flex;height:8px;border-radius:99px;background:var(--lp-surface2);overflow:hidden;margin-top:12px;border:1px solid var(--lp-line);}
+.ch-tally .y{background:#3F8A4A}.ch-tally .n{background:var(--lp-bad);margin-left:auto}
+.ch-who{display:flex;gap:4px}.ch-who .lp-sigil{opacity:.4}.ch-who .lp-sigil.y{opacity:1;box-shadow:0 0 0 2px #3F8A4A}.ch-who .lp-sigil.n{opacity:1;box-shadow:0 0 0 2px var(--lp-bad)}
+.ch-passed{border-color:#3F8A4A}.ch-failed{opacity:.75}
+.lp-fdone-stamp{display:flex;justify-content:center;}.lp-fdone-stamp .pp-stamp{width:150px;background:transparent;}.lp-fdone-stamp .pp-stamp b{font-size:18px}.lp-fdone-stamp .pp-stamp small{font-size:9.5px}
+.lp-fdone-ring{width:130px;height:130px;border-radius:50%;border:3px dashed var(--lp-lit);display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 34px var(--serif);color:var(--lp-ink)}.lp-fdone-ring small{font:600 12px var(--sans);color:var(--lp-muted)}
+.lp-nexts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media (max-width:360px){.lp-nexts{grid-template-columns:1fr}}
+.lp-next{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:14px;font:inherit;color:var(--lp-ink);cursor:pointer;}
+.lp-next b{display:block;font-size:14.5px;margin-bottom:2px}.lp-next-ic{width:32px;height:32px;flex:none;border-radius:10px;background:var(--lp-surface2);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--lp-lit)}
+.lp-next-ic svg{width:18px;height:18px}.lp-next-ic svg[viewBox="0 0 24 24"]{stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
 .pp-stamp em{position:absolute;right:2px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;font:700 12px/22px var(--sans);font-style:normal;}
 .pp-endorse p{margin:0 0 10px;padding:12px 14px;border-left:3px solid #C9A227;background:var(--lp-surface);border-radius:0 10px 10px 0;font-family:var(--serif);font-size:16px;line-height:1.4;}
 .pp-endorse span{display:block;margin-top:4px;font:500 12.5px var(--sans);color:var(--lp-muted);}
@@ -964,6 +1021,15 @@ body[data-lp="dark"] .lp-ftime{color:#FFE3A8}body[data-lp="dark"] .lp-fnote{colo
 .lp-leads{margin-top:14px;padding:12px 14px;border:1px dashed var(--lp-line);border-radius:14px;}
 .lp-leads>summary{cursor:pointer;min-height:32px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
 .lp-lead{display:flex;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--lp-line);}
+.lp-pv{display:flex;gap:12px;margin-top:12px;padding:10px;border:1px solid var(--lp-line);border-radius:14px;background:var(--lp-surface);align-items:flex-start;}
+.lp-pv img,.lp-pv-ph{width:84px;height:84px;flex:none;border-radius:10px;object-fit:cover;background:var(--lp-surface2,#F2F2F2);}
+.lp-pv-ph{display:grid;place-items:center;font:700 30px var(--serif);color:var(--lp-muted);}
+.lp-pv-b{flex:1;min-width:0;}
+.lp-pv-t{width:100%;border:0;border-bottom:1px dashed var(--lp-line);background:transparent;font:600 16px/1.3 var(--sans);color:var(--lp-ink);padding:2px 0;margin-top:2px;}
+.lp-pv-t:focus{outline:none;border-bottom-color:var(--lp-cta);}
+.lp-pv-d{margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.lp-pv-load{justify-content:center;padding:18px;}
+.lp-opp-img{display:block;width:100%;height:120px;object-fit:cover;border-radius:10px;margin:8px 0 2px;}
 .lp-opp{border:1px solid var(--lp-line);border-radius:14px;background:var(--lp-surface);}
 .lp-oppbtn{display:block;width:100%;text-align:left;background:none;border:0;padding:14px;color:var(--lp-ink);font:inherit;cursor:pointer;}
 .lp-opp-t{font-weight:600;font-size:16px;line-height:1.35;margin:6px 0 2px;}
@@ -1541,21 +1607,43 @@ function lpFocusLeft(){const f=LP.focus;if(!f)return 0;return Math.max(0,f.start
 function lpFocusEarn(mins){const left=LP_SHIFT_MAX-lpShiftToday(),earn=Math.max(0,Math.min(Math.floor(mins/25),left));LP.shifts=LP.shifts||{};LP.shifts[lpToday()]=lpShiftToday()+earn;if(earn){LP.minted=LP.minted||{};LP.minted.birch=(LP.minted.birch||0)+earn;}return earn;}
 function lpFocusFinish(ok){const f=LP.focus;if(!f)return;LP.focus=null;const d=lpToday();
   if(ok){LP.focusMin=LP.focusMin||{};LP.focusMin[d]=lpFocusMin(d)+f.mins;const earn=lpFocusEarn(f.mins);LP.focusLog=LP.focusLog||[];LP.focusLog.unshift({ts:Date.now(),mins:f.mins,task:f.task,cracks:f.cracks||0});LP.focusLog.length=Math.min(LP.focusLog.length,200);
+    lpT.fdone={mins:f.mins,task:f.task,earn,ts:Date.now(),day:d,stamp:lpFocusMin(d)>=25&&lpFocusMin(d)-f.mins<25};
     lpEvt('focus_done',{mins:f.mins});lpNotify('Focus block done',f.mins+' minutes on '+f.task+(earn?' · +'+earn+(earn===1?' log':' logs'):''));lpSave();lpPing('Focus block done','Your torch burned the full '+f.mins+' minutes.');toast('Block done. '+f.mins+' focused minutes'+(earn?' · +'+earn+(earn===1?' log':' logs'):''));}
   else{LP.focusLog=LP.focusLog||[];LP.focusLog.unshift({ts:Date.now(),mins:0,task:f.task,out:1});lpEvt('focus_out',{});lpSave();}}
 function lpFocusScreen(){lpEnsure();const f=LP.focus,i=lpInfo(),task=lpEsc((i&&i.s.goals[0]&&i.s.goals[0].t)||'');
+  if(!f&&lpT.fdone&&Date.now()-lpT.fdone.ts<3*3600e3)return lpFocusDoneScreen(i);
   if(!f){const hrs=i&&i.s.unit==='hours';return lpShell(`${lpHead('Today','lpDock')}
     <h1 class="lp-h2" style="margin-top:6px">Focus</h1><p class="lp-sub" style="margin-top:6px">Light a torch and work until it burns down. Leave the app and it flickers. Say you got distracted and it cracks. Three cracks and it goes out. Only you see cracks.</p>
     <div class="lp-card lp-stack" style="margin-top:16px;gap:12px"><div><label class="lp-label" for="lpFT">What are you working on?</label><input id="lpFT" class="lp-field" maxlength="60" value="${task}"/></div>
       <div class="lp-label">How long</div><div class="lp-row" style="gap:8px;flex-wrap:wrap">${[10,15,25,50,90].map(m=>`<button class="lp-btn ${m===25?'':'lp-ghost'} lp-sm" onclick="lp.focusStart(${m})">${m} min</button>`).join('')}</div><p class="lp-small" style="margin:6px 0 0">Short on time or energy? 10 or 15 minutes still counts toward your focused hours. Logs start at 25.</p>
       <p class="lp-small" style="margin:0">Today: ${lpFocusMin()} focused minutes. ${LP_SHIFT_MAX-lpShiftToday()>0?'Earn 1 log per 25 minutes, '+(LP_SHIFT_MAX-lpShiftToday())+' more today.':'Today’s focus logs are earned. Keep going for yourself.'}${hrs?' Your sprint is measured in hours, so focus blocks are how you fill it.':''}</p></div>
-    ${(LP.focusLog||[]).length?`<div class="lp-eyebrow" style="margin:18px 0 8px">Recent blocks</div><ul class="lp-list">${LP.focusLog.slice(0,6).map(x=>`<li style="justify-content:space-between"><span>${lpEsc(x.task)}</span><span class="lp-small">${x.out?'went out':x.mins+' min'} · ${lpAgo(x.ts)}</span></li>`).join('')}</ul>`:''}`,'dock');}
+    ${(LP.focusLog||[]).length?`<div class="lp-eyebrow" style="margin:18px 0 8px">Recent blocks</div><ul class="lp-list">${LP.focusLog.slice(0,6).map(x=>`<li style="justify-content:space-between"><span>${lpEsc(x.task)}${x.note?`<span class="lp-small" style="display:block">${lpEsc(x.note)}</span>`:''}</span><span class="lp-small">${x.out?'went out':x.mins+' min'} · ${lpAgo(x.ts)}</span></li>`).join('')}</ul>`:''}`,'dock');}
   return lpShell(`<div class="lp-focus">
     <div class="lp-row lp-between"><span class="lp-eyebrow lp-fcol">Focus · ${lpEsc(f.task)}</span><button class="lp-link lp-fcol" onclick="lp.focusEnd()">End</button></div>
     <div class="lp-ftime" id="lpFTime" aria-live="off">--:--</div>
     <canvas id="lpTorch" aria-label="Your torch. ${3-(f.cracks||0)} of 3 left before it goes out."></canvas>
     <p class="lp-fnote" id="lpFNote">${f.cracks?f.cracks+(f.cracks===1?' crack':' cracks')+'. One more distraction'+(f.cracks===2?' and it goes out.':' is fine. Two more and it goes out.'):'Phone down. Do the thing.'}</p>
     <div class="lp-row" style="gap:8px;justify-content:center;flex-wrap:wrap"><button class="lp-btn lp-ghost lp-sm" onclick="lp.focusCrack()">I got distracted</button></div></div>`,null,'','lp-focusbg');}
+function lpFocusDoneScreen(i){const x=lpT.fdone,tot=lpFocusMin(x.day),b=lpT.brk,logged=i&&i.logged;
+  const stamp=tot>=25?lpStampHTML({kind:'focus',t:tot+' MIN',top:'FOCUSED',bot:lpShortDate(x.day),c:'#B5651D',k:'f'+x.day},lpT.fdoneSeen?'':'pp-new'):'';lpT.fdoneSeen=1;
+  const act=(ic,t,sub,on)=>`<button class="lp-card lp-click lp-next" onclick="${on}"><span class="lp-next-ic">${ic}</span><span><b>${t}</b><span class="lp-small">${sub}</span></span></button>`;
+  if(b)return lpShell(`${lpHead('Today','lpDock')}<div class="lp-center" style="margin-top:30px"><div class="lp-eyebrow">Break</div><div class="lp-ftime" id="lpBrkT" style="color:var(--lp-ink)">5:00</div>
+    <p class="lp-sub" style="max-width:320px;margin:6px auto 0">Stand up. Water. Look at something far away. Not your phone.</p>
+    <div class="lp-row" style="gap:8px;justify-content:center;margin-top:22px"><button class="lp-btn lp-sm" onclick="lp.focusAgain()">Light another torch</button><button class="lp-btn lp-ghost lp-sm" onclick="lp.focusBreak(false)">End break</button></div></div>`,'dock');
+  return lpShell(`${lpHead('Today','lpDock')}
+    <div class="lp-fdone"><div class="lp-fdone-stamp">${stamp||`<div class="lp-fdone-ring">${x.mins}<small>min</small></div>`}</div>
+    <h1 class="lp-h2" style="margin-top:14px">Block done.</h1>
+    <p class="lp-sub" style="margin-top:6px">${x.mins} minutes on ${lpEsc(x.task)}. ${tot} focused minutes today${x.earn?` · +${x.earn} ${x.earn===1?'log':'logs'}`:''}.</p>
+    ${x.stamp?'<p class="lp-small" style="margin-top:4px">Today’s focus stamp is on your Passport.</p>':tot<25?`<p class="lp-small" style="margin-top:4px">${25-tot} more minutes today earns a focus stamp.</p>`:''}</div>
+    <div class="lp-card" style="margin-top:18px"><label class="lp-label" for="lpFNote2">What got done? <span class="lp-optl">optional, only you see it</span></label>
+      <div class="lp-row" style="gap:8px;margin-top:6px"><input id="lpFNote2" class="lp-field" maxlength="120" value="${lpEsc(((LP.focusLog||[])[0]||{}).note||'')}" placeholder="Drafted the intro" onkeydown="if(event.key==='Enter')lp.focusNote()"/><button class="lp-btn lp-sm lp-ghost" onclick="lp.focusNote()">Save</button></div></div>
+    <div class="lp-eyebrow" style="margin:20px 0 10px">What now</div>
+    <div class="lp-nexts">
+      ${act(LP_FLAME,'Another block',(x.mins>=25?x.mins:25)+' minutes, same task','lp.focusAgain()')}
+      ${act(lpIcon('cup'),'Take 5 minutes','A short break, then back','lp.focusBreak(true)')}
+      ${logged?act(lpIcon('moon'),'A minute in the dark room','Three short games. Can earn a log','lpT.gameFrom=\'lpFocus\';go(\'lpGame\')'):act(lpIcon('pen'),'Write today’s line','Tell your pod you showed up','lpT.fdone=null;go(\'lpDock\')')}
+      ${act(lpIcon('home'),'Back to Today','See your sprint','lpT.fdone=null;go(\'lpDock\')')}
+    </div>`,'dock');}
 function lpFocusAway(){const f=LP.focus;if(!f)return;if(document.hidden){f.awayAt=Date.now();lpSave();}else if(f.awayAt){const gone=Date.now()-f.awayAt;f.awayAt=null;lpSave();if(gone>20000&&state.screen==='lpFocus')lpHost('lpFocusAsk',`<div class="lp-modal"><div class="lp-sheet" role="dialog" aria-label="While you were away"><div class="lp-title">You were away ${Math.round(gone/60000)||'<1'} min</div><p class="lp-small" style="margin:6px 0 14px">Were you working on ${lpEsc(f.task)}? Be honest. Only you and your pod see the cracks.</p><div class="lp-row" style="gap:8px;flex-wrap:wrap"><button class="lp-btn lp-sm" onclick="lpHost('lpFocusAsk','')">Yes, I was working</button><button class="lp-btn lp-ghost lp-sm" onclick="lpHost('lpFocusAsk','');lp.focusCrack()">I got distracted</button></div></div></div>`);}}
 document.addEventListener('visibilitychange',()=>{try{lpFocusAway();}catch(e){}});
 function lpTorchMount(){const cv=document.getElementById('lpTorch');if(!cv){if(LF.raf)cancelAnimationFrame(LF.raf);LF.raf=0;return;}LF.cv=cv;LF.ctx=cv.getContext('2d');const dpr=Math.min(2,devicePixelRatio||1),w=Math.min(360,cv.parentNode.clientWidth-20),h=Math.round(w*1.15);cv.width=w*dpr;cv.height=h*dpr;cv.style.width=w+'px';cv.style.height=h+'px';LF.w=w;LF.h=h;LF.k=dpr;if(!LF.raf)LF.raf=requestAnimationFrame(lpTorchLoop);}
@@ -1717,7 +1805,7 @@ function lpSigil(name,size,over){
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="-50 -50 100 100" role="img" aria-label="${LP_TREES[i][0]} sigil"><defs>${T.defs}${tx>0?LP_TEX_DEFS[tx]:''}</defs>${T.shadow}<g${sway?` class="lp-tsw" style="animation-delay:-${lp}s"`:''}>${body}</g></svg>`;
 }
 function lpIcon(n){
-  const p={sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',msg:'<path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v7a2.5 2.5 0 01-2.5 2.5H10l-4.5 3.5V16A2.5 2.5 0 014 13.5z"/>',bell:'<path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15z"/><path d="M10 21h4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/>',plus:'<path d="M12 5v14M5 12h14"/>',home:'<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>'};
+  const p={cup:'<path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16M9 3c-.6 1 .6 2 0 3M12.5 3c-.6 1 .6 2 0 3"/>',home:'<path d="M4 11l8-6.5 8 6.5"/><path d="M6 9.5V20h12V9.5"/>',pen:'<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',msg:'<path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v7a2.5 2.5 0 01-2.5 2.5H10l-4.5 3.5V16A2.5 2.5 0 014 13.5z"/>',bell:'<path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15z"/><path d="M10 21h4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/>',plus:'<path d="M12 5v14M5 12h14"/>',home:'<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>'};
   return `<svg viewBox="0 0 24 24" aria-hidden="true">${p[n]||''}</svg>`;
 }
 /* lamp: tier = lantern|post|tall|double, st = lit|dim|dark. viewBox 0 0 80 120, ground at y=116 */
@@ -2041,14 +2129,31 @@ function lpPodPrefsScreen(){
 function lpPodFindingScreen(){
   const pr=LP.podPrefs||lpPodPrefsDefault(), i=lpInfo();
   const area=i&&i.s.goals[0]&&i.s.goals[0].cat?LP_GOALS.find(c=>c[0]===i.s.goals[0].cat)[1]:null;
-  const rows=[['Your age',pr.age||'Not set'],['Ages',pr.wantAge==='near'?'Close to yours':'Any'],['Gender',{any:'Anyone',women:'Women only',men:'Men only'}[pr.wantGender]],['Goal area',pr.sameArea?(area||'Same as yours'):'Any'],['Time zone',pr.sameTz?'Within about three hours':'Any'],['Check-in',lpDayName(pr.day)+' · '+pr.tone.toLowerCase()+' tone']];
+  const chips=[pr.wantAge==='near'?'Ages close to yours':'Any age',{any:'Anyone',women:'Women only',men:'Men only'}[pr.wantGender],pr.sameArea?(area||'Same goal area'):'Any goal area',pr.sameTz?'Within about 3 hours':'Any time zone',lpDayName(pr.day)+' check-ins',pr.tone+' tone'];
+  const since=LP.podReq&&LP.podReq.ts?lpShortDate(new Date(LP.podReq.ts).toISOString().slice(0,10)):lpShortDate(lpToday());
+  const step=(st,t,sub)=>`<li class="pf-${st}"><span class="pf-dot" aria-hidden="true">${st==='done'?'✓':''}</span><div><b>${t}</b><div class="lp-small">${sub}</div></div></li>`;
+  const seat=(k,x,y)=>`<span class="pf-seat" style="left:${x}px;top:${y}px;animation-delay:${k*.4}s">?</span>`;
   return lpShell(`<div class="lp-top"><span class="lp-title">POD</span></div>
-    <div class="lp-center" style="margin-top:8px"><div class="lg-search" aria-hidden="true">${[lpName(),'?','?','?'].map((n,k)=>`<span class="lp-sigil" style="width:52px;height:52px;${k?'border-style:dashed;color:var(--lp-faint);font:600 20px var(--sans)':''};animation-delay:${k*.3}s">${k?'?':lpSigil(n,44)}</span>`).join('')}</div>
-      <h1 class="lp-h2" style="margin-top:16px">Looking for your pod</h1>
-      <p class="lp-sub" style="margin-top:8px">We’ll match you with up to three people starting around the same time. Your sprint runs as normal while you wait.</p></div>
-    <div class="lp-card" style="margin-top:18px"><dl class="lp-kv">${rows.map(r=>`<dt>${r[0]}</dt><dd>${lpEsc(r[1])}</dd>`).join('')}</dl></div>
-    <p class="lp-small" style="margin-top:12px">Preview: matching starts when live accounts are switched on. Your request is saved on this device until then.</p>
-    <div class="lp-stack" style="margin-top:16px"><button class="lp-btn lp-ghost" onclick="lpT.prefsEdit=true;go('lpPodPrefs')">Change preferences</button><button class="lp-btn lp-ghost" onclick="go('lpInvite')">Invite people I know instead</button><button class="lp-link" style="align-self:center" onclick="lp.cancelPodReq()">Stop looking</button></div>`,'pod');
+    <div class="pf-orbit" aria-hidden="true"><span class="pf-ring"></span><span class="lp-sigil pf-me">${lpSigil(lpName(),72)}</span>${seat(0,85,-7)}${seat(1,165,131)}${seat(2,5,131)}</div>
+    <div class="lp-center"><h1 class="lp-h2" style="margin-top:10px">Looking for your pod</h1>
+      <p class="lp-sub" style="margin:8px auto 0;max-width:420px">Up to three people starting around the same time. Your sprint runs as normal while you wait.</p></div>
+    <ol class="pf-steps" aria-label="Where your request is">
+      ${step('done','Request saved',since)}
+      ${step('now','Matching','People who fit what you asked for, starting near you in time')}
+      ${step('todo','Your pod forms','You meet, and agree a charter together')}
+      ${step('todo','First check-in',lpDayName(pr.day)+', '+pr.tone.toLowerCase()+' tone')}
+    </ol>
+    <div class="lp-row lp-between" style="margin:20px 0 8px;align-items:baseline"><div class="lp-eyebrow">What you asked for</div><button class="lp-link" onclick="lpT.prefsEdit=true;go('lpPodPrefs')">Change</button></div>
+    <div class="pf-chips">${chips.map(c=>`<span class="pf-chip">${lpEsc(c)}</span>`).join('')}</div>
+    <div class="lp-eyebrow" style="margin:22px 0 10px">While you wait</div>
+    <div class="lp-nexts">
+      <button class="lp-card lp-click lp-next" onclick="go('lpFocus')"><span class="lp-next-ic">${LP_FLAME}</span><span><b>Focus block</b><span class="lp-small">${lpFocusMin()} min today</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="go('lpDock')"><span class="lp-next-ic">${lpIcon('pen')}</span><span><b>${i&&i.logged?'Today':'Today’s line'}</b><span class="lp-small">${i&&i.logged?'You showed up today':'Show up, even solo'}</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="go('lpInvite')"><span class="lp-next-ic">${lpIcon('msg')}</span><span><b>Invite people</b><span class="lp-small">Make a pod with people you know</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="go('lpWorld')"><span class="lp-next-ic">${lpIcon('home')}</span><span><b>The city</b><span class="lp-small">Walk around while you wait</span></span></button>
+    </div>
+    <p class="lp-small lp-center" style="margin-top:16px">Preview: matching starts when live accounts are switched on. Your request is saved on this device until then.</p>
+    <div class="lp-center" style="margin-top:8px"><button class="lp-link" onclick="lp.cancelPodReq()">Stop looking</button></div>`,'pod');
 }
 function lpCharterRules(){const pr=LP.podPrefs||lpPodPrefsDefault();
   return [['How we talk',{Gentle:'Gentle. Encouragement first.',Straight:'Straight. Honest, not harsh.',Blunt:'Blunt. We say the hard thing.'}[pr.tone]],['Check-in',{Sun:'Sundays',Mon:'Mondays',Tue:'Tuesdays',Wed:'Wednesdays',Thu:'Thursdays',Fri:'Fridays',Sat:'Saturdays'}[pr.day]+', before 9pm.'],['What we share','Whether we showed up. Not what we wrote.'],['If someone goes quiet',pr.quiet==='two'?'A nudge after two dark days.':'One nudge. Then leave them.'],['Anchor','Rotates every three weeks.']];}
@@ -2284,17 +2389,52 @@ function lpChatScreen(){
       ${msgs.length?msgs.map(m=>`<div class="lp-msg ${m.who===me?'me':''}"><small>${lpEsc(m.who)} · ${lpClock(m.t)}</small><div class="lp-bubble">${lpEsc(m.text)}</div></div>`).join(''):'<div class="lp-nodata">Nothing here yet. Say something short.</div>'}
     </div>`,null,`<div class="lp-compose"><div class="lp-compose-in"><input id="lpMsg" class="lp-field" maxlength="500" placeholder="Message" aria-label="Message" onkeydown="if(event.key==='Enter')lp.send()"/><button class="lp-btn lp-sm" onclick="lp.send()">Send</button></div></div>`);
 }
+const LP_CHARTER_FLOOR='Merroes rules always apply: nobody asks anyone for money, lines stay inside the pod, and harassment gets reported. A pod can make its rules stricter than these, never looser.';
+function lpCharter(){const c=LP.charter=LP.charter||{};if(!c.rules)c.rules=lpCharterRules().map(r=>({h:r[0],t:r[1]}));c.props=c.props||[];
+  if((LP.charterProposals||[]).length){LP.charterProposals.forEach(x=>c.props.push({id:'p'+x.ts,kind:'add',h:'New rule',t:x.text,by:lpName(),ts:x.ts,votes:{[lpName()]:true},status:'open'}));LP.charterProposals=[];}
+  const p=LP.pod;if(p&&lpSample()&&!c.seeded&&p.members.length){c.seeded=1;c.props.push({id:'ps1',kind:'add',h:'Phone-free first block',t:'On check-in day we each do one focus block before opening the chat.',by:p.members[0],ts:Date.now()-3*3600e3,votes:Object.fromEntries(p.members.map((m,k)=>[m,k<2])),status:'open'});}
+  lpCharterTick();return c;}
+function lpCharterVoters(){const p=LP.pod;return p?p.members.concat([lpName()]):[lpName()];}
+// Sample pods vote on their own after a short wait, so the preview behaves like a real pod. Real votes sync when accounts are live.
+function lpCharterTick(){const c=LP.charter,p=LP.pod;if(!c)return;const vs=lpCharterVoters(),n=vs.length,now=Date.now();let changed=0;
+  c.props.forEach(x=>{if(x.status!=='open')return;
+    if(p&&lpSample()&&x.by===lpName())p.members.forEach(m=>{if(x.votes[m]==null&&now-x.ts>(15+lpHash(x.id+m)%45)*1000){x.votes[m]=lpHash(m+x.id)%4!==0;changed=1;}});
+    const yes=vs.filter(v=>x.votes[v]===true).length,no=vs.filter(v=>x.votes[v]===false).length;
+    if(yes>n/2){x.status='passed';x.closed=now;lpCharterApply(x);changed=1;}
+    else if(no>=n/2||now-x.ts>48*3600e3){x.status='failed';x.closed=now;changed=1;}});
+  if(changed)lpSave();}
+function lpCharterApply(x){const r=LP.charter.rules,tally=lpCharterVoters().filter(v=>x.votes[v]===true).length+'–'+lpCharterVoters().filter(v=>x.votes[v]===false).length,note='Agreed '+lpShortDate(lpToday())+' · '+tally;
+  if(x.kind==='add')r.push({h:x.h,t:x.t,note});else if(x.kind==='edit'&&r[x.idx])r[x.idx]={h:r[x.idx].h,t:x.t,note};else if(x.kind==='remove'&&r[x.idx])r.splice(x.idx,1);
+  lpNotify('Charter changed',(x.kind==='remove'?'Removed: ':x.kind==='add'?'Added: ':'Changed: ')+x.h);}
+function lpCharterProp(x){const vs=lpCharterVoters(),me=lpName(),n=vs.length,yes=vs.filter(v=>x.votes[v]===true).length,no=vs.filter(v=>x.votes[v]===false).length,mine=x.votes[me],need=Math.floor(n/2)+1;
+  const what=x.kind==='add'?`Add <b>${lpEsc(x.h)}</b>`:x.kind==='remove'?`Remove <b>${lpEsc(x.h)}</b>`:`Change <b>${lpEsc(x.h)}</b> to`;
+  const left=Math.max(0,Math.ceil((x.ts+48*3600e3-Date.now())/3600e3));
+  return `<div class="lp-card ch-prop ch-${x.status}"><div class="lp-small">${x.by===me?'You':lpEsc(x.by)} proposed · ${x.status==='open'?left+'h left':x.status==='passed'?'passed':'didn’t pass'}</div>
+    <div style="margin-top:6px">${what}</div>${x.kind!=='remove'?`<p class="ch-text">“${lpEsc(x.t)}”</p>`:''}
+    <div class="ch-tally" role="img" aria-label="${yes} yes, ${no} no, ${n-yes-no} still to vote. ${need} yes votes pass it."><i class="y" style="width:${yes/n*100}%"></i><i class="n" style="width:${no/n*100}%"></i></div>
+    <div class="lp-row lp-between" style="margin-top:6px;align-items:center;flex-wrap:wrap;gap:6px"><span class="lp-small">${yes} yes · ${no} no · ${need} of ${n} needed</span><span class="ch-who">${vs.map(v=>`<span class="lp-sigil ${x.votes[v]===true?'y':x.votes[v]===false?'n':''}" title="${lpEsc(v)}: ${x.votes[v]===true?'yes':x.votes[v]===false?'no':'not yet'}" style="width:24px;height:24px">${lpSigil(v,18)}</span>`).join('')}</span></div>
+    ${x.status==='open'?`<div class="lp-row" style="gap:8px;margin-top:10px;flex-wrap:wrap"><button class="lp-btn lp-sm ${mine===true?'':'lp-ghost'}" aria-pressed="${mine===true}" onclick="lp.chVote('${x.id}',true)">Yes</button><button class="lp-btn lp-sm ${mine===false?'':'lp-ghost'}" aria-pressed="${mine===false}" onclick="lp.chVote('${x.id}',false)">No</button>${x.by===me?`<button class="lp-link" style="margin-left:auto" onclick="lp.chWithdraw('${x.id}')">Withdraw</button>`:''}</div>`:''}</div>`;}
 function lpCharterScreen(){
-  lpEnsure(); const p=LP.pod; const rules=[['Tone','Honest. Not harsh.'],['Check-in','Sundays, before 9pm.'],['What we share','Whether we showed up. Not what we wrote.'],['If someone goes quiet','One nudge. Then leave them.'],['Anchor rotation','Every three weeks. Alphabetical.']];
+  lpEnsure(); const p=LP.pod,c=lpCharter(),open=c.props.filter(x=>x.status==='open'),done=c.props.filter(x=>x.status!=='open').slice(-4).reverse(),f=lpT.chForm,n=lpCharterVoters().length;
   return lpShell(`${lpHead('Pod','lpPod','Charter')}
-    <h1 class="lp-h2">Our pod</h1>
+    <h1 class="lp-h2">Our charter</h1>
     ${lpSample()?'<div style="margin:8px 0 0"><span class="lp-preview">Preview pod</span></div>':''}
-    <div class="lp-card" style="margin-top:18px"><ul class="lp-list">${rules.map(r=>`<li style="display:block"><div class="lp-eyebrow">${r[0]}</div><div style="margin-top:4px;font-size:16px">${r[1]}</div></li>`).join('')}</ul></div>
-    ${p?`<div class="lp-row" style="margin-top:14px;gap:0">${p.members.concat([lpName()]).map((n,k)=>`<span class="lp-sigil" style="width:34px;height:34px;margin-left:${k?-8:0}px;border:2px solid var(--lp-bg)">${lpSigil(n,26)}</span>`).join('')}</div>`:''}
-    <p class="lp-small" style="margin-top:8px">${p?`Agreed by all ${p.members.length+1} on ${lpLong(p.since||lpToday())}.`:'Set when your pod forms.'} A change needs everyone to agree.</p>
-    ${LP.charterProposals.length?`<div class="lp-eyebrow" style="margin-top:22px">Proposed changes</div><ul class="lp-list">${LP.charterProposals.map((c,ci)=>`<li style="display:block"><div>${lpEsc(c.text)}</div><div class="lp-small" style="margin-top:3px">You proposed this · waiting for the pod to agree · <button class="lp-link" onclick="lp.withdrawProp(${ci})">Withdraw</button></div></li>`).join('')}</ul>`:''}
-    ${lpT.proposing?`<div class="lp-stack" style="margin-top:16px"><textarea id="lpProp" class="lp-field" maxlength="200" placeholder="What would you change?"></textarea><div class="lp-row"><button class="lp-btn lp-sm" onclick="lp.propose()">Send proposal</button><button class="lp-btn lp-ghost lp-sm" onclick="lpT.proposing=false;render()">Cancel</button></div></div>`:`<button class="lp-btn lp-ghost" style="margin-top:18px" onclick="lpT.proposing=true;render()">Propose a change</button>`}`);
+    <p class="lp-sub" style="margin-top:8px">The rules your pod runs on. Anyone can propose a change. It passes when more than half the pod (${Math.floor(n/2)+1} of ${n}) votes yes, and voting closes after 48 hours.</p>
+    ${p?`<div class="lp-row" style="margin-top:12px;gap:0">${p.members.concat([lpName()]).map((m,k)=>`<span class="lp-sigil" style="width:34px;height:34px;margin-left:${k?-8:0}px;border:2px solid var(--lp-bg)">${lpSigil(m,26)}</span>`).join('')}</div>`:''}
+    <div class="lp-card" style="margin-top:14px"><ol class="ch-rules">${c.rules.map((r,k)=>`<li><div class="lp-row lp-between" style="gap:8px;align-items:baseline"><div class="lp-eyebrow">${lpEsc(r.h)}</div>${p?`<button class="lp-link lp-small" aria-label="Propose a change to ${lpEsc(r.h)}" onclick="lp.chForm('edit',${k})">Change</button>`:''}</div><div style="margin-top:4px;font-size:16px">${lpEsc(r.t)}</div>${r.note?`<div class="lp-small" style="margin-top:3px">${lpEsc(r.note)}</div>`:''}</li>`).join('')}</ol></div>
+    <p class="lp-small" style="margin-top:8px">${LP_CHARTER_FLOOR}</p>
+    ${!p?`<p class="lp-small" style="margin-top:12px">Your pod votes on these once it forms.</p>`:f?lpCharterForm(c,f):`<button class="lp-btn lp-ghost" style="margin-top:16px;width:100%" onclick="lp.chForm('add')">Propose a new rule</button>`}
+    ${open.length?`<div class="lp-eyebrow" style="margin:24px 0 10px">Open votes · ${open.length}</div><div class="lp-stack" style="gap:10px">${open.map(lpCharterProp).join('')}</div>`:''}
+    ${done.length?`<div class="lp-eyebrow" style="margin:24px 0 10px">Decided</div><div class="lp-stack" style="gap:10px">${done.map(lpCharterProp).join('')}</div>`:''}
+    ${p&&!lpSample()?'<p class="lp-small" style="margin-top:14px">Preview: votes are saved on this device. They reach your pod when live accounts are switched on.</p>':''}`);
 }
+function lpCharterForm(c,f){const r=c.rules[f.idx];
+  return `<div class="lp-card lp-stack" style="margin-top:16px;gap:10px"><div class="lp-title" style="font-size:17px">${f.kind==='add'?'Propose a new rule':'Propose a change to “'+lpEsc(r?r.h:'')+'”'}</div>
+    ${f.kind==='edit'?`<div class="lp-row" style="gap:6px"><button class="lp-chip sel" aria-pressed="true">Reword it</button><button class="lp-chip" onclick="lp.chForm('remove',${f.idx})">Remove it</button></div>`:f.kind==='remove'?`<div class="lp-row" style="gap:6px"><button class="lp-chip" onclick="lp.chForm('edit',${f.idx})">Reword it</button><button class="lp-chip sel" aria-pressed="true">Remove it</button></div><p class="lp-small" style="margin:0">Now: “${lpEsc(r?r.t:'')}”</p>`:''}
+    ${f.kind==='add'?`<div><label class="lp-label" for="lpChH">Name</label><input id="lpChH" class="lp-field" maxlength="40" placeholder="Phone-free first block"/></div>`:''}
+    ${f.kind!=='remove'?`<div><label class="lp-label" for="lpChT">${f.kind==='add'?'The rule':'New wording'}</label><textarea id="lpChT" class="lp-field" maxlength="160" style="min-height:70px" placeholder="${f.kind==='add'?'What everyone agrees to do':lpEsc(r?r.t:'')}"></textarea></div>`:''}
+    <div class="lp-row" style="gap:8px"><button class="lp-btn lp-sm" onclick="lp.chPropose()">Put it to a vote</button><button class="lp-btn lp-ghost lp-sm" onclick="lpT.chForm=null;render()">Cancel</button></div>
+    <p class="lp-small" style="margin:0">Your vote counts as yes. Rules that ask for money or loosen Merroes safety rules can’t be proposed.</p></div>`;}
 function lpAnchorScreen(){
   lpEnsure(); const i=lpInfo(); if(!i||!LP.pod) return lpPodMatchScreen();
   const a=lpAnchor(i), me=lpName(), mine=a===me, p=LP.pod; p.focus=p.focus||{};
@@ -2835,13 +2975,17 @@ function lpMantraHTML(){const v=((LP.user&&LP.user.mantra)||'').trim();return `<
   <input id="lpMantraIn" class="lp-field" maxlength="60" value="${lpEsc(v)}" placeholder="Start ugly. Finish anyway." onkeydown="if(event.key==='Enter')lp.mantraSave()"/>
   <div class="lp-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">${LP_MANTRA_IDEAS.map(x=>`<button class="lp-chip" onclick="document.getElementById('lpMantraIn').value='${x}'">${x}</button>`).join('')}</div>
   <div class="lp-row" style="gap:8px;margin-top:14px"><button class="lp-btn lp-sm" onclick="lp.mantraSave()">Save</button>${v?`<button class="lp-btn lp-ghost lp-sm" onclick="document.getElementById('lpMantraIn').value='';lp.mantraSave()">Remove</button>`:''}</div></div></div>`;}
-function lpPassStamps(){const fin=LP.finished.slice().sort((a,b)=>a.end.localeCompare(b.end)),vol=((LP.give&&LP.give.logs)||[]),rec=LP.recognisedBy||[];
-  const cols=['#2F5E9E','#8E3B2A','#3F7A3B','#6B3E8C','#B5651D','#2E6F6A'];
-  const st=(t,top,bot,c,k,seal)=>`<div class="pp-stamp" style="--c:${c};--r:${(lpHash(k)%17)-8}deg"><small>${top}</small><b>${t}</b><small>${bot}</small>${seal?'<em>✓</em>':''}</div>`;
-  const sp=fin.map((f,n)=>st(lpEsc(f.title.length>22?f.title.slice(0,21)+'…':f.title),'SPRINT '+(n+1),lpShortDate(f.end)+' · '+(f.lit||0)+'/'+f.days+' days',cols[n%cols.length],f.id,!!f.proof)).join('');
-  const vs=vol.map(v=>st(lpEsc(v.org.length>22?v.org.slice(0,21)+'…':v.org),'VOLUNTEERED',v.hours+'h · '+lpShortDate(v.date),v.confirmed?'#1F6B3A':'#777',v.id,!!v.confirmed)).join('');
-  const ts=(LP.trips||[]).filter(x=>x.to!==(lpHomeL()||[])[0]).slice(0,12).map((x,n)=>st(lpEsc(x.to),x.mode==='plane'?'ARRIVED BY AIR':x.mode==='train'?'ARRIVED BY TRAIN':'ARRIVED BY COACH',lpShortDate(x.date)+' · '+x.mins+' min work','#2E6F6A','tr'+n+x.date,false)).join('')+Object.keys(LP.visas||{}).map(cc=>{const v=LP.visas[cc];return st('VISA · '+cc,'GRANTED',lpShortDate(v.granted),'#6B3E8C','v'+cc,true);}).join('');
-  return `${sp||vs||ts?`<div class="lp-eyebrow" style="margin:22px 0 10px">Stamps</div><div class="pp-stamps">${sp}${vs}${ts}</div><p class="lp-small" style="margin-top:6px">✓ on a sprint means it has a proof link. ✓ on volunteering means the organisation confirmed the hours.</p>`:`<p class="lp-small" style="margin-top:14px">Your first stamp is added when you finish a sprint.</p>`}
+const LP_FLAME='<svg viewBox="0 0 12 16" width="10" height="13" aria-hidden="true"><path d="M6 1c1 3 4 4.5 4 8.5A4 4 0 0 1 2 9.5C2 7 3.5 6 4 4c.8 1.2 1.2 2 1 3.4C6.6 6 6.6 3.5 6 1z" fill="currentColor"/></svg>';
+function lpStampData(){const out=[],cols=['#2F5E9E','#8E3B2A','#3F7A3B','#6B3E8C','#B5651D','#2E6F6A'];
+  (LP.finished||[]).slice().sort((a,b)=>a.end.localeCompare(b.end)).forEach((f,n)=>out.push({kind:'sprint',t:f.title.length>22?f.title.slice(0,21)+'…':f.title,top:'SPRINT '+(n+1),bot:lpShortDate(f.end)+' · '+(f.lit||0)+'/'+f.days+' days',c:cols[n%cols.length],k:f.id,seal:!!f.proof,d:f.end}));
+  Object.keys(LP.focusMin||{}).filter(d=>LP.focusMin[d]>=25).forEach(d=>out.push({kind:'focus',t:LP.focusMin[d]+' MIN',top:'FOCUSED',bot:lpShortDate(d),c:'#B5651D',k:'f'+d,d}));
+  ((LP.give&&LP.give.logs)||[]).forEach(v=>out.push({kind:'vol',t:v.org.length>22?v.org.slice(0,21)+'…':v.org,top:'VOLUNTEERED',bot:v.hours+'h · '+lpShortDate(v.date),c:v.confirmed?'#1F6B3A':'#777',k:v.id,seal:!!v.confirmed,d:v.date}));
+  (LP.trips||[]).filter(x=>x.to!==(lpHomeL()||[])[0]).forEach((x,n)=>out.push({kind:'trip',t:x.to,top:x.mode==='plane'?'ARRIVED BY AIR':x.mode==='train'?'ARRIVED BY TRAIN':'ARRIVED BY COACH',bot:lpShortDate(x.date)+' · '+x.mins+' min work',c:'#2E6F6A',k:'tr'+n+x.date,d:x.date}));
+  Object.keys(LP.visas||{}).forEach(cc=>{const v=LP.visas[cc];out.push({kind:'visa',t:'VISA · '+cc,top:'GRANTED',bot:lpShortDate(v.granted),c:'#6B3E8C',k:'v'+cc,seal:true,d:v.granted});});
+  return out.sort((a,b)=>(b.d||'').localeCompare(a.d||''));}
+function lpStampHTML(x,cls){return `<div class="pp-stamp pp-${x.kind}${cls?' '+cls:''}" style="--c:${x.c};--r:${(lpHash(x.k)%17)-8}deg"><small>${x.kind==='focus'?LP_FLAME+' ':''}${lpEsc(x.top)}</small><b>${lpEsc(x.t)}</b><small>${lpEsc(x.bot)}</small>${x.seal?'<em>✓</em>':''}</div>`;}
+function lpPassStamps(){const all=lpStampData(),rec=LP.recognisedBy||[];
+  return `${all.length?`<div class="lp-row lp-between" style="margin:22px 0 10px;align-items:baseline"><div class="lp-eyebrow">Stamps</div><span class="lp-small">${all.length}</span></div><div class="pp-stamps">${all.map(x=>lpStampHTML(x)).join('')}</div><p class="lp-small" style="margin-top:6px">Sprints, days with 25+ focused minutes, volunteering and trips. ✓ on a sprint means it has a proof link; on volunteering, the organisation confirmed the hours.</p>`:`<p class="lp-small" style="margin-top:14px">Your first stamp comes with your first 25 focused minutes.</p>`}
   ${rec.length?`<div class="lp-eyebrow" style="margin:22px 0 10px">Endorsements</div><div class="pp-endorse">${rec.map(r=>`<p>“${lpEsc(r.why)}”<span>${lpEsc(r.from)} · pod mate · ${lpShortDate(r.date)}</span></p>`).join('')}</div>`:''}`;}
 function lpLedgerScreen(){
   lpEnsure(); const list=LP.finished.slice().sort((a,b)=>b.end.localeCompare(a.end)),i=lpInfo(),S=lpLedgerStats(),u=LP.user||{},city=u.city&&u.city.name;
@@ -2853,8 +2997,8 @@ function lpLedgerScreen(){
     ${lpPassPage()}
     <div class="lp-row lp-noprint" style="gap:8px;margin-top:14px;flex-wrap:wrap"><button class="lp-btn lp-sm" onclick="lp.passShare()">Share summary</button><button class="lp-btn lp-ghost lp-sm" onclick="window.print()">Print or save PDF</button><button class="lp-btn lp-ghost lp-sm" onclick="lp.ledgerCsv()">Download CSV</button></div>
     <p class="lp-small lp-noprint" style="margin-top:8px">${LP.prefs.street?'Anyone with your link can see this summary once accounts are live.':'Only you can see this. Turn on “Show my Passport” in Settings to share a link.'}</p>
-    <details class="pp-full"${lpT.ppFull?' open':''} ontoggle="lpT.ppFull=this.open"><summary>Full record</summary>
     ${lpPassStamps()}
+    <details class="pp-full"${lpT.ppFull?' open':''} ontoggle="lpT.ppFull=this.open"><summary>Full record</summary>
     <div class="lp-stats" style="margin-top:12px">${tile((S.fm/60).toFixed(S.fm<600?1:0),'focused hours')}${tile(S.anc,'weeks anchoring')}${tile(S.org,'actions organised')}${tile(con.length,'opportunities shared')}</div>
     <div class="lp-eyebrow" style="margin:22px 0 10px">The last six months</div>${lpHeat()}
     <div class="lp-eyebrow" style="margin:22px 0 10px">Focused minutes, last 14 days</div>${lpFocusBars()}
@@ -2935,7 +3079,15 @@ Object.assign(lp,{
     LP.spent=LP.spent||{};LP.spent.birch=(LP.spent.birch||0)+3;(LP.recognised=LP.recognised||[]).unshift({to,why:why.slice(0,120),date:lpToday()});lpEvt('recognised',{});lpSave();lp.recSheet(false);toast(to+' will see it on their Passport');render();},
   nudge(n){const i=lpInfo();LP.nudges[n+'_'+i.week]=true;lpSave();toast('Nudge sent to '+n);render();},
   send(){const el=document.getElementById('lpMsg');const v=(el.value||'').trim();if(!v)return;const k=lpT.thread||'pod';(LP.chat[k]=LP.chat[k]||[]).push({who:lpName(),t:Date.now(),text:v});lpSave();render();setTimeout(()=>{window.scrollTo(0,document.body.scrollHeight);const m=document.getElementById('lpMsg');if(m)m.focus();},80);},
-  propose(){const v=(document.getElementById('lpProp').value||'').trim();if(!v){toast('Write the change first');return;}LP.charterProposals.push({text:v,ts:Date.now()});lpT.proposing=false;lpSave();toast('Proposal saved');render();},
+  chForm(kind,idx){lpT.chForm=kind?{kind,idx}:null;render();setTimeout(()=>{const e=document.getElementById(kind==='add'?'lpChH':'lpChT');if(e)e.focus();},50);},
+  chPropose(){const c=lpCharter(),f=lpT.chForm;if(!f)return;const g=id=>((document.getElementById(id)||{}).value||'').replace(/\s+/g,' ').trim();
+    const r=c.rules[f.idx],h=f.kind==='add'?g('lpChH'):(r&&r.h),t=f.kind==='remove'?'':g('lpChT');
+    if(!h||h.length<3){toast('Give the rule a short name');return;}if(f.kind!=='remove'&&t.length<6){toast('Write the rule in a sentence');return;}
+    if(LP_OPP_FEE.test(t)||/\b(pay|fee|money|send|naira|cash|airtime)\b/i.test(t)){toast('Pod rules can’t involve money. Merroes keeps that off the table.');return;}
+    if(c.props.filter(x=>x.status==='open').length>=5){toast('Five votes are already open. Let some close first.');return;}
+    c.props.push({id:'p'+Date.now(),kind:f.kind,idx:f.idx,h,t,by:lpName(),ts:Date.now(),votes:{[lpName()]:true},status:'open'});lpT.chForm=null;lpCharterTick();lpSave();lpEvt('charter_propose',{kind:f.kind});toast('Put to a vote');render();},
+  chVote(id,v){const c=lpCharter(),x=c.props.find(p=>p.id===id);if(!x||x.status!=='open')return;x.votes[lpName()]=v;lpCharterTick();lpSave();lpEvt('charter_vote',{});toast(x.status==='passed'?'Passed. The charter is updated.':x.status==='failed'?'That one didn’t pass.':'Vote counted');render();},
+  chWithdraw(id){const c=lpCharter();c.props=c.props.filter(p=>p.id!==id);lpSave();toast('Withdrawn');render();},
   doneGoal(k,v){const i=lpInfo();lpT.doneGoals=lpT.doneGoals||i.s.goals.map(()=>true);lpT.doneGoals[k]=v;},
   light(){
     const i=lpInfo(); if(!i) return; const s=i.s,done=lpT.doneGoals||s.goals.map(()=>true);
@@ -3705,7 +3857,7 @@ Object.assign(lp,{
     try{const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Merroes//Campfire//EN','BEGIN:VEVENT','UID:'+id+'-'+f(t)+'@merros','DTSTAMP:'+f(new Date()),'DTSTART:'+f(t),'DTEND:'+f(e),'SUMMARY:Campfire · '+d.name,'DESCRIPTION:A room to talk. Stories, struggles, what worked this week.','END:VEVENT','END:VCALENDAR'].join('\r\n');
       const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));a.download='campfire.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}catch(x){}
     toast('Reminder set');render();},
-  withdrawProp(i){LP.charterProposals.splice(i,1);lpSave();toast('Withdrawn');render();},
+
   setFocus(){const v=(document.getElementById('lpFocus').value||'').trim();const i=lpInfo();LP.pod.focus=LP.pod.focus||{};LP.pod.focus[i.week]=v;lpSave();toast(v?'Focus set':'Focus cleared');render();},
   pf(k,v){lpT.posting[k]=v;const f=lpT.posting,K=LP_PK[f.kind],ok=f.takeaway&&f.takeaway.trim().length>=8&&(!K.req||(f.lesson&&f.lesson.trim().length>=8))&&!(f.kind==='win'&&!LP.finished.length);const b=document.getElementById('lpPostBtn');if(b)b.disabled=!ok;},
   showLive(){lpT.liveShown=(lpT.livePend||[]).concat(lpT.liveShown||[]);lpT.livePend=[];render();window.scrollTo(0,0);},
@@ -3986,24 +4138,31 @@ function lpPersonHTML(n){const open=lpOpenToWitness(n),on=(LP.witnessing||[]).in
   <div class="lp-row" style="gap:8px;margin-top:14px">${open?`<button class="lp-btn lp-sm ${on?'lp-ghost':''}" aria-pressed="${on}" onclick="lp.witness('${lpEsc(n)}')">${on?'Witnessing ✓':'Witness'}</button>`:`<button class="lp-btn lp-sm" disabled style="opacity:.55">Witness</button>`}<button class="lp-btn lp-ghost lp-sm" onclick="lp.personMsg('${lpEsc(n)}')">Message</button><button class="lp-btn lp-ghost lp-sm" onclick="lp.block('${lpEsc(n)}')">Block</button></div>
   <p class="lp-small" style="margin:12px 0 0">Preview: witnessing is saved on this device only until accounts are live.</p></div></div>`;}
 function lpProfileScreen(){
-  lpEnsure(); const f=LP.finished, weeks=f.reduce((a,x)=>a+x.weeks,0), rooms=f.length, shown=f.reduce((a,x)=>a+(x.lit||0),0);
-  const dist=lpMyDistrict()?lpMyDistrict().name:'No district yet';
-  return lpShell(`<div class="lp-top"><span class="lp-title">${lpEsc(lpName())}</span><div class="lp-icons"><button class="lp-ic" aria-label="Settings" onclick="go('lpSettings')">${lpIcon('gear')}</button></div></div>
-    <div class="lp-center" style="margin-top:6px"><div class="lp-sigil" style="width:116px;height:116px">${lpSigil(lpName(),98)}</div>
-      <h1 class="lp-h2" style="margin-top:14px">${rooms} ${rooms===1?'room':'rooms'} in your house</h1><p class="lp-sub" style="margin-top:4px">${lpMyDistrict()?lpEsc(dist)+' · '+lpTenure():dist}</p>
-      ${(LP.user&&LP.user.bio)?`<p style="margin:12px auto 0;max-width:420px;line-height:1.45">${lpEsc(LP.user.bio)}</p>`:''}
-      <div class="lp-row" style="justify-content:center;gap:14px;margin-top:10px;flex-wrap:wrap"><button class="lp-link" onclick="lp.bioSheet(true)">${(LP.user&&LP.user.bio)?'Edit bio':'Add a bio'}</button><button class="lp-link" onclick="lp.statusSheet(true)">${lpStatus()?'Status: '+lpEsc(lpStatus().length>30?lpStatus().slice(0,29)+'…':lpStatus()):'Set your status'}</button></div></div>
-    <hr class="lp-hr"/>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);text-align:center"><div><div style="font-family:var(--serif);font-size:34px">${f.length}</div><div class="lp-small">finished</div></div><div><div style="font-family:var(--serif);font-size:34px">${weeks}</div><div class="lp-small">weeks</div></div><div><div style="font-family:var(--serif);font-size:34px">${shown}</div><div class="lp-small">days shown up</div></div></div>
-    <hr class="lp-hr"/>
-    <div class="lp-row lp-between" style="margin-bottom:10px;align-items:center"><div class="lp-eyebrow">Your house</div><button class="lp-link" onclick="go('lpHouse')">Go inside ▸</button></div><div role="button" tabindex="0" style="cursor:pointer" onclick="go('lpHouse')" onkeydown="if(event.key==='Enter')go('lpHouse')">${lpMiniHouse()}</div>
-    <div class="lp-stack" style="margin-top:16px"><button class="lp-btn" onclick="go('lpLedger')">Your Passport</button></div>
+  lpEnsure(); const f=LP.finished,u=LP.user||{},S=lpLedgerStats(),stamps=lpStampData(),m=(u.mantra||'').trim(),i=lpInfo();
+  const where=[u.city&&u.city.name,lpMyDistrict()?lpMyDistrict().name:null].filter(Boolean).join(' · ')||'No district yet';
+  const shown=f.reduce((a,x)=>a+(x.lit||0),0)+(i?i.lit:0),fh=S.fm/60;
+  const tile=(n,l)=>`<div class="me-tile"><b>${n}</b><span>${l}</span></div>`;
+  return lpShell(`<div class="lp-top"><span class="lp-title">Me</span><div class="lp-icons"><button class="lp-ic" aria-label="Settings" onclick="go('lpSettings')">${lpIcon('gear')}</button></div></div>
+    <div class="me-hero"><button class="me-sig" aria-label="Change your picture" onclick="lp.sigilSheet(true)">${lpSigil(lpName(),78)}</button>
+      <div class="me-id"><h1 class="lp-h2" style="margin:0">${lpEsc(lpName())}</h1><div class="lp-small" style="margin-top:3px">${lpEsc(where)}${u.joined?' · '+lpTenure():''}</div>
+        ${m?`<p class="me-mantra">“${lpEsc(m)}”</p>`:`<button class="lp-link" style="margin-top:8px" onclick="lp.mantraSheet(true)">Add your mantra</button>`}
+        <div class="lp-row" style="gap:12px;margin-top:8px;flex-wrap:wrap"><button class="lp-link" onclick="lp.bioSheet(true)">${u.bio?'Edit bio':'Add a bio'}</button><button class="lp-link" onclick="lp.statusSheet(true)">${lpStatus()?'Status: '+lpEsc(lpStatus().length>24?lpStatus().slice(0,23)+'…':lpStatus()):'Set status'}</button></div></div></div>
+    ${u.bio?`<p style="margin:14px 2px 0;line-height:1.5">${lpEsc(u.bio)}</p>`:''}
+    <div class="me-tiles">${tile(f.length,f.length===1?'sprint finished':'sprints finished')}${tile(shown,'days shown up')}${tile(fh?fh.toFixed(fh<10?1:0):0,'focused hours')}${tile(stamps.length,stamps.length===1?'stamp':'stamps')}</div>
+    <div class="lp-row lp-between" style="margin:24px 0 10px;align-items:baseline"><div class="lp-eyebrow">Stamps</div><button class="lp-link" onclick="go('lpLedger')">${stamps.length?'All in your Passport ▸':'Your Passport ▸'}</button></div>
+    ${stamps.length?`<div class="pp-stamps pp-shelf" role="list" aria-label="Your latest stamps">${stamps.slice(0,10).map(x=>lpStampHTML(x)).join('')}</div>`
+      :`<div class="pp-stamps me-empty"><div class="pp-stamp pp-focus" style="--c:var(--lp-faint);--r:-6deg;opacity:.5"><small>FOCUSED</small><b>25 MIN</b><small>your first</small></div><div><b>Your first stamp is 25 minutes away.</b><p class="lp-small" style="margin:4px 0 10px">Focus blocks, finished sprints, volunteering and trips all stamp your Passport.</p><button class="lp-btn lp-sm" onclick="go('lpFocus')">Start a focus block</button></div></div>`}
+    <div class="lp-nexts" style="margin-top:18px">
+      <button class="lp-card lp-click lp-next" onclick="go('lpHouse')"><span class="lp-next-ic">${lpIcon('home')}</span><span><b>Your house</b><span class="lp-small">${f.length} ${f.length===1?'room':'rooms'}, one per sprint</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="lpT.gameFrom='lpProfile';go('lpGame')"><span class="lp-next-ic">${lpIcon('moon')}</span><span><b>The dark room</b><span class="lp-small">Three one-minute games</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="go('lpFocus')"><span class="lp-next-ic">${LP_FLAME}</span><span><b>Focus</b><span class="lp-small">${lpFocusMin()} min today</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="go('lpLedger')"><span class="lp-next-ic">${lpIcon('pen')}</span><span><b>Passport</b><span class="lp-small">Your record, to share or print</span></span></button>
+    </div>
     <hr class="lp-hr"/>
     <div class="lp-row lp-between" style="align-items:center;margin-bottom:10px"><div class="lp-eyebrow">Leadership</div><button class="lp-link" onclick="go('lpLedger')">Full record ▸</button></div>
-    <div class="lp-stats" style="margin-top:0">${(()=>{const g=LP.give||{},org=(g.actions||[]).length,came=(g.actions||[]).reduce((a,x)=>a+(x.going||0),0);return [[LP.anchorWeeks||0,'weeks anchored'],[org,'actions organised'],[lpContribs().length,'shared in the Hub'],[came,'people at your actions'],[Object.keys(g.done||{}).length,'gave back']].map(x=>`<div class="lp-stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');})()}</div>
+    <div class="lp-stats" style="margin-top:0">${(()=>{const g=LP.give||{},org=(g.actions||[]).length,came=(g.actions||[]).reduce((a,x)=>a+(x.going||0),0);return [[LP.anchorWeeks||0,'weeks anchored'],[org,'actions organised'],[lpContribs().length,'shared in the Hub'],[came,'people at your actions']].map(x=>`<div class="lp-stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');})()}</div>
     <hr class="lp-hr"/>
-    <div class="lp-row lp-between" style="align-items:center;gap:12px"><div><b>${LP.prefs.witnesses?`${lpMyWitnesses()} ${lpMyWitnesses()===1?'witness':'witnesses'}`:'Witnesses off'}</b><div class="lp-small">${LP.prefs.witnesses?'People can witness your starts and finishes.':'Turn on to let people witness your sprints.'} You witness ${(LP.witnessing||[]).length}.</div></div>${lpTog(LP.prefs.witnesses,'lp.witnessOpen()')}</div>
-    <p class="lp-small lp-center" style="margin-top:14px">Witnesses only if you want them.</p>`,'me');
+    <div class="lp-row lp-between" style="align-items:center;gap:12px"><div><b>${LP.prefs.witnesses?`${lpMyWitnesses()} ${lpMyWitnesses()===1?'witness':'witnesses'}`:'Witnesses off'}</b><div class="lp-small">${LP.prefs.witnesses?'People can witness your starts and finishes.':'Turn on to let people witness your sprints.'} You witness ${(LP.witnessing||[]).length}.</div></div>${lpTog(LP.prefs.witnesses,'lp.witnessOpen()')}</div>`,'me');
 }
 function lpSigilSheet(){
   const signup=lpT.sigFor==='signup', s=signup?lpT.sig:((LP.user&&LP.user.sigil)||{k:null,t:0}), nm=signup?(lpT.sigName||'?'):lpName(), cur=lpSigilIdx(nm,s);
@@ -4473,7 +4632,7 @@ function lgMode(m){
   LG.mode=m;lgStop();
   document.querySelectorAll('.lg-mode').forEach(b=>{const on=b.dataset.m===m;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);});
   const t=document.getElementById('lgToast');if(t)t.classList.remove('on');
-  m==='puzzle'?lgInitPuzzle():lgInitLamps();
+  m==='puzzle'?lgInitPuzzle():m==='imposter'?lgInitImposter():lgInitLamps();
   if(LG.cv)LG.raf=requestAnimationFrame(lgLoop);
 }
 /* ---------- SEASONS + WEATHER ---------- */
@@ -4740,11 +4899,11 @@ function lpGameScreen(){
   if(!LP.demo&&!(gi&&gi.logged)){const fr=lpT.gameFrom||'lpHouse';return lpShell(`<div class="lp-top"><button class="lp-back" onclick="go('${fr}')">← Back</button><span class="lp-title">The dark room</span></div>
     <div class="lp-card lp-center" style="margin-top:20px;padding:30px 20px;background:#1B160F;color:#E8DCC4;border-color:#3A3024"><div style="font:600 22px var(--serif)">The dark room opens after today’s line</div><p style="margin:10px 0 18px;color:#BFAF92">Work first, play after. It’s a minute, and it’s yours once you’ve shown up.</p>
     ${gi?`<button class="lp-btn" onclick="go('lpDock')">Write today’s line</button>`:`<button class="lp-btn" onclick="go('lpGoals')">Start a sprint</button>`}</div>`,'town');}
-  const from=lpT.gameFrom||'lpHouse', tab=from==='lpDock'?'dock':(from==='lpWorld'||from==='lpMore')?'town':'street';
+  const from=lpT.gameFrom||'lpHouse', tab=(from==='lpDock'||from==='lpFocus')?'dock':from==='lpProfile'?'me':(from==='lpWorld'||from==='lpMore')?'town':'street';
   const mb=(m,l)=>`<button class="lg-mode ${LG.mode===m?'on':''}" data-m="${m}" aria-pressed="${LG.mode===m}" onclick="lgMode('${m}')">${l}</button>`;
-  return lpShell(`<div class="lp-top"><button class="lp-back" onclick="go('${from}')">← ${from==='lpDock'?'Today':(from==='lpWorld'||from==='lpMore')?'City':'House'}</button><span class="lp-title">The dark room</span></div>
+  return lpShell(`<div class="lp-top"><button class="lp-back" onclick="go('${from}')">← ${from==='lpFocus'?'Focus':from==='lpProfile'?'Me':from==='lpDock'?'Today':(from==='lpWorld'||from==='lpMore')?'City':'House'}</button><span class="lp-title">The dark room</span></div>
     <h1 class="lp-h2">A minute in the dark</h1>
-    <div class="lg-modes">${mb('lamps','Lamplighter')}${mb('puzzle','Questions')}</div>
+    <div class="lg-modes">${mb('lamps','Lamplighter')}${mb('imposter','Imposters')}${mb('puzzle','Questions')}</div>
     <div class="lg-panel"><div id="lgQ" class="lg-q"></div><div id="lgSlots" class="lg-slots lg-slotsnote"></div><div class="lg-stats"><span id="lgA"></span><span id="lgB"></span></div><div id="lgE" class="lg-earn" aria-live="polite"></div></div>
     <div class="lg-stage" style="background:${(LP.game&&LP.game.light===false)?'#2B2418':'#F8F5EE'}"><canvas id="lgCanvas" tabindex="0" aria-label="Flashlight game. Move the light with the arrow keys and press space to select."></canvas><div id="lgToast" class="lg-toast" role="status" aria-live="polite"></div>${lpT.lgSeen?'':`<div class="lg-intro" id="lgIntro" onclick="lpT.lgSeen=true;this.remove();document.getElementById('lgCanvas').focus({preventScroll:true})"><b>Move the light</b><span>Drag your finger, or use the arrow keys. Tap to begin.</span><i></i></div>`}</div>
     <div class="lg-ctl">
@@ -4754,6 +4913,7 @@ function lpGameScreen(){
     <details class="lg-how" ${lpT.lgSeen?'':'open'}><summary>How to play</summary>
       <ol><li><b>Move the light.</b> Drag on the dark room, or use the arrow keys. Things brighten when your light touches them. Tap, or press space, to act.</li>
       <li><b>Lamplighter.</b> You have a minute to keep a row of dark lamps lit. Lamps burn down, faster in a gust of wind. Move your light over a lamp and tap to relight it. Distractions drift toward your light; if one reaches it your light shrinks for a few seconds, so move away or tap it to dismiss it. Your score is how much of the street you kept lit.</li>
+      <li><b>Imposters.</b> Twenty-five shapes drift in the dark. Five are imposters, and they turn red when your light finds them. Tap each one before it reaches the core in the middle.</li>
       <li><b>Questions.</b> Read the question. Four answers drift around the room. Light them to read them clearly, then tap the one you think is right. If you get it wrong, the right answer is shown.</li></ol>
       <div class="lg-key"><span><i style="background:#E8A33D"></i>your light</span><span><i style="background:#E5484D"></i>lamp about to go out</span><span><i style="background:#8A7CF0"></i>distraction</span><span><i style="background:#2E9E5B"></i>correct answer</span></div></details>
     <p class="lp-small" style="margin-top:12px">Every 25% of the lamps you keep lit in Lamplighter, and every question you get right, is a point. Once today’s line is in, three points earn one log, one a day. Showing up always earns more than playing.</p>`,tab);
@@ -4771,8 +4931,13 @@ Object.assign(lp,{
     const fm=[['date','focused_minutes']];Object.keys(LP.focusMin||{}).sort().forEach(d=>fm.push([d,LP.focusMin[d]]));
     const csv='# sprints\n'+rows.map(r=>r.map(q).join(',')).join('\n')+'\n\n# days\n'+days.map(r=>r.map(q).join(',')).join('\n')+'\n\n# focus\n'+fm.map(r=>r.map(q).join(',')).join('\n');
     const u=URL.createObjectURL(new Blob([csv],{type:'text/csv'})),l=document.createElement('a');l.href=u;l.download='merroes-passport.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);},
-  focusStart(m){if(LP.focus)return go('lpFocus');const t=((document.getElementById('lpFT')||{}).value||'').trim()||'my sprint';LP.focus={start:Date.now(),mins:m,task:t.slice(0,60),cracks:0};lpEvt('focus_start',{mins:m});lpSave();go('lpFocus',{force:true});},
+  focusStart(m){if(LP.focus)return go('lpFocus');lpT.fdone=null;lpT.fdoneSeen=0;const t=((document.getElementById('lpFT')||{}).value||'').trim()||'my sprint';LP.focus={start:Date.now(),mins:m,task:t.slice(0,60),cracks:0};lpEvt('focus_start',{mins:m});lpSave();go('lpFocus',{force:true});},
   focusCrack(){const f=LP.focus;if(!f)return;f.cracks=(f.cracks||0)+1;lpSave();if(f.cracks>=3){lpFocusFinish(false);toast('The torch went out. Relight it when you’re ready.');go('lpFocus',{force:true});return;}toast(f.cracks===1?'The torch cracked. Back to it.':'Two cracks. One more and it goes out.');go('lpFocus',{force:true});},
+  focusAgain(){const x=lpT.fdone||{};lpT.fdone=null;lpT.fdoneSeen=0;lp.focusBreak(false,1);LP.focus={start:Date.now(),mins:x.mins>=25?x.mins:25,task:(x.task||'my sprint').slice(0,60),cracks:0};lpEvt('focus_start',{mins:LP.focus.mins,again:1});lpSave();go('lpFocus',{force:true});},
+  focusNote(){const el=document.getElementById('lpFNote2'),l=(LP.focusLog||[])[0];if(!el||!l)return;l.note=el.value.replace(/\s+/g,' ').trim().slice(0,120);lpSave();toast(l.note?'Saved to your focus log':'Cleared');},
+  focusBreak(on,quiet){clearInterval(lpT.brkTm);if(!on){lpT.brk=null;if(!quiet)render();return;}lpT.brk={end:Date.now()+5*60000};render();
+    const tick=()=>{const b=lpT.brk;if(!b){clearInterval(lpT.brkTm);return;}const left=Math.max(0,b.end-Date.now()),el=document.getElementById('lpBrkT');if(el)el.textContent=Math.floor(left/60000)+':'+String(Math.floor(left%60000/1000)).padStart(2,'0');
+      if(left<=0){clearInterval(lpT.brkTm);lpT.brk=null;lpPing('Break’s over','Light another torch when you’re ready.');toast('Break’s over');if(state.screen==='lpFocus')render();}};tick();lpT.brkTm=setInterval(tick,500);},
   focusEnd(){const f=LP.focus;if(!f)return;const done=Math.floor((Date.now()-f.start)/60000);LP.focus=null;if(done>=5){LP.focusMin=LP.focusMin||{};LP.focusMin[lpToday()]=lpFocusMin()+done;LP.focusLog=LP.focusLog||[];LP.focusLog.unshift({ts:Date.now(),mins:done,task:f.task,early:1});}lpSave();toast(done>=5?'Ended early. '+done+' minutes count toward today, no logs.':'Ended.');go('lpFocus',{force:true});}
 });
 
@@ -4999,13 +5164,13 @@ function lpOppSamples(){const t=lpToday(),c=lpCityName()||'Lagos';return [
   {id:'o8',type:'resource',title:'A one-page weekly review template',org:'',link:'https://example.com/weekly-review',deadline:'',where:'',remote:1,elig:'',about:'What moved, what stuck, one thing for next week. The one I use with my pod.',who:'SOFIA',ts:Date.now()-90*36e5,helpful:52}
   ].map(o=>Object.assign({sample:true,free:true},o));}
 function lpOppsAll(){const own=(LP.opps||[]).map(o=>Object.assign({},o)),rep=LP.oppReported||{};return own.concat(lpSamples()?lpOppSamples():[]).filter(o=>!rep[o.id]&&!lpIsBlocked(o.who));}
-function lpOppOpen(o){return !o.deadline||o.deadline>=lpToday();}
+function lpOppOpen(o){return (!o.deadline||o.deadline>=lpToday())&&(!o.expires||o.expires>=lpToday());}
 function lpOppDays(o){return o.deadline?lpDiff(lpToday(),o.deadline):null;}
 function lpOppHelp(o){return (o.helpful||0)+((LP.oppHelpful||{})[o.id]?1:0);}
 function lpOppCard(o){const T=lpOppType(o.type),d=lpOppDays(o),sv=(LP.oppSaved||{})[o.id];
   return `<article class="lp-opp"><button class="lp-oppbtn" onclick="lpT.opp='${o.id}';go('lpOpp')">
     <div class="lp-row lp-between" style="gap:8px"><span class="lp-opptype t-${o.type}">${T.n}</span>${o.pending?'<span class="lp-small">waiting for 2 checks</span>':sv?'<span class="lp-small">★ saved</span>':''}</div>
-    <div class="lp-opp-t">${lpEsc(o.title)}</div>
+    ${o.img?`<img class="lp-opp-img" src="${lpEsc(o.img)}" alt="" loading="lazy" onerror="this.remove()"/>`:''}<div class="lp-opp-t">${lpEsc(o.title)}</div>
     <div class="lp-small">${[o.org&&lpEsc(o.org)+(o.sample?' (sample)':''),o.where&&lpEsc(o.where),o.remote?'remote':''].filter(Boolean).join(' · ')}</div>
     <div class="lp-small" style="margin-top:6px">${d==null?'No deadline':d<0?'Closed':d===0?'<b>Closes today</b>':d<=7?`<b>Closes in ${d} ${d===1?'day':'days'}</b>`:'Closes '+lpLong(o.deadline)} · shared by ${lpEsc(o.who)} · ${lpOppHelp(o)} found it helpful</div></button></article>`;}
 /* Leads: items read from opportunity sites' public feeds. A member checks each one and shares it properly. */
@@ -5050,43 +5215,46 @@ function lpOppScreen(){
     <p class="lp-small" style="margin-top:8px">People who share useful things build a following here. Witnessing ${lpEsc(o.who)} shows you their starts, finishes and what they share.</p>
     ${o.mine?`<p class="lp-small" style="margin-top:12px">${o.pending?'Waiting for two members to check it looks real. Then everyone can see it. ':''}${(o.helpful||0)>=3?'You earned 2 logs for this.':`${o.helpful||0} of 3 helpful marks for 2 logs.`}</p><button class="lp-link" style="margin-top:8px;color:var(--lp-danger,#B42318)" onclick="lp.oppDelete('${o.id}')">Remove this listing</button>`:`<button class="lp-link" style="margin-top:14px" onclick="lp.oppReport('${o.id}')">Report a scam or a problem</button>`}`,'hub');
 }
+/* Sharing is one link. We read the page's title and picture (through the link-preview function when it's live,
+   otherwise from the address itself), guess the type, and you confirm with one tap. */
+function lpGuessType(t){t=(t||'').toLowerCase();return /scholar|bursar|tuition|masters|phd/.test(t)?'scholarship':/fellow|training|bootcamp|course|academy|programme|program/.test(t)?'fellowship':/grant|fund|award|prize/.test(t)?'grant':/co-?founder/.test(t)?'cofounder':/mentor|coach/.test(t)?'mentor':/remote|work from home|wfh/.test(t)?'remote':/job|hiring|vacanc|career|intern|role|position|officer|analyst|engineer|manager/.test(t)?'job':'resource';}
+function lpUrlGuess(u){try{const x=new URL(u),site=x.hostname.replace(/^www\./,''),seg=decodeURIComponent(x.pathname).split('/').filter(Boolean).pop()||'';const title=seg.replace(/\.(html?|php|aspx?)$/,'').replace(/[-_+]+/g,' ').replace(/\b\d{5,}\b/g,'').trim();
+  return {site,title:title?title.charAt(0).toUpperCase()+title.slice(1):'',img:null,desc:''};}catch(e){return null;}}
+async function lpFetchPreview(u){try{const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),4500);const r=await fetch(LP_SB.url+'/functions/v1/link-preview?url='+encodeURIComponent(u),{signal:ctl.signal,headers:{apikey:LP_SB.key}});clearTimeout(tm);if(!r.ok)return null;const j=await r.json();return j&&j.title?{site:j.site||'',title:j.title,img:/^https:\/\//.test(j.image||'')?j.image:null,desc:j.description||''}:null;}catch(e){return null;}}
 function lpOppNewScreen(){
-  lpEnsure(); const f=lpT.oppNew||(lpT.oppNew={type:'job',title:'',org:'',link:'',deadline:'',where:'',remote:false,elig:'',about:'',free:false}),T=lpOppType(f.type);
-  const young=LP.user&&LP.user.joined&&lpDiff(LP.user.joined,lpToday())<7&&!LP.demo;
-  const fld=(id,lab,k,ph,max,type)=>`<div><label class="lp-label" for="${id}">${lab}</label><input id="${id}" class="lp-field" ${type?`type="${type}"`:''} maxlength="${max}" placeholder="${ph}" value="${lpEsc(f[k]||'')}" oninput="lpT.oppNew.${k}=this.value"/></div>`;
+  lpEnsure(); const f=lpT.oppNew||(lpT.oppNew={link:'',title:'',type:null,deadline:'',about:'',pv:null,loading:false});
+  const young=LP.user&&LP.user.joined&&lpDiff(LP.user.joined,lpToday())<7&&!LP.demo, pv=f.pv, type=f.type||(pv?lpGuessType(pv.title+' '+(pv.desc||'')+' '+f.link):'job');
   return lpShell(`${lpHead('Hub','lpHub')}
-    <h1 class="lp-h2" style="margin-top:6px">Share an opportunity or resource</h1>
-    <p class="lp-sub" style="margin-top:6px">Your name goes on it. People who find it helpful can witness you.</p>
-    ${f.lead?`<div class="lp-citychip" style="margin-top:14px"><b>Checking a lead from ${lpEsc(f.leadSrc)}</b><div class="lp-small">Open <a href="${lpEsc(f.leadLink)}" target="_blank" rel="noopener noreferrer nofollow">their post</a>, find the official page and the deadline, and add them below. You earn 1 log when you share it.</div></div>`:''}
-    ${young?`<p class="lp-small" style="margin-top:12px">In your first week, what you share appears once two members have checked it looks real. It keeps scams out of the Hub.</p>`:''}
-    <div class="lp-card lp-stack" style="margin-top:14px;gap:12px">
-      <div><label class="lp-label" for="lpOT">What is it?</label><select id="lpOT" class="lp-field" onchange="lpT.oppNew.type=this.value;render()">${LP_OPP_TYPES.map(t=>`<option value="${t.k}" ${f.type===t.k?'selected':''}>${t.n}</option>`).join('')}</select></div>
-      ${fld('lpOTi','Title','title',f.type==='cofounder'?'Technical co-founder for …':'Junior data analyst',90)}
-      ${['cofounder','mentor','resource'].includes(f.type)?'':fld('lpOO','Organisation','org','Who is offering it',80)}
-      ${fld('lpOL','Official link','link','https://…',300,'url')}
-      ${T.dl?fld('lpOD','Deadline','deadline','',10,'date'):''}
-      ${fld('lpOW','Where','where','City, or online',60)}
-      <label style="display:flex;gap:10px;align-items:center;min-height:40px"><input type="checkbox" ${f.remote?'checked':''} onchange="lpT.oppNew.remote=this.checked" style="width:20px;height:20px;accent-color:var(--lp-cta)"/> Can be done remotely</label>
-      ${f.type==='resource'?'':fld('lpOE','Who it’s for','elig','Experience, location, age range…',140)}
-      <div><label class="lp-label" for="lpOA">A line or two about it</label><textarea id="lpOA" class="lp-field" maxlength="400" rows="3" oninput="lpT.oppNew.about=this.value">${lpEsc(f.about||'')}</textarea></div>
-      <label style="display:flex;gap:10px;align-items:flex-start;min-height:40px"><input type="checkbox" ${f.free?'checked':''} onchange="lpT.oppNew.free=this.checked" style="width:20px;height:20px;margin-top:2px;accent-color:var(--lp-cta)"/> <span>It’s free to apply. Nobody is asked to pay a fee, buy anything or send money to take part.</span></label>
-      <button class="lp-btn" onclick="lp.oppPost()">Share it</button></div>
-    <p class="lp-small" style="margin-top:10px">You earn 2 logs when 3 people mark what you shared as helpful, up to 10 logs a week. Listings with a deadline disappear the day after it. Anything that asks for money is removed and the account is reviewed.</p>`,'hub');
-}
+    <h1 class="lp-h2" style="margin-top:6px">Share something useful</h1>
+    <p class="lp-sub" style="margin-top:6px">Paste the link to the official page. We’ll do the rest.</p>
+    ${f.lead?`<div class="lp-citychip" style="margin-top:14px"><b>Checking a lead from ${lpEsc(f.leadSrc)}</b><div class="lp-small">Open <a href="${lpEsc(f.leadLink)}" target="_blank" rel="noopener noreferrer nofollow">their post</a>, then paste the link to the official page here. You earn 1 log when you share it.</div></div>`:''}
+    <input id="lpOL" class="lp-field lp-linkin" type="url" inputmode="url" autocomplete="off" placeholder="https://…" value="${lpEsc(f.link)}" oninput="lp.oppLink(this.value)" style="margin-top:14px"/>
+    <div id="lpPv">${lpPreviewCard(f,type)}</div>
+    ${young?`<p class="lp-small" style="margin-top:10px">In your first week, what you share appears once two members have checked it looks real.</p>`:''}`,'hub');}
+function lpPreviewCard(f,type){const pv=f.pv;if(f.loading)return `<div class="lp-pv lp-pv-load" aria-live="polite"><span class="lp-small">Reading the page…</span></div>`;if(!pv)return '';
+  return `<div class="lp-pv">${pv.img?`<img src="${lpEsc(pv.img)}" alt="" loading="lazy" onerror="this.remove()"/>`:`<div class="lp-pv-ph">${lpEsc((pv.site||'?').charAt(0).toUpperCase())}</div>`}
+    <div class="lp-pv-b"><div class="lp-small">${lpEsc(pv.site)}</div><input class="lp-pv-t" aria-label="Title" maxlength="90" value="${lpEsc(f.title||pv.title)}" oninput="lpT.oppNew.title=this.value"/>${pv.desc?`<div class="lp-small lp-pv-d">${lpEsc(pv.desc.slice(0,140))}</div>`:''}</div></div>
+    <div class="lp-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px" role="radiogroup" aria-label="What is it">${LP_OPP_TYPES.map(t=>`<button class="lp-chip ${type===t.k?'sel':''}" role="radio" aria-checked="${type===t.k}" onclick="lpT.oppNew.type='${t.k}';lp.oppPv()">${t.n}</button>`).join('')}</div>
+    <div class="lp-row" style="gap:10px;margin-top:12px;align-items:center;flex-wrap:wrap"><label class="lp-small" for="lpOD">Deadline <span class="lp-optl">optional</span></label><input id="lpOD" class="lp-field" type="date" style="width:auto;min-height:40px" value="${lpEsc(f.deadline)}" oninput="lpT.oppNew.deadline=this.value"/></div>
+    <details style="margin-top:8px"><summary class="lp-small" style="cursor:pointer">Add a note (optional)</summary><textarea class="lp-field" maxlength="300" style="margin-top:8px;min-height:70px" placeholder="Who it’s for, or why it’s good" oninput="lpT.oppNew.about=this.value">${lpEsc(f.about||'')}</textarea></details>
+    <button class="lp-btn" style="margin-top:14px;width:100%" onclick="lp.oppPost()">Share</button>
+    <p class="lp-small" style="margin-top:8px">By sharing you confirm it’s free to apply. Listings with no deadline stay up for 30 days. You earn 2 logs when 3 people find it helpful.</p>`;}
 Object.assign(LP_SCREENS,{lpHub:lpHubScreen,lpOpp:lpOppScreen,lpOppNew:lpOppNewScreen});Object.assign(Screens,{lpHub:lpHubScreen,lpOpp:lpOppScreen,lpOppNew:lpOppNewScreen});
 Object.assign(lp,{
   hubHide(k){LP.hubHide=LP.hubHide||{};if(LP.hubHide[k])delete LP.hubHide[k];else LP.hubHide[k]=1;lpSave();render();},
   oppNew(){lpT.oppNew=null;go('lpOppNew');},
-  leadCheck(id){const l=lpLeads().find(x=>x.id===id);if(!l)return;lpT.oppNew={type:'job',title:l.title,org:'',link:'',deadline:'',where:'',remote:false,elig:'',about:'',free:false,lead:l.id,leadSrc:l.src,leadLink:l.link};go('lpOppNew');},
-  oppPost(){const f=lpT.oppNew,T=lpOppType(f.type),t=(f.title||'').trim(),link=(f.link||'').trim();
+  leadCheck(id){const l=lpLeads().find(x=>x.id===id);if(!l)return;lpT.oppNew={link:'',title:l.title,type:null,deadline:'',about:'',pv:null,lead:l.id,leadSrc:l.src,leadLink:l.link};go('lpOppNew');},
+  oppLink(v){const f=lpT.oppNew;f.link=v.trim();clearTimeout(lpT.pvTm);if(!/^https:\/\/[^\s/]+\.[^\s]+/.test(f.link)){f.pv=null;f.loading=false;lp.oppPv();return;}
+    f.pv=lpUrlGuess(f.link);f.title='';f.type=null;f.loading=true;lp.oppPv();const want=f.link;
+    lpT.pvTm=setTimeout(async()=>{const r=await lpFetchPreview(want);const g=lpT.oppNew;if(!g||g.link!==want)return;g.loading=false;if(r)g.pv=r;lp.oppPv();},350);},
+  oppPv(){const f=lpT.oppNew,el=document.getElementById('lpPv');if(!f||!el)return;const type=f.type||(f.pv?lpGuessType(f.pv.title+' '+(f.pv.desc||'')+' '+f.link):'job');el.innerHTML=lpPreviewCard(f,type);},
+  oppPost(){const f=lpT.oppNew;if(!f)return;const link=(f.link||'').trim(),pv=f.pv||lpUrlGuess(link)||{},t=((f.title||pv.title||'')+'').trim(),type=f.type||lpGuessType(t+' '+(pv.desc||'')+' '+link);
+    if(!/^https:\/\/[^\s/]+\.[^\s]+/.test(link)){toast('Paste the link to the official page, starting with https://');return;}
     if(t.length<6){toast('Give it a clear title');return;}
-    if(!/^https:\/\/[^\s/]+\.[^\s]+/.test(link)){toast('Add the official link, starting with https://');return;}
-    if(T.dl&&!f.deadline){toast('Add the deadline');return;}
     if(f.deadline&&f.deadline<lpToday()){toast('That deadline has passed');return;}
-    if(!f.free){toast('Confirm it’s free to apply');return;}
-    if(LP_OPP_FEE.test([t,f.about,f.elig].join(' '))){toast('Real opportunities never ask applicants to pay. This one can’t go on Merroes.');return;}
+    if(LP_OPP_FEE.test([t,f.about,pv.desc].join(' '))){toast('Real opportunities never ask applicants to pay. This one can’t go on Merroes.');return;}
     const young=LP.user&&LP.user.joined&&lpDiff(LP.user.joined,lpToday())<7&&!LP.demo;
-    const o={id:'u'+Date.now(),pending:young?1:0,lead:f.lead||null,type:f.type,title:t.slice(0,90),org:(f.org||'').trim().slice(0,80),link:link.slice(0,300),deadline:T.dl?f.deadline:'',where:(f.where||'').trim().slice(0,60),remote:f.remote?1:0,elig:(f.elig||'').trim().slice(0,140),about:(f.about||'').trim().slice(0,400),free:true,who:lpName(),ts:Date.now(),helpful:0,mine:true};
+    const o={id:'u'+Date.now(),pending:young?1:0,lead:f.lead||null,type,title:t.slice(0,90),org:(pv.site||'').slice(0,80),img:pv.img||null,link:link.slice(0,300),deadline:f.deadline||'',expires:f.deadline?'':lpAdd(lpToday(),30),where:'',remote:/remote/i.test(t+' '+(pv.desc||''))?1:0,elig:'',about:(f.about||pv.desc||'').trim().slice(0,400),free:true,who:lpName(),ts:Date.now(),helpful:0,mine:true};
     (LP.opps=LP.opps||[]).unshift(o);
     if(f.lead){LP.leadsDone=LP.leadsDone||{};LP.leadsDone[f.lead]=1;const wk=lpLogsThisWeek();if(wk<10){LP.minted=LP.minted||{};LP.minted.birch=(LP.minted.birch||0)+1;(LP.shareAwards=LP.shareAwards||[]).push({ts:Date.now(),n:1});setTimeout(()=>toast('+1 log for checking a lead'),1600);}}
     lpT.oppNew=null;lpEvt('opp_shared',{type:o.type});lpNotify('You shared '+o.title,'It’s on your Passport');lpSave();toast('Shared. Thank you.');lpT.opp=o.id;go('lpOpp');},
