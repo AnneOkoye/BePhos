@@ -2101,15 +2101,15 @@ const lp={
     if(!/^\S+@\S+\.\S+$/.test(em)){err.textContent='That email does not look right.';return;}
     if(pw.length<8){err.textContent='Use at least 8 characters for the password.';return;}
     if(!(lpT.place&&lpT.place.city)){err.textContent='Choose your city. Your city is shared with people there.';return;}
-    const dob=(document.getElementById('lpDob')||{}).value||'',age=lpAgeFrom(dob);
-    if(age==null){err.textContent='Add your date of birth.';return;}
-    if(age<18){lpT.minor=true;err.textContent='Sorry, Merroes is only for people aged 18 and over.';document.getElementById('lpDob').value='';return;}
+    const band=(document.getElementById('lpBand')||{}).value||'';
+    if(!band){err.textContent='Choose your age range.';return;}
+    if(band==='minor'){lpT.minor=true;err.textContent='Sorry, Merroes is only for people aged 18 and over.';document.getElementById('lpBand').value='';return;}
     if(!document.getElementById('lpAge').checked){err.textContent='Please agree to the terms to continue.';return;}
     if(LP.away){err.innerHTML=(LP.away.email||'').toLowerCase()===em.toLowerCase()?'You already have an account on this device. <button class="lp-link" onclick="go(\'lpLogin\')">Log in instead</button>.':'This device already holds '+lpEsc(LP.away.callsign)+'’s street. <button class="lp-link" onclick="go(\'lpLogin\')">Log in</button> as '+lpEsc(LP.away.callsign)+' first. To start fresh, delete that data in Settings.';return;}
     const btn=document.getElementById('lpGo'); btn.disabled=true; btn.textContent='One moment';
     let synced=false;
     try{ if(window.Merros&&Merros.auth){ const r=await Promise.race([Merros.auth.signUpWithPassword(em,pw),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6000))]); synced=!!r; } }catch(e){ synced=false; }
-    const keep={draft:LP.draft,mode:LP.mode,theme:LP.theme,podPrefs:LP.podPrefs};LP=Object.assign(lpBlank(),keep);lpEvt('signup',{}); LP.user={callsign:cs,email:em,synced,ageBand:lpAgeBand(age),sigil:{k:null,t:0},city:lpT.place.city,tz:lpTzOk(lpT.place.tz)?lpT.place.tz:lpDeviceTz(),joined:lpToday(),pwh:await lpPwHash(em,pw)}; lpSave();
+    const keep={draft:LP.draft,mode:LP.mode,theme:LP.theme,podPrefs:LP.podPrefs};LP=Object.assign(lpBlank(),keep);lpEvt('signup',{}); LP.user={callsign:cs,email:em,synced,ageBand:band,sigil:{k:null,t:0},city:lpT.place.city,tz:lpTzOk(lpT.place.tz)?lpT.place.tz:lpDeviceTz(),joined:lpToday(),pwh:await lpPwHash(em,pw)}; lpSave();
     go('lpConfirm');
   },
   placeQ(v,who){clearTimeout(lpT.plTm);const box=document.getElementById('lpRes_'+who),note=document.getElementById('lpResNote_'+who);if(!box)return;
@@ -2407,8 +2407,8 @@ function lpSignupScreen(){
       <div><label class="lp-label" for="lpPw">Password</label>
         <div style="position:relative"><input id="lpPw" class="lp-field" type="password" autocomplete="new-password" placeholder="At least 8 characters" style="padding-right:76px"/>
         <button type="button" class="lp-link" style="position:absolute;right:16px;top:15px" onclick="const p=document.getElementById('lpPw');p.type=p.type==='password'?'text':'password';this.textContent=p.type==='password'?'Show':'Hide'">Show</button></div></div>
-      <div><label class="lp-label" for="lpDob">Date of birth</label><input id="lpDob" class="lp-field" type="date" autocomplete="bday" max="${lpToday()}"/>
-        <div class="lp-hint">Merroes is for adults. We keep only your age range, never the date.</div></div>
+      <div><label class="lp-label" for="lpBand">Your age range</label><select id="lpBand" class="lp-field"><option value="">Choose one</option><option value="minor">Under 18</option>${['18–24','25–34','35–44','45–54','55+'].map(b=>`<option value="${b}">${b}</option>`).join('')}</select>
+        <div class="lp-hint">Merroes is for adults. We only ask for a range, never your date of birth.</div></div>
       ${lpPlaceHTML('signup')}
       <label class="lp-row" style="gap:10px;align-items:flex-start;font-size:14px;cursor:pointer"><input id="lpAge" type="checkbox" style="width:20px;height:20px;margin:1px 0 0;accent-color:var(--lp-cta);flex:none"/><span>I’m 18 or older and I agree to the <button type="button" class="lp-link" onclick="lp.legal('terms')">terms</button> and <button type="button" class="lp-link" onclick="lp.legal('privacy')">privacy notice</button>.</span></label>
       <div id="lpErr" role="alert" style="color:var(--lp-bad);font-size:14px;min-height:20px"></div>
@@ -3642,6 +3642,31 @@ const LW_SHOPS={
  petrol:{n:'Petrol Station',roof:'#C62828',e:'fuel',label:'Fuel, air and a small shop',open:[0,24],folk:'Attendant'}};
 /* The hour the city is showing: the real hour when the sky follows the clock, otherwise the hour that matches the chosen time of day. */
 function lpCityHour(){const s=LP.sky||'theme';if(s==='clock')return lpLocalHour();return {daybreak:6,morning:9,noon:12,afternoon:15,evening:18,dusk:19,night:23}[lpTod()];}
+/* Each launch city gets its own everyday places, people, weather name and street sounds.
+   food = where people eat a cheap hot meal, street = evening street food, money = where you send money or top up. */
+const LP_LOCALE={
+ Lagos:{food:['Mama Put Buka','Rice, swallow and soup, cooked fresh','Cook'],street:['Suya Spot','Grilled suya after dark','Suya man'],money:['POS Kiosk','Cash out, transfers, airtime'],haze:'Harmattan haze',horns:1,dish:'Jollof',seller:'Fresh tomatoes, fresh peppers!',hi:['Good morning o!','How far?','Good evening o!'],names:['Bisi','Tunde','Ngozi','Emeka','Kemi','Femi','Aisha','Chidi','Funke','Segun']},
+ Accra:{food:['Chop Bar','Waakye, banku and soup','Cook'],street:['Kebab Corner','Chichinga after dark','Griller'],money:['MoMo Kiosk','Mobile money and airtime'],haze:'Harmattan haze',horns:.8,dish:'Waakye',seller:'Fresh kontomire, fresh garden eggs!',hi:['Good morning!','Ete sen?','Good evening!'],names:['Kofi','Ama','Kwame','Esi','Yaw','Akosua','Kojo','Efua','Kwabena','Abena']},
+ Nairobi:{food:['Kibanda','Ugali, sukuma and stew','Cook'],street:['Nyama Choma Grill','Roast meat after work','Griller'],money:['M-Pesa Agent','Send, withdraw, pay bills'],haze:'Dust haze',horns:.8,dish:'Pilau',seller:'Fresh sukuma, fresh tomatoes!',hi:['Habari ya asubuhi!','Sasa!','Habari ya jioni!'],names:['Wanjiru','Otieno','Achieng','Kamau','Njeri','Mwangi','Akinyi','Kiprop','Wambui','Odhiambo']},
+ Johannesburg:{food:['Kota Shop','Kotas and chips','Cook'],street:['Shisa Nyama','Braai after dark','Braaier'],money:['Spaza Shop','Airtime, bread and everything else'],haze:'Highveld dust',horns:.4,dish:'Kota',seller:'Fresh mielies, fresh spinach!',hi:['Morning!','Howzit!','Evening!'],names:['Thabo','Lerato','Sipho','Naledi','Zanele','Bongani','Palesa','Kagiso','Ayanda','Lindiwe']},
+ Cairo:{food:['Koshary Shop','Koshary, lentils and rice','Cook'],street:['Shawarma Stand','Shawarma until late','Cook'],money:['Kiosk','Phone credit, snacks, cold drinks'],haze:'Khamsin dust',horns:1,dish:'Koshary',seller:'Fresh mangoes, sweet mangoes!',hi:['Sabah el kheir!','Ahlan!','Masa el kheir!'],names:['Ahmed','Mona','Youssef','Salma','Omar','Nour','Karim','Hana','Mostafa','Laila'],bar:['Juice Bar','Sugarcane and mango juice','Juice maker']},
+ Dubai:{food:['Cafeteria','Karak tea and parathas','Cook'],street:['Shawarma Stand','Shawarma until late','Cook'],money:['Exchange House','Send money home'],haze:'Sandy haze',horns:.3,dish:'Biryani',seller:'Fresh dates, fresh fruit!',hi:['Good morning!','Hello!','Good evening!'],names:['Omar','Fatima','Rashid','Aditi','Joseph','Maryam','Sameer','Leah','Hamdan','Anjali'],bar:['Juice Bar','Fresh juice and shakes','Juice maker']},
+ Mumbai:{food:['Udupi Canteen','Dosa, idli and filter coffee','Cook'],street:['Vada Pav Stall','Vada pav and chai','Stall owner'],money:['Recharge Shop','Mobile recharge and UPI help'],haze:'Winter haze',horns:1,dish:'Pav bhaji',seller:'Fresh mangoes, fresh bhindi!',hi:['Good morning!','Kaise ho?','Good evening!'],names:['Rohan','Priya','Aarav','Meera','Ishaan','Sneha','Vikram','Anaya','Kunal','Pooja']},
+ Delhi:{food:['Dhaba','Dal, roti and sabzi','Cook'],street:['Chaat Corner','Chaat and golgappe','Stall owner'],money:['Recharge Shop','Mobile recharge and UPI help'],haze:'Winter haze',horns:1,dish:'Chole bhature',seller:'Fresh gajar, fresh matar!',hi:['Namaste!','Kya haal?','Good evening!'],names:['Arjun','Neha','Kabir','Simran','Rahul','Aditi','Karan','Ishita','Manish','Riya']},
+ Dhaka:{food:['Bhaat Hotel','Rice, dal and curry','Cook'],street:['Fuchka Stall','Fuchka and chotpoti','Stall owner'],money:['bKash Agent','Send money and top up'],haze:'Winter haze',horns:1.2,dish:'Biryani',seller:'Fresh fish, fresh greens!',hi:['Shuprobhat!','Kemon achen?','Shubho shondha!'],names:['Rahim','Nusrat','Tanvir','Farhana','Arif','Sadia','Imran','Tania','Rafiq','Maliha'],bar:['Tea Stall','Milk tea and biscuits','Tea seller']},
+ Tokyo:{food:['Teishoku Diner','Set meals: rice, miso, fish','Cook'],street:['Yakitori Stand','Grilled skewers after work','Griller'],money:['Konbini','Bills, ATM, snacks'],haze:'Spring haze',horns:.1,dish:'Bento',seller:'Fresh vegetables today!',hi:['Ohayō!','Konnichiwa!','Konbanwa!'],names:['Yuki','Haruto','Aoi','Sota','Hina','Ren','Mei','Kaito','Sakura','Daiki']},
+ Seoul:{food:['Kimbap Shop','Kimbap and ramyeon','Cook'],street:['Tteokbokki Cart','Tteokbokki and fish cakes','Cook'],money:['Convenience Store','Bills, ATM, snacks'],haze:'Yellow dust',horns:.3,dish:'Bibimbap',seller:'Fresh fruit, good price!',hi:['Annyeonghaseyo!','Annyeong!','Annyeonghaseyo!'],names:['Minjun','Jiwoo','Seoyeon','Hyun','Jisoo','Dohyun','Yuna','Taeyang','Haeun','Siwoo']},
+ Bangkok:{food:['Khao Gaeng Shop','Curry over rice','Cook'],street:['Moo Ping Cart','Grilled pork skewers','Griller'],money:['Mini-mart','Top up, bills, snacks'],haze:'Dry-season haze',horns:.5,dish:'Pad kra pao',seller:'Fresh mango, sweet mango!',hi:['Sawasdee ka!','Sabai dee mai?','Sawasdee krub!'],names:['Somchai','Ploy','Nok','Arthit','Mali','Krit','Fah','Niran','Pim','Chai']},
+ London:{food:['Caff','Fry-ups and a cup of tea','Cook'],street:['Kebab Shop','Late-night kebabs and chips','Cook'],money:['Corner Shop','Top up, post, milk'],haze:'Fog',horns:.2,dish:'Curry',seller:'Five for a pound!',hi:['Morning!','Alright?','Evening!'],names:['Ollie','Priya','Jamal','Grace','Tom','Amara','Callum','Sofia','Kwame','Ella']},
+ Berlin:{food:['Imbiss','Currywurst and fries','Cook'],street:['Döner Stand','Döner until late','Cook'],money:['Späti','Drinks, snacks, late hours'],haze:'Fog',horns:.15,dish:'Döner',seller:'Frische Erdbeeren!',hi:['Guten Morgen!','Hallo!','Guten Abend!'],names:['Lena','Jonas','Emre','Mia','Felix','Leyla','Noah','Hannah','Can','Sophie']},
+ 'New York':{food:['Diner','Eggs, coffee and pie','Cook'],street:['Halal Cart','Chicken over rice','Cart owner'],money:['Bodega','Coffee, sandwiches, everything'],haze:'Fog',horns:.6,dish:'Pizza',seller:'Fresh fruit, two dollars!',hi:['Morning!','Hey!','Evening!'],names:['Maria','Dev','Tasha','Luis','Jake','Keisha','Andre','Rosa','Sam','Mei']},
+ 'São Paulo':{food:['Lanchonete','Prato feito and coffee','Cook'],street:['Pastel Stand','Pastel and caldo de cana','Cook'],money:['Lotérica','Bills and transfers'],haze:'Dry-season haze',horns:.5,dish:'Feijoada',seller:'Olha a fruta fresquinha!',hi:['Bom dia!','E aí?','Boa noite!'],names:['Ana','João','Bruno','Larissa','Pedro','Camila','Lucas','Beatriz','Rafael','Juliana']}};
+const LP_LOCALE_PACK={africa:'Lagos',mideast:'Dubai',southasia:'Mumbai',eastasia:'Tokyo',europe:'London',americas:'New York'};
+function lpLocal(){const c=lpTownCity(),n=c&&c.name;if(n&&LP_LOCALE[n])return LP_LOCALE[n];const pk=(typeof lpPack==='function')?lpPack():'europe';return LP_LOCALE[LP_LOCALE_PACK[pk]||'London'];}
+/* Swap the everyday places to the ones this city actually has. */
+function lpLocalApply(){const L=lpLocal(),S=LW_SHOPS;S.buka.n=L.food[0];S.buka.label=L.food[1];S.buka.folk=L.food[2];S.suya.n=L.street[0];S.suya.label=L.street[1];S.suya.folk=L.street[2];S.pos.n=L.money[0];S.pos.label=L.money[1];
+  const B=L.bar||['The Bar','Drinks and football on the screen','Bartender'];S.bar.n=B[0];S.bar.label=B[1];S.bar.folk=B[2];S.bar.e=L.bar?'cupl':'glass';
+  const w=LP_WEATHERS.find(x=>x[0]==='haze');if(w)w[1]=L.haze;}
 function lpShopOpen(id){const S=LW_SHOPS[id];if(!S)return true;const h=lpCityHour(),a=S.open[0],b=S.open[1];return b>24?(h>=a||h<b-24):(h>=a&&h<b);}
 const LW_BLOCKS=[];LW_LAYOUT.forEach((row,ry)=>row.forEach((c,cx)=>{const q=c.split(':');LW_BLOCKS.push([cx,ry,q[0],q[1]||null]);}));
 /* Public places: each one is a door into a real part of the app, and has roles you can take a shift in. */
@@ -3731,7 +3756,8 @@ function lwEmote(k){const e=LW_EMO[k];if(!e)return;LW.emo={k,t0:LW.t,dur:e[2]};l
   const m=document.getElementById('lwEmoMore');if(m)m.classList.remove('on');}
 function lwEmoToggle(){const m=document.getElementById('lwEmoMore');if(m){m.classList.toggle('on');const b=document.getElementById('lwEmoBtn');if(b)b.setAttribute('aria-expanded',m.classList.contains('on'));}}
 
-function lwBuild(){
+function lwBuild(){LW.folk=null;LW.fbubs=[];LW.wander=0;
+  try{lpLocalApply();}catch(e){}
   const r=lpRng(lpHash('merros-world')); LW.blds=[];LW.pois=[];LW.boards=[];LW.lamps=[];LW.trees=[];LW.staff=[];LW.plates=[];
   const dists=lpAllDistricts(); let di=0;
   const door=(b,label,act,extra)=>{const o=Object.assign({x:b.x+b.w/2,y:b.y+b.h+40,r:70,label,act,bld:b},extra||{});LW.pois.push(o);b.poi=o;return o;};
@@ -3780,34 +3806,86 @@ function lwBuild(){
   if(!LW.placed){const hb=LW_BLOCKS.find(b=>b[2]==='home');if(hb){LW.p.x=(hb.rect[0]+hb.rect[2])/2;LW.p.y=hb.rect[3]-150;}LW.placed=1;}
   LW.built=true;lwRefreshOwned();
 }
-/* City folk: people who make the city feel lived in. They're not members, they're labelled, and what they do follows the time of day. */
+/* City people. They live here but aren't Merroes members, and their cards say so. They walk the pavements, turn at corners,
+   go into places and come back out, say hello when you pass, and what they're doing follows the time of day. */
 const LW_FOLK={
- sweeper:{n:'Street sweeper',c:'#E07A2E',g:'broom',sp:18,lines:{daybreak:['Early start. Streets are nicer before the noise.','You’re up early too. Good on you.'],morning:['Morning! Mind the dust.','Half the street done already.']}},
- jogger:{n:'Jogger',c:'#3F8F8A',g:'shoe',sp:120,lines:{daybreak:['Five kilometres before the city wakes up.','Can’t stop, I’m on a roll!'],morning:['Morning!','Last lap.'],evening:['An evening run clears the head.','Race you to the lagoon.']}},
- rider:{n:'Delivery rider',c:'#C62828',g:'box',sp:150,lines:{any:['Jollof for the third floor!','Can’t talk, the food’s getting cold.','Traffic is something else today.'],night:['Last delivery, then bed.']}},
- walker:{n:'Dog walker',c:'#8E5A9B',g:'paw',sp:40,lines:{morning:['Say hi to Bingo.','Honestly, he walks me.'],evening:['Last walk of the day.','Lovely evening for it.'],dusk:['Getting dark. We’re heading in.']}},
+ sweeper:{n:'Street sweeper',c:'#E07A2E',g:'broom',sp:22,lines:{daybreak:['Early start. Streets are nicer before the noise.','You’re up early too. Good on you.'],morning:['Morning! Mind the dust.','Half the street done already.']}},
+ jogger:{n:'Jogger',c:'#3F8F8A',g:'shoe',sp:120,lines:{daybreak:['Five kilometres before the city wakes up.','Can’t stop, I’m on a roll!'],morning:['Morning!','Last lap.'],evening:['An evening run clears the head.','One more round the block.']}},
+ rider:{n:'Delivery rider',c:'#C62828',g:'box',sp:140,lines:{any:['{dish} for the third floor!','Can’t talk, the food’s getting cold.','Traffic is something else today.'],night:['Last delivery, then bed.']}},
+ walker:{n:'Dog walker',c:'#8E5A9B',g:'paw',sp:40,lines:{morning:['Say hi to Bingo.','Honestly, he walks me.'],evening:['Last walk of the day.','Lovely evening for it.'],dusk:['Getting dark. We’re heading in.'],any:['He wants to say hello.']}},
  mower:{n:'Groundskeeper',c:'#4F8A4A',g:'leaf',sp:30,lines:{any:['Grass grows whether you watch it or not.','Mind your feet!']}},
- seller:{n:'Market seller',c:'#B5651D',g:'bag',sp:0,lines:{morning:['Fresh tomatoes, fresh peppers!','First customer gets a discount.'],noon:['Hot one today. Buy water?','Everything must go by evening.'],afternoon:['Nearly sold out.'],evening:['Packing up soon. Last chance!']}},
- guard:{n:'Night guard',c:'#3C4A57',g:'shield',sp:0,lines:{any:['Quiet night. Get home safe.','All locked up here.']}},
+ seller:{n:'Market seller',c:'#B5651D',g:'bag',sp:0,lines:{morning:['{seller}','First customer gets a discount.'],noon:['Hot one today. Buy water?','Everything must go by evening.'],afternoon:['Nearly sold out.'],evening:['Packing up soon. Last chance!'],any:['Come and look, no charge for looking.']}},
+ guard:{n:'Security guard',c:'#3C4A57',g:'shield',sp:55,lines:{any:['All quiet here.','Let me know if you need anything.'],night:['Quiet night. Get home safe.','All locked up here.']}},
  homeward:{n:'Walking home',c:'#5E7FA3',g:'moon',sp:45,lines:{any:['Long day. Heading home.','Night, neighbour.']}},
- commuter:{n:'Commuter',c:'#6E6E6E',g:'case',sp:60,lines:{morning:['Running late, sorry!','The bus was full again.'],noon:['Lunch break, finally.'],afternoon:['Two more meetings.'],evening:['Home time.','What a day.'],dusk:['Nearly home.']}}};
-/* How many of each are out at each time of day. */
-const LW_FOLK_AT={daybreak:{sweeper:4,jogger:3,commuter:2},morning:{sweeper:2,jogger:3,rider:4,walker:3,mower:2,seller:3,commuter:6},noon:{rider:5,seller:4,commuter:6},afternoon:{rider:4,seller:3,commuter:5,mower:2,walker:1},
- evening:{jogger:2,rider:3,walker:4,seller:2,commuter:6},dusk:{walker:2,guard:2,homeward:2,commuter:2},night:{guard:2,homeward:2,rider:1}};
-function lwFolkBuild(){const tod=LW.tod||lpTod(),A=LW_FOLK_AT[tod]||{},lite=lpLite(),out=[],r=Math.random;LW.folkTod=tod;
-  const park=LW_BLOCKS.filter(b=>b[2]==='park'),mkt=LW_BLOCKS.find(b=>b[2]==='market'),bank=LW.blds.find(b=>b.civic==='bank'),mall=LW.blds.find(b=>b.civic==='mall');
-  Object.keys(A).forEach(t=>{const n=lite?Math.ceil(A[t]/2):A[t];for(let k=0;k<n;k++){const F=LW_FOLK[t],f={t,ph:r()*6,step:0,mv:0,face:1,wait:0};
+ shopper:{n:'Out shopping',c:'#B5603A',g:'bag',sp:50,lines:{any:['Just picking up a few things.','Have you tried {dish} round the corner?'],evening:['Getting something for dinner.']}},
+ student:{n:'Student',c:'#2F6DB5',g:'book',sp:58,lines:{morning:['Late for class!'],any:['Off to the library.','Exams next week, pray for me.']}},
+ friends:{n:'Out with friends',c:'#C9803A',g:'chat',sp:38,lines:{evening:['We’re going for {dish}. Coming?'],any:['Just catching up.','We’ve been walking for an hour, talking.']}},
+ commuter:{n:'Commuter',c:'#6E6E6E',g:'case',sp:62,lines:{morning:['Running late, sorry!','The bus was full again.'],noon:['Lunch break, finally.'],afternoon:['Two more meetings.'],evening:['Home time.','What a day.'],dusk:['Nearly home.'],any:['Busy day.']}}};
+/* How many of each are out at each time of day. Cities are busy by day and quiet at night. */
+const LW_FOLK_AT={daybreak:{sweeper:4,jogger:4,commuter:5,guard:2,seller:2,student:1},
+ morning:{sweeper:2,jogger:3,rider:4,walker:3,mower:2,seller:4,commuter:12,student:6,shopper:4,guard:2},
+ noon:{rider:6,seller:5,commuter:10,shopper:8,student:4,friends:3,guard:2,mower:1},
+ afternoon:{rider:5,seller:4,commuter:9,shopper:7,student:5,friends:3,mower:2,walker:2,guard:2},
+ evening:{jogger:3,rider:4,walker:4,seller:3,commuter:12,shopper:5,friends:6,guard:2},
+ dusk:{walker:2,guard:2,homeward:5,commuter:4,friends:3,rider:2},night:{guard:2,homeward:3,rider:2,friends:1}};
+/* Pavements run along both edges of every road; corners are where they cross. */
+function lwPave(){if(LW.pave)return LW.pave;const HY=[],VX=[];LW_ROWY.slice(0,-1).forEach(r=>HY.push(r[1]-14,r[1]+LW_RD+14));LW_COLX.slice(0,-1).forEach(c=>VX.push(c[1]-14,c[1]+LW_RD+14));return LW.pave={HY,VX};}
+function lwNext(arr,cur,dir,skip){const c=dir>0?arr.filter(a=>a>cur+4):arr.filter(a=>a<cur-4).reverse();return c.length?c[Math.min(skip,c.length-1)]:null;}
+function lwPaveStart(o){const P=lwPave(),pick=a=>a[Math.floor(Math.random()*a.length)];o.ax=Math.random()<.5?'h':'v';
+  if(o.ax==='h'){o.y=pick(P.HY);o.x=80+Math.random()*(LW.W-160);}else{o.x=pick(P.VX);o.y=80+Math.random()*(LW.H-160);}o.dir=Math.random()<.5?1:-1;o.path=[];}
+/* Plan the next stretch: carry on to a corner, maybe turn, sometimes step into an open place for a while. */
+function lwPavePlan(o,canEnter){const P=lwPave(),skip=Math.floor(Math.random()*3);
+  /* step into a place on this street: walk along the pavement to opposite its door, go in, come back out to the same spot */
+  if(canEnter&&Math.random()<.3){const h=o.ax==='h',bs=LW.blds.filter(b=>b.poi&&(b.kind!=='shop'||lpShopOpen(b.shop))&&(h?Math.abs(b.poi.y-o.y)<340&&Math.abs(b.poi.x-o.x)<700:Math.abs(b.poi.x-o.x)<420&&Math.abs(b.poi.y-o.y)<600));
+    if(bs.length){const b=bs[Math.floor(Math.random()*bs.length)],k=h?{x:b.poi.x,y:o.y}:{x:o.x,y:b.poi.y};o.trip=1;o.path=[k,{x:b.poi.x,y:b.poi.y},{x:b.poi.x,y:b.poi.y,hide:10+Math.random()*30},{x:k.x,y:k.y}];return;}}
+  const corner=o.ax==='h'?P.VX.some(x=>Math.abs(x-o.x)<1):P.HY.some(y=>Math.abs(y-o.y)<1);if(corner&&Math.random()<.45){o.ax=o.ax==='h'?'v':'h';o.dir=Math.random()<.5?1:-1;}
+  let t=o.ax==='h'?lwNext(P.VX,o.x,o.dir,skip):lwNext(P.HY,o.y,o.dir,skip);if(t==null){o.dir*=-1;t=o.ax==='h'?lwNext(P.VX,o.x,o.dir,skip):lwNext(P.HY,o.y,o.dir,skip);}
+  if(t==null)t=o.ax==='h'?o.x:o.y;o.path=[o.ax==='h'?{x:t,y:o.y}:{x:o.x,y:t}];}
+/* Move one walker along its path. Returns true while it is moving. */
+function lwPaveStep(o,dt,sp,canEnter){if(o.hideT>0){o.hideT-=dt;if(o.hideT<=0)o.hid=0;return false;}if(o.wait>0){o.wait-=dt;return false;}
+  if(!o.path||!o.path.length)lwPavePlan(o,canEnter);const w=o.path[0],dx=w.x-o.x,dy=w.y-o.y,d=Math.hypot(dx,dy);
+  if(d<3){o.x=w.x;o.y=w.y;o.path.shift();if(!o.path.length)o.trip=0;if(w.hide){o.hid=1;o.hideT=w.hide;}else if(!o.path.length&&o.lingers&&Math.random()<.3)o.wait=1+Math.random()*4;return false;}
+  const s=Math.min(d,sp*dt);o.x+=dx/d*s;o.y+=dy/d*s;if(Math.abs(dx)>.5)o.face=dx>0?1:-1;return true;}
+function lwFolkBuild(){const tod=LW.tod||lpTod(),A=LW_FOLK_AT[tod]||{},lite=lpLite(),out=[],r=Math.random,names=(lpLocal().names||['Sam','Ade','Kemi','Tunde','Ngozi']).slice();LW.folkTod=tod;
+  for(let i=names.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[names[i],names[j]]=[names[j],names[i]];}let ni=0;const nm=()=>{const k=ni++,c=Math.floor(k/names.length);return names[k%names.length]+(c?' '+'OABEKNTMDS'[(c*3+k)%10]+'.':'');};
+  const park=LW_BLOCKS.filter(b=>b[2]==='park'),mkt=LW_BLOCKS.find(b=>b[2]==='market'),posts=[LW.blds.find(b=>b.civic==='bank'),LW.blds.find(b=>b.civic==='mall')].filter(Boolean);
+  Object.keys(A).forEach(t=>{const n=lite?Math.ceil(A[t]/2):A[t];for(let k=0;k<n;k++){const f={t,name:nm(),ph:r()*6,step:0,mv:0,face:1,wait:0,lingers:t==='walker'||t==='friends'||t==='shopper'};
     if(t==='mower'&&park.length){const b=park[k%park.length];f.area=b.rect;f.x=b.rect[0]+80+r()*(LW_BW-160);f.y=b.rect[1]+120+r()*(LW_BH-200);f.tx=f.x;f.ty=f.y;}
     else if(t==='seller'&&mkt){f.x=mkt.rect[0]+110+(k%3)*220;f.y=mkt.rect[1]+240+Math.floor(k/3)*190;f.fixed=1;}
-    else if(t==='guard'){const B=k%2?mall:bank;if(B){f.x=B.x+B.w/2+(k%2?60:-60);f.y=B.y+B.h+40;f.fixed=1;}else{const q=lwRoadPoint();f.x=q[0];f.y=q[1];}}
-    else{const q=lwRoadPoint();f.x=q[0];f.y=q[1];const q2=lwRoadPoint();f.tx=q2[0];f.ty=q2[1];}
-    out.push(f);}});
-  /* shopkeepers stand at the doors of places that are open */
-  LW.blds.filter(b=>b.kind==='shop'&&lpShopOpen(b.shop)).forEach(b=>out.push({t:'keeper',shop:b.shop,x:b.x+b.w+30,y:b.y+b.h+16,fixed:1,ph:r()*6,step:0,mv:0,face:-1}));
+    else if(t==='guard'&&posts[k%2]){const B=posts[k%2];f.post={x:B.x+B.w/2+(k%2?60:-60),y:B.y+B.h+40};f.x=f.post.x;f.y=f.post.y;f.fixed=1;f.at=B.sign||'';}
+    else{lwPaveStart(f);if(r()<.25){f.hid=1;f.hideT=r()*20;}}
+    if(t==='friends'){f.pal=nm();}out.push(f);}});
+  LW.blds.filter(b=>b.kind==='shop'&&lpShopOpen(b.shop)).forEach(b=>out.push({t:'keeper',shop:b.shop,name:nm(),x:b.x+b.w+30,y:b.y+b.h+16,fixed:1,ph:r()*6,step:0,mv:0,face:-1}));
   LW.folk=out;}
-function lwFolkStep(dt){if(!LW.folk||LW.folkTod!==LW.tod)lwFolkBuild();LW.folk.forEach(f=>{f.mv=0;if(f.fixed)return;if(f.wait>0){f.wait-=dt;return;}const F=LW_FOLK[f.t],dx=f.tx-f.x,dy=f.ty-f.y,d=Math.hypot(dx,dy);
-  if(d<6){if(f.area){f.tx=f.area[0]+80+Math.random()*(LW_BW-160);f.ty=f.y+(Math.random()<.5?-1:1)*24;f.ty=Math.max(f.area[1]+100,Math.min(f.area[3]-80,f.ty));}else{const q=lwRoadPoint();f.tx=q[0];f.ty=q[1];f.wait=f.t==='walker'&&Math.random()<.4?2+Math.random()*3:0;}return;}
-  f.x+=dx/d*F.sp*dt;f.y+=dy/d*F.sp*dt;f.mv=1;f.step+=dt*(F.sp>100?14:8);f.face=dx>0?1:-1;});}
+function lwHi(){const tod=LW.tod||lpTod(),L=lpLocal(),i=tod==='daybreak'||tod==='morning'?0:tod==='noon'||tod==='afternoon'?1:2,gen=[['Morning!','Good morning.'],['Hi there.','Hello!','Afternoon.'],['Evening!','Good evening.']][i];
+  return L.hi&&Math.random()<.6?L.hi[i]:gen[Math.floor(Math.random()*gen.length)];}
+function lwFolkStep(dt){if(!LW.folk||LW.folkTod!==LW.tod)lwFolkBuild();const P=LW.p;
+  LW.folk.forEach(f=>{f.mv=0;if(f.helping){lwGuardStep(f,dt);return;}if(f.fixed)return;const F=LW_FOLK[f.t];
+    if(f.area){if(f.wait>0){f.wait-=dt;return;}const dx=f.tx-f.x,dy=f.ty-f.y,d=Math.hypot(dx,dy);if(d<6){f.tx=f.area[0]+80+Math.random()*(LW_BW-160);f.ty=Math.max(f.area[1]+100,Math.min(f.area[3]-80,f.y+(Math.random()<.5?-1:1)*24));return;}f.x+=dx/d*F.sp*dt;f.y+=dy/d*F.sp*dt;f.mv=1;f.step+=dt*8;f.face=dx>0?1:-1;return;}
+    if(lwPaveStep(f,dt,F.sp,f.t!=='jogger'&&f.t!=='rider'&&f.t!=='sweeper')){f.mv=1;f.step+=dt*(F.sp>100?14:8);}});
+  /* saying hello: when you pass someone, or they pass you */
+  if(LW.t>(LW.hiNext||0)){const f=LW.folk.find(f=>!f.hid&&!f.helping&&(f.hiT||0)<LW.t&&Math.hypot(f.x-P.x,f.y-P.y)<72);
+    if(f){const fast=f.t==='jogger'||f.t==='rider';lwSayAt(f,f.t==='keeper'?lwFolkLine(f):fast?(Math.random()<.5?'Hi!':lwHi()):lwHi());f.hiT=LW.t+120;LW.hiNext=LW.t+4;if(!fast&&!f.fixed){f.wait=Math.max(f.wait||0,.9);}f.face=P.x>f.x?1:-1;}}
+  lwWanderCheck(dt);}
+/* A guard notices if you've been walking about for a while without going in anywhere, and offers to help. Once in a while, never pushy. */
+function lwWanderCheck(dt){const P=LW.p,card=document.getElementById('lwCard'),busy=card&&!card.hidden;
+  if(busy||LW.target&&LW.autoEnter){LW.wander=0;return;}if(P.mv)LW.wander=(LW.wander||0)+dt;
+  if(LW.wander>75&&LW.t>(LW.helpNext||0)&&!LW.folk.some(f=>f.helping)){const g=LW.folk.filter(f=>f.t==='guard').sort((a,b)=>Math.hypot(a.x-P.x,a.y-P.y)-Math.hypot(b.x-P.x,b.y-P.y))[0];
+    LW.helpNext=LW.t+600;LW.wander=0;if(!g)return;const d=Math.hypot(g.x-P.x,g.y-P.y);if(d>1400){g.x=P.x+(Math.random()<.5?-1:1)*420;g.y=P.y+40;}g.helping='going';}}
+function lwGuardStep(g,dt){const P=LW.p,back=g.post||{x:g.x,y:g.y};
+  if(g.helping==='going'){const dx=P.x+(g.x<P.x?-34:34)-g.x,dy=P.y-g.y,d=Math.hypot(dx,dy);if(d<8){g.helping='asked';g.face=P.x>g.x?1:-1;lwGuardAsk(g);return;}const s=Math.min(d,LW_FOLK.guard.sp*1.4*dt);g.x+=dx/d*s;g.y+=dy/d*s;g.mv=1;g.step+=dt*9;g.face=dx>0?1:-1;}
+  else if(g.helping==='back'){const dx=back.x-g.x,dy=back.y-g.y,d=Math.hypot(dx,dy);if(d<6){g.helping=0;return;}const s=Math.min(d,LW_FOLK.guard.sp*dt);g.x+=dx/d*s;g.y+=dy/d*s;g.mv=1;g.step+=dt*9;g.face=dx>0?1:-1;}
+  else if(g.helping==='asked'&&Math.hypot(g.x-P.x,g.y-P.y)>260)g.helping='back';}
+function lwGuardAsk(g){const el=document.getElementById('lwCard');if(!el)return;LW.sel=null;LW.guardAt=g;const tod=LW.tod||lpTod(),gd=tod==='daybreak'||tod==='morning'?'Good morning':tod==='noon'||tod==='afternoon'?'Good afternoon':'Good evening';
+  const line=gd+'. You’ve been walking a while. Can I help you find somewhere?';lwSayAt(g,'Can I help you find somewhere?');el.hidden=false;
+  el.innerHTML=`<div class="lp-row lp-between"><div><b>${lpEsc(g.name)}, security guard</b><div class="lp-small">Lives in ${lpEsc(lpCityName()||'the city')}. Not a Merroes member.</div></div><button class="lp-link" aria-label="Close" onclick="lp.guardBye(0)">✕</button></div>
+   <p style="margin:10px 0 8px;font-family:var(--serif);font-size:17px;line-height:1.3">“${lpEsc(line)}”</p>
+   <div class="lp-row" style="gap:6px;flex-wrap:wrap"><button class="lp-btn lp-sm" onclick="lp.guardHelp('open')">Walk me to somewhere open</button><button class="lp-btn lp-ghost lp-sm" onclick="lp.guardHelp('map')">Show me the city map</button><button class="lp-btn lp-ghost lp-sm" onclick="lp.guardBye(1)">Just walking, thanks</button></div>`;}
+lp.guardBye=function(said){const g=LW.guardAt;lwCard(null);if(g){if(said)lwSayAt(g,'No problem. Enjoy your walk.');g.helping='back';}LW.wander=0;};
+lp.guardHelp=function(what){const g=LW.guardAt,P=LW.p;lwCard(null);if(g)g.helping='back';LW.wander=0;
+  if(what==='map'){if(g)lwSayAt(g,'Here you go. The map’s up top too.');lp.townPlan(true);return;}
+  const bs=LW.blds.filter(b=>b.poi&&(b.kind==='shop'?lpShopOpen(b.shop):b.kind==='civic')).sort((a,b)=>Math.hypot(a.poi.x-P.x,a.poi.y-P.y)-Math.hypot(b.poi.x-P.x,b.poi.y-P.y)),b=bs[0];
+  if(!b){if(g)lwSayAt(g,'Everything’s shut right now. Try again in the morning.');return;}if(g)lwSayAt(g,(b.sign?b.sign+' is open, ':'There’s somewhere open ')+'just that way.');LW.target={x:b.poi.x,y:b.poi.y};LW.autoEnter=b.poi;};
 function lwGlyph(c,g,col){c.fillStyle=col;c.strokeStyle=col;c.lineWidth=2.2;c.lineCap='round';
   if(g==='broom'){c.beginPath();c.moveTo(-6,-9);c.lineTo(4,5);c.stroke();c.beginPath();c.moveTo(1,4);c.lineTo(9,0);c.lineTo(11,9);c.lineTo(3,11);c.closePath();c.fill();}
   else if(g==='shoe'){c.beginPath();c.moveTo(-10,2);c.lineTo(-4,-6);c.lineTo(0,-3);c.lineTo(10,2);c.lineTo(10,6);c.lineTo(-10,6);c.closePath();c.fill();}
@@ -3818,25 +3896,33 @@ function lwGlyph(c,g,col){c.fillStyle=col;c.strokeStyle=col;c.lineWidth=2.2;c.li
   else if(g==='shield'){c.beginPath();c.moveTo(-8,-8);c.lineTo(8,-8);c.lineTo(8,0);c.quadraticCurveTo(8,7,0,10);c.quadraticCurveTo(-8,7,-8,0);c.closePath();c.fill();}
   else if(g==='moon'){c.beginPath();c.arc(0,0,8,.9,5.4);c.arc(3,-2,6,5.0,1.3,true);c.fill();}
   else if(g==='case'){c.fillRect(-9,-4,18,12);c.strokeRect(-4,-8,8,5);}
+  else if(g==='book'){c.fillRect(-9,-7,8,14);c.fillRect(1,-7,8,14);}
+  else if(g==='chat'){c.beginPath();c.ellipse(-2,-2,8,6,0,0,6.3);c.fill();c.beginPath();c.moveTo(-6,3);c.lineTo(-9,9);c.lineTo(-1,4);c.fill();}
   else{c.beginPath();c.arc(0,0,6,0,6.3);c.fill();}}
-function lwFolkDraw(c,f){const P=LW.pal,F=LW_FOLK[f.t],S=f.shop?LW_SHOPS[f.shop]:null,col=S?S.roof:F.c,bob=f.mv?Math.abs(Math.sin(f.step))*3:Math.sin(LW.t*2+f.ph)*.8,x=f.x,y=f.y;
+/* Drawn like members: their own sigil in a disc. A dashed ring and a small badge show what they're doing, so you can tell them from members. */
+function lwPerson(c,x,y,name,col,glyph,bob){c.save();c.translate(x,y-22-bob);c.fillStyle=LW.dark?'#1A1A1A':'#FFFFFF';c.beginPath();c.arc(0,0,17,0,6.3);c.fill();
+  const im=lwImg(name);if(im.complete&&im.naturalWidth){c.save();c.beginPath();c.arc(0,0,15,0,6.3);c.clip();c.drawImage(im,-15,-15,30,30);c.restore();}
+  c.setLineDash([4,3]);c.lineWidth=2.2;c.strokeStyle=col;c.beginPath();c.arc(0,0,17,0,6.3);c.stroke();c.setLineDash([]);
+  c.translate(13,11);c.fillStyle=LW.dark?'#1A1A1A':'#FFFFFF';c.beginPath();c.arc(0,0,9,0,6.3);c.fill();c.strokeStyle=col;c.lineWidth=1.5;c.stroke();c.scale(.55,.55);lwGlyph(c,glyph,col);c.restore();}
+function lwFolkDraw(c,f){if(f.hid)return;const P=LW.pal,F=LW_FOLK[f.t],S=f.shop?LW_SHOPS[f.shop]:null,col=S?S.roof:F.c,bob=f.mv?Math.abs(Math.sin(f.step))*3:Math.sin(LW.t*2+f.ph)*.8,x=f.x,y=f.y;
   c.fillStyle='rgba(0,0,0,.16)';c.beginPath();c.ellipse(x,y+2,13,5,0,0,6.3);c.fill();
   if(f.t==='walker'){const dx=x-f.face*22,dy=y+2,st=Math.sin(f.step*1.6)*2;c.strokeStyle=P.sub;c.lineWidth=1;c.beginPath();c.moveTo(x-f.face*8,y-14);c.lineTo(dx+f.face*6,dy-8);c.stroke();c.fillStyle='#8A5A3A';c.beginPath();c.ellipse(dx,dy-6,8,4.5,0,0,6.3);c.fill();c.beginPath();c.arc(dx+f.face*8,dy-10,3.6,0,6.3);c.fill();c.fillRect(dx-6,dy-3+st,2,5);c.fillRect(dx+4,dy-3-st,2,5);}
   if(f.t==='mower'){c.fillStyle='#C62828';c.fillRect(x+f.face*14-7,y-8,14,9);c.fillStyle='#222';c.beginPath();c.arc(x+f.face*14-5,y+2,2.4,0,6.3);c.arc(x+f.face*14+5,y+2,2.4,0,6.3);c.fill();c.strokeStyle=P.sub;c.lineWidth=1.5;c.beginPath();c.moveTo(x+f.face*5,y-18);c.lineTo(x+f.face*10,y-8);c.stroke();}
   if(f.t==='rider'){c.strokeStyle='#222';c.lineWidth=2;c.beginPath();c.arc(x-11,y-2,6,0,6.3);c.arc(x+11,y-2,6,0,6.3);c.stroke();}
   if(f.t==='sweeper'&&!f.mv){const sw=Math.sin(LW.t*5+f.ph)*5;c.strokeStyle='#8A6A3A';c.lineWidth=2;c.beginPath();c.moveTo(x+8,y-20);c.lineTo(x+14+sw,y);c.stroke();}
-  c.save();c.translate(x,y-22-bob);c.fillStyle=LW.dark?'#1A1A1A':'#FFFFFF';c.beginPath();c.arc(0,0,17,0,6.3);c.fill();c.setLineDash([4,3]);c.lineWidth=2.2;c.strokeStyle=col;c.stroke();c.setLineDash([]);
-  if(S){c.scale(.6,.6);lwEmblem(c,S.e,0,0,col);}else{lwGlyph(c,F.g,col);}c.restore();
-  const label=(S?S.folk:F.n).toUpperCase();c.font='700 8.5px system-ui,sans-serif';c.textAlign='center';const w=c.measureText(label).width+10;c.fillStyle=LW.dark?'rgba(20,20,20,.88)':'rgba(255,255,255,.92)';c.beginPath();c.roundRect?c.roundRect(x-w/2,y+5,w,13,6):c.rect(x-w/2,y+5,w,13);c.fill();c.fillStyle=P.sub;c.fillText(label,x,y+14.5);}
+  if(f.pal)lwPerson(c,x-f.face*26,y+3,f.pal,col,F.g,f.mv?Math.abs(Math.cos(f.step))*3:0);
+  if(S){c.save();c.translate(x,y-22-bob);c.fillStyle=LW.dark?'#1A1A1A':'#FFFFFF';c.beginPath();c.arc(0,0,17,0,6.3);c.fill();c.setLineDash([4,3]);c.lineWidth=2.2;c.strokeStyle=col;c.stroke();c.setLineDash([]);c.scale(.6,.6);lwEmblem(c,S.e,0,0,col);c.restore();}
+  else lwPerson(c,x,y,f.name,col,F.g,bob);
+  if(LW.z<.55)return;const label=(f.name+(f.pal?' & '+f.pal:'')).toUpperCase();c.font='700 8.5px system-ui,sans-serif';c.textAlign='center';const w=c.measureText(label).width+10;c.fillStyle=LW.dark?'rgba(20,20,20,.88)':'rgba(255,255,255,.92)';c.beginPath();c.roundRect?c.roundRect(x-w/2,y+5,w,13,6):c.rect(x-w/2,y+5,w,13);c.fill();c.fillStyle=P.sub;c.fillText(label,x,y+14.5);}
 function lwFolkLine(f){const tod=LW.tod||lpTod();if(f.t==='keeper'){const S=LW_SHOPS[f.shop],h=lpCityHour(),cl=S.open[1]%24,soon=((cl-h+24)%24)<=1&&S.open[1]!==24;return soon?'Closing up soon. Come back tomorrow.':['Come in, we’re open.','Take your time, no rush.','Good '+(tod==='morning'||tod==='daybreak'?'morning':tod==='night'||tod==='dusk'?'evening':'afternoon')+'!'][Math.floor(Math.random()*3)];}
-  const L=LW_FOLK[f.t].lines,a=L[tod]||L.any||Object.values(L)[0];return a[Math.floor(Math.random()*a.length)];}
-function lwFolkCard(f){const el=document.getElementById('lwCard');if(!el)return;LW.sel=null;el.hidden=false;const S=f.shop?LW_SHOPS[f.shop]:null,nm=S?S.folk+' at '+S.n:LW_FOLK[f.t].n,line=lwFolkLine(f);lwSayAt(f,line);
-  el.innerHTML=`<div class="lp-row lp-between"><div><b>${lpEsc(nm)}</b><div class="lp-small">City folk, not a real person</div></div><button class="lp-link" aria-label="Close" onclick="lwCard(null)">✕</button></div><p style="margin:10px 0 2px;font-family:var(--serif);font-size:17px;line-height:1.3">“${lpEsc(line)}”</p>${S?`<button class="lp-btn lp-ghost lp-sm" style="margin-top:10px" onclick="lwCard(null);lp.shop('${f.shop}')">Look in at ${lpEsc(S.n)}</button>`:''}`;}
-function lwSayAt(f,text){LW.fbub={f,text,until:LW.t+4};}
+  const L=LW_FOLK[f.t].lines,a=L[tod]||L.any||Object.values(L)[0],Lc=lpLocal();return a[Math.floor(Math.random()*a.length)].replace('{dish}',Lc.dish).replace('{seller}',Lc.seller);}
+function lwFolkCard(f){const el=document.getElementById('lwCard');if(!el)return;if(f.t==='guard'&&!f.helping){f.helping='asked';lwGuardAsk(f);return;}LW.sel=null;el.hidden=false;const S=f.shop?LW_SHOPS[f.shop]:null,role=S?S.folk+' at '+S.n:LW_FOLK[f.t].n,line=lwFolkLine(f);lwSayAt(f,line);f.wait=Math.max(f.wait||0,4);
+  el.innerHTML=`<div class="lp-row lp-between"><div><b>${lpEsc(f.name+(f.pal?' and '+f.pal:''))}</b> <span class="lp-small">· ${lpEsc(role.toLowerCase())}</span><div class="lp-small">Lives in ${lpEsc(lpCityName()||'the city')}. Not a Merroes member.</div></div><button class="lp-link" aria-label="Close" onclick="lwCard(null)">✕</button></div><p style="margin:10px 0 2px;font-family:var(--serif);font-size:17px;line-height:1.3">“${lpEsc(line)}”</p>${S?`<button class="lp-btn lp-ghost lp-sm" style="margin-top:10px" onclick="lwCard(null);lp.shop('${f.shop}')">Look in at ${lpEsc(S.n)}</button>`:''}`;}
+function lwSayAt(f,text){LW.fbubs=(LW.fbubs||[]).filter(b=>b.f!==f&&b.until>LW.t);LW.fbubs.push({f,text,until:LW.t+3.5});LW.fbub=LW.fbubs[LW.fbubs.length-1];}
 function lwRoadPoint(){const pick=a=>a[Math.floor(Math.random()*a.length)];if(Math.random()<.5){const y=pick(LW_ROWY.slice(0,-1))[1]+40;return [60+Math.random()*(LW.W-120),y];}const x=pick(LW_COLX.slice(0,-1))[1]+40;return [x,60+Math.random()*(LW.H-120)];}
 function lwImg(name){const key=name+'|'+(name===lpName()?JSON.stringify((LP.user&&LP.user.sigil)||''):'');if(LW.imgs[key])return LW.imgs[key];
   const im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(lpSigil(name,64));LW.imgs[key]=im;return im;}
-function lwSay(who,text,ms){LW.bub=LW.bub.filter(b=>b.who!==who);LW.bub.push({who,text:text.length>64?text.slice(0,61)+'…':text,until:LW.t+(ms||4500)});}
+function lwSay(who,text,ms){LW.bub=LW.bub.filter(b=>b.who!==who);LW.bub.push({who,text:text.length>64?text.slice(0,61)+'…':text,until:LW.t+(ms||4500)/1000});}
 function lwOnLive(p){
   if(state.screen!=='lpWorld')return;
   lpT.livePend=(lpT.livePend||[]).filter(x=>x!==p);lpT.liveShown=lpT.liveShown||[];lpT.liveShown.unshift(p);
@@ -3866,9 +3952,7 @@ function lwUpdate(dt){
     const hit=(x,y)=>LW.blds.some(b=>x>b.x-12&&x<b.x+b.w+12&&y>b.y+b.h*.3-8&&y<b.y+b.h+10);
     if(!hit(nx,P.y))P.x=nx;if(!hit(P.x,ny))P.y=ny;
     P.x=Math.max(24,Math.min(LW.W-24,P.x));P.y=Math.max(40,Math.min(LW.H-20,P.y));P.mv=1;LW.hintT=Math.min(LW.hintT,1.2);P.step+=dt*11;if(ix)P.face=ix>0?1:-1;}
-  LW.npcs.forEach(n=>{n.mv=0;if(n.wait>0){n.wait-=dt;return;}const dx=n.tx-n.x,dy=n.ty-n.y,d=Math.hypot(dx,dy);
-    if(d<6){const q=lwRoadPoint();n.tx=q[0];n.ty=q[1];n.wait=Math.random()<.5?1+Math.random()*4:0;return;}
-    n.x+=dx/d*n.sp*dt;n.y+=dy/d*n.sp*dt;n.mv=1;n.step+=dt*9;n.face=dx>0?1:-1;});
+  LW.npcs.forEach(n=>{n.mv=0;if(!n.ax){const ox=n.x,oy=n.y;lwPaveStart(n);n.lingers=1;}if(lwPaveStep(n,dt,n.sp,false)){n.mv=1;n.step+=dt*9;}});
   lwVehStep(dt);lwFolkStep(dt);lwWhere();
   LW.bub=LW.bub.filter(b=>b.until>LW.t);
   if(!LW.nextSay||LW.t>LW.nextSay){LW.nextSay=LW.t+3500+Math.random()*4000;const n=LW.npcs[Math.floor(Math.random()*LW.npcs.length)];if(n&&n.line)lwSay(n.name,n.line[1],4200);}
@@ -3946,8 +4030,8 @@ function lwDraw(){
   if(LW.dark&&LW.flies&&LP.flies!==false){LW.flies.forEach(f=>{const x=f.x+Math.sin(LW.t*f.sp+f.ph)*26,y=f.y+Math.cos(LW.t*f.sp*.8+f.ph)*18;if(x<cx-20||x>cx+vw+20||y<cy-20||y>cy+vh+20)return;const a=.35+.65*Math.max(0,Math.sin(LW.t*2.2+f.ph*3));c.globalAlpha=a*.35;c.fillStyle='#FFE27A';c.beginPath();c.arc(x,y,7,0,6.3);c.fill();c.globalAlpha=a;c.beginPath();c.arc(x,y,2.2,0,6.3);c.fill();});c.globalAlpha=1;}
   // bubbles
   c.font='500 12px system-ui,sans-serif';
-  if(LW.fbub&&LW.fbub.until>LW.t){const b=LW.fbub,e=b.f,lines=lwWrap(c,b.text,150),w=Math.min(170,Math.max(...lines.map(l=>c.measureText(l).width))+16),h=lines.length*15+10,x=e.x-w/2,y=e.y-58-h;
-    c.fillStyle=P.bubble;c.strokeStyle=P.edge;c.lineWidth=1.5;c.beginPath();c.roundRect?c.roundRect(x,y,w,h,10):c.rect(x,y,w,h);c.fill();c.stroke();c.fillStyle=P.text;c.textAlign='left';lines.forEach((l,i)=>c.fillText(l,x+8,y+17+i*15));}
+  (LW.fbubs||[]).forEach(b=>{if(b.until<=LW.t||b.f.hid)return;const e=b.f,lines=lwWrap(c,b.text,150),w=Math.min(170,Math.max(...lines.map(l=>c.measureText(l).width))+16),h=lines.length*15+10,x=e.x-w/2,y=e.y-58-h;
+    c.fillStyle=P.bubble;c.strokeStyle=P.edge;c.lineWidth=1.5;c.beginPath();c.roundRect?c.roundRect(x,y,w,h,10):c.rect(x,y,w,h);c.fill();c.stroke();c.fillStyle=P.text;c.textAlign='left';lines.forEach((l,i)=>c.fillText(l,x+8,y+17+i*15));});
   LW.bub.forEach(b=>{const e=b.who===lpName()?LW.p:LW.npcs.find(n=>n.name===b.who);if(!e)return;const lines=lwWrap(c,b.text,150),w=Math.min(170,Math.max(...lines.map(l=>c.measureText(l).width))+16),h=lines.length*15+10,x=e.x-w/2,y=e.y-72-h;
     c.fillStyle=P.bubble;c.strokeStyle=P.edge;c.lineWidth=1.5;c.beginPath();c.roundRect?c.roundRect(x,y,w,h,10):c.rect(x,y,w,h);c.fill();c.stroke();c.beginPath();c.moveTo(e.x-5,y+h);c.lineTo(e.x,y+h+7);c.lineTo(e.x+5,y+h);c.fill();
     c.fillStyle=P.text;c.textAlign='left';lines.forEach((l,i)=>c.fillText(l,x+8,y+17+i*15));});
@@ -4038,7 +4122,7 @@ function lwBld(c,b){const P=LW.pal;
 }
 function lwLamp(c,l){const lit=l.lit,s=l.big?1.4:1,P=LW.pal,fl=lit?(.88+Math.sin(LW.t*5+l.ph)*.06+(Math.sin(LW.t*13+l.ph*3)>.92?-.12:0)):0;
   c.fillStyle='rgba(0,0,0,.14)';c.beginPath();c.ellipse(l.x,l.y,7*s,3*s,0,0,6.3);c.fill();c.fillStyle=LW.dark?'#777':'#2B3A2E';c.fillRect(l.x-1.8*s,l.y-34*s,3.6*s,34*s);
-  if(lit&&!LW.dark){const g=c.createRadialGradient(l.x,l.y-36*s,0,l.x,l.y-36*s,46*s);g.addColorStop(0,'rgba(239,162,27,'+(.38*fl)+')');g.addColorStop(1,'rgba(239,162,27,0)');c.fillStyle=g;c.beginPath();c.arc(l.x,l.y-36*s,46*s,0,6.3);c.fill();}
+  if(lit&&!LW.dark){const nt=lpIsNight(),R=(nt?46:20)*s,g=c.createRadialGradient(l.x,l.y-36*s,0,l.x,l.y-36*s,R);g.addColorStop(0,'rgba(239,162,27,'+((nt?.38:.22)*fl)+')');g.addColorStop(1,'rgba(239,162,27,0)');c.fillStyle=g;c.beginPath();c.arc(l.x,l.y-36*s,R,0,6.3);c.fill();}
   c.fillStyle=lit?'#EFA21B':(LW.dark?'#333':'#C9CCC4');c.globalAlpha=lit?fl:1;c.beginPath();c.arc(l.x,l.y-38*s,6*s,0,6.3);c.fill();c.globalAlpha=1;
   if(l.pole){const ad=lpAdPick('pole',l.pi);c.fillStyle='#2B2B2B';c.fillRect(l.x+2,l.y-44*s,3,2);c.fillRect(l.x+2,l.y-14*s,3,2);lpAdPanel(c,ad,l.x+4,l.y-48*s,58,36,0);}}
 function lwBoard(c,b){const P=LW.pal,p=b.post;
@@ -4392,7 +4476,7 @@ Object.assign(lp,{
   fBoard(k){lpT.board=k;go('lpBoard');},
   fOpen(id){lpT.thread2=id;go('lpThread');},
   placeOpen(id){if(!id)return;if(LW_CIVIC[id])lp.civic(id);else if(LW_SHOPS[id])lp.shop(id);else lp.venueSheet(true,id);},
-  shop(id){const S=LW_SHOPS[id];if(!S)return;lpT.civicOpen=null;lpT.venue=null;lpT.shopOpen=id;const op=lpShopOpen(id),hrs=(a,b)=>a===0&&b===24?'Open all day':'Open '+lpTimeOf(new Date().setHours(a%24,0,0,0))+' to '+lpTimeOf(new Date().setHours(b%24,0,0,0));
+  shop(id){try{lpLocalApply();}catch(e){}const S=LW_SHOPS[id];if(!S)return;lpT.civicOpen=null;lpT.venue=null;lpT.shopOpen=id;const op=lpShopOpen(id),hrs=(a,b)=>a===0&&b===24?'Open all day':'Open '+lpTimeOf(new Date().setHours(a%24,0,0,0))+' to '+lpTimeOf(new Date().setHours(b%24,0,0,0));
     lpHost('lpCivicHost',`<div class="lp-modal" onclick="if(event.target===this)lpHost('lpCivicHost','')"><div class="lp-sheet" role="dialog" aria-label="${lpEsc(S.n)}">
       <div class="lp-row lp-between"><div><div class="lp-title">${lpEsc(S.n)}</div><div class="lp-small">${hrs(S.open[0],S.open[1])} · <b style="color:${op?'#3FA34D':'var(--lp-muted)'}">${op?'open now':'closed now'}</b></div></div><button class="lp-link" aria-label="Close" onclick="lpHost('lpCivicHost','')">✕</button></div>
       <p class="lp-sub" style="margin:10px 0 12px">${lpEsc(S.label)}.</p>
@@ -5102,7 +5186,7 @@ function lpSn(){const own=LP.season&&LP.season!=='auto',s=own?LP.season:lpSnAuto
   if(auto){const h=lpHash(lpToday()+'wx')%100,m=new Date().getMonth();w=s==='dry'?((m===11||m<=1)&&h<45?'haze':'clear'):s==='rainy'?(h<14?'storm':h<38?'rain':'clear'):s==='winter'?(h<45?'snow':'clear'):(h<(s==='summer'?12:30)?'rain':'clear');}
   if(w==='snow'&&s!=='winter'&&!LP.weather)w='clear';
   return {season:s,weather:w,ownS:!!own,ownW:!!LP.weather,auto};}
-function lpSnLabel(){const S=lpSn(),n=LP_SEASONS.find(x=>x[0]===S.season)[1],tod=(LP_TODS.find(t=>t[0]===lpTod())||['',''])[1];return tod+' · '+(S.weather==='clear'?n:(LP_WEATHERS.find(x=>x[0]===S.weather)||['',S.weather])[1]);}
+function lpSnLabel(){try{lpLocalApply();}catch(e){}const S=lpSn(),n=LP_SEASONS.find(x=>x[0]===S.season)[1],tod=(LP_TODS.find(t=>t[0]===lpTod())||['',''])[1];return tod+' · '+(S.weather==='clear'?n:(LP_WEATHERS.find(x=>x[0]===S.weather)||['',S.weather])[1]);}
 function lpSnPal(P,dark){const S=lpSn(),o={dry:{lawn:dark?'#1F1C10':'#E9E2C0',tree:dark?'#2E3A18':'#8FAF5F'},rainy:{lawn:dark?'#0D2410':'#C9E7B5',tree:dark?'#16401F':'#4F9A4A'},spring:{lawn:dark?'#102414':'#CDEBBE',tree:dark?'#1D4A27':'#9DCF8C'},summer:{lawn:dark?'#0F2410':'#D4E9B3',tree:dark?'#16401F':'#6FAF5F'},fall:{lawn:dark?'#221A0B':'#E6DDB1',tree:dark?'#6A3B12':'#DE8A2E'},winter:{lawn:dark?'#1B2328':'#F0F5F8',tree:dark?'#26423A':'#7FA394'}}[S.season];return Object.assign({},P,o);}
 function lpSnStreetPal(P,dark){const S=lpSn(),q=Object.assign({},P);
   const m={dry:dark?{lawn:'#1F1C10',mid:'#2A2412',hedge:'#3A3218'}:{lawn:'#E9E2C0',mid:'#D8CB98',hedge:'#AFA066'},rainy:dark?{lawn:'#0D2410',mid:'#0F2A17',hedge:'#173A22'}:{lawn:'#C9E7B5',mid:'#9CCB8A',hedge:'#6FAF5F'},spring:dark?{lawn:'#102414',mid:'#0F2A17',hedge:'#173A22'}:{lawn:'#CDEBBE',mid:'#9CCB8A',hedge:'#7FBF72'},summer:{},fall:dark?{lawn:'#221A0B',mid:'#2A1D0C',hedge:'#3A2610'}:{lawn:'#E6DDB1',mid:'#D9B27A',hedge:'#B9873F',s1:'#F8EBD0'},winter:dark?{lawn:'#1B2328',mid:'#1B2A33',hedge:'#26343C',walk:'#262B2E'}:{lawn:'#F0F5F8',mid:'#DCE6EC',hedge:'#B8CBD3',s0:'#DDE8F0',walk:'#F1F1EE'}}[S.season];Object.assign(q,m);
@@ -5138,43 +5222,76 @@ function lpSnDraw(c,w,h,dt,dark){
     if(p.y>h+14||p.x<-20||p.x>w+20){const n=lpSnNew(w,h,false);if(wx!=='haze')n.x=Math.random()*(w+80);P[i]=n;}}
 }
 function LS_T(){return performance.now()/1000;}
-/* City sound, made in the browser (no recordings): birds at daybreak, traffic and horns by day, a market hum at noon,
-   crickets and frogs at night, rain, wind in the harmattan, hail and thunder. Off until you turn it on. */
-const LPA={ctx:null,master:null,L:{},timer:0,on:false};
+/* City sound, made in the browser. Each sound can be switched off. Everything goes through a little room reverb so it sounds
+   like it's outside around you rather than in your ear. Off until you turn it on. */
+const LPA={ctx:null,master:null,L:{},timer:0,on:false,cr:[]};
+const LPA_KEYS=[['birds','Birds'],['owls','Owls'],['crickets','Crickets'],['cicadas','Cicadas'],['frogs','Frogs and toads'],['horns','Car horns'],['traffic','Traffic'],['market','Market chatter'],['rain','Rain and thunder'],['wind','Wind']];
+function lpaOk(k){return !(LP.sound&&LP.sound.off&&LP.sound.off[k]);}
 function lpaNoise(type){const ctx=LPA.ctx,n=ctx.sampleRate*3,b=ctx.createBuffer(1,n,ctx.sampleRate),d=b.getChannelData(0);let l=0,b0=0,b1=0,b2=0;
   for(let i=0;i<n;i++){const w=Math.random()*2-1;if(type==='brown'){l=(l+.02*w)/1.02;d[i]=l*3.5;}else if(type==='pink'){b0=.99765*b0+w*.099;b1=.963*b1+w*.2965;b2=.57*b2+w*1.0526;d[i]=(b0+b1+b2+w*.1848)*.12;}else d[i]=w*.5;}return b;}
-function lpaBed(buf,mk){const ctx=LPA.ctx,src=ctx.createBufferSource();src.buffer=buf;src.loop=true;let node=src;(mk||[]).forEach(f=>{node.connect(f);node=f;});const g=ctx.createGain();g.gain.value=0;node.connect(g);g.connect(LPA.master);src.start();return g;}
+function lpaVerb(){const ctx=LPA.ctx,len=Math.floor(ctx.sampleRate*2.6),b=ctx.createBuffer(2,len,ctx.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3.2)*(i<ctx.sampleRate*.01?i/(ctx.sampleRate*.01):1);}const cv=ctx.createConvolver();cv.buffer=b;return cv;}
 function lpaF(type,f,q){const x=LPA.ctx.createBiquadFilter();x.type=type;x.frequency.value=f;if(q)x.Q.value=q;return x;}
-function lpaStart(){try{if(!LPA.ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;LPA.ctx=new AC();LPA.master=LPA.ctx.createGain();LPA.master.connect(LPA.ctx.destination);
+function lpaBed(buf,mk,wet){const ctx=LPA.ctx,src=ctx.createBufferSource();src.buffer=buf;src.loop=true;let node=src;(mk||[]).forEach(f=>{node.connect(f);node=f;});const g=ctx.createGain();g.gain.value=0;node.connect(g);g.connect(LPA.dry);if(wet){const w=ctx.createGain();w.gain.value=wet;g.connect(w);w.connect(LPA.wet);}src.start(0,Math.random()*2);return g;}
+/* Send a sound out: a little dry, mostly through the room, panned somewhere around you. */
+function lpaOut(node,pan,wet){const ctx=LPA.ctx;let n=node;if(ctx.createStereoPanner){const p=ctx.createStereoPanner();p.pan.value=Math.max(-1,Math.min(1,pan));node.connect(p);n=p;}const d=ctx.createGain(),w=ctx.createGain();d.gain.value=1-(wet==null?.45:wet);w.gain.value=wet==null?.45:wet;n.connect(d);n.connect(w);d.connect(LPA.dry);w.connect(LPA.wet);}
+function lpaEnv(g,t,a,peak,hold,rel){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.setValueAtTime(peak,t+a+hold);g.gain.exponentialRampToValueAtTime(.0001,t+a+hold+rel);}
+function lpaStart(){try{if(!LPA.ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;const ctx=LPA.ctx=new AC();LPA.master=ctx.createGain();LPA.master.connect(ctx.destination);
+    LPA.dry=ctx.createGain();LPA.dry.connect(LPA.master);const v=lpaVerb();LPA.wet=ctx.createGain();LPA.wet.gain.value=.9;LPA.wet.connect(v);v.connect(LPA.master);
     LPA.nb={white:lpaNoise('white'),pink:lpaNoise('pink'),brown:lpaNoise('brown')};
-    LPA.L.rain=lpaBed(LPA.nb.pink,[lpaF('highpass',500),lpaF('lowpass',7000)]);LPA.L.wind=lpaBed(LPA.nb.brown,[lpaF('bandpass',420,.7)]);
-    LPA.L.traffic=lpaBed(LPA.nb.brown,[lpaF('lowpass',230)]);LPA.L.market=lpaBed(LPA.nb.pink,[lpaF('bandpass',850,1.1)]);
-    const lfo=LPA.ctx.createOscillator(),lg=LPA.ctx.createGain();lfo.frequency.value=.13;lg.gain.value=.25;lfo.connect(lg);lg.connect(LPA.L.wind.gain);lfo.start();}
-  if(LPA.ctx.state==='suspended')LPA.ctx.resume();LPA.on=true;clearInterval(LPA.timer);LPA.timer=setInterval(lpaTick,150);return true;}catch(e){return false;}}
+    LPA.L.rain=lpaBed(LPA.nb.pink,[lpaF('highpass',900),lpaF('lowpass',9000)],.25);LPA.L.wind=lpaBed(LPA.nb.brown,[lpaF('bandpass',380,.6)],.2);
+    LPA.L.traffic=lpaBed(LPA.nb.brown,[lpaF('lowpass',260)],.5);LPA.L.market=lpaBed(LPA.nb.pink,[lpaF('bandpass',700,2.5),lpaF('peaking',1800)],.6);
+    const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=.11;lg.gain.value=.18;lfo.connect(lg);lg.connect(LPA.L.wind.gain);lfo.start();
+    const ml=ctx.createOscillator(),mg=ctx.createGain();ml.type='triangle';ml.frequency.value=3.3;mg.gain.value=.03;ml.connect(mg);mg.connect(LPA.L.market.gain);ml.start();
+    LPA.cr=[0,1,2,3,4].map(k=>({f:4100+Math.random()*900,per:.45+Math.random()*.5,next:0,pan:Math.random()*1.8-.9,far:k>2}));}
+  if(LPA.ctx.state==='suspended')LPA.ctx.resume();LPA.on=true;clearInterval(LPA.timer);LPA.timer=setInterval(lpaTick,100);return true;}catch(e){return false;}}
 function lpaStop(){LPA.on=false;clearInterval(LPA.timer);try{if(LPA.ctx&&LPA.ctx.state==='running')LPA.ctx.suspend();}catch(e){}}
-function lpaEnv(g,t,a,peak,d){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+a+d);}
-function lpaOut(node,pan){const ctx=LPA.ctx;if(ctx.createStereoPanner){const p=ctx.createStereoPanner();p.pan.value=pan;node.connect(p);p.connect(LPA.master);}else node.connect(LPA.master);}
-function lpaBird(t){const ctx=LPA.ctx,f0=2300+Math.random()*1900,n=2+Math.floor(Math.random()*4),up=Math.random()<.5,pan=Math.random()*1.6-.8;
-  for(let k=0;k<n;k++){const o=ctx.createOscillator(),g=ctx.createGain(),s=t+k*(.09+Math.random()*.05),d=.05+Math.random()*.06;o.type='sine';o.frequency.setValueAtTime(f0*(up?1:1.35),s);o.frequency.exponentialRampToValueAtTime(f0*(up?1.4:.9),s+d);lpaEnv(g,s,.008,.05,d);o.connect(g);lpaOut(g,pan);o.start(s);o.stop(s+d+.05);}}
-function lpaCricket(t){const ctx=LPA.ctx,f=4300+Math.random()*500,pan=Math.random()*1.8-.9;for(let k=0;k<3+Math.floor(Math.random()*2);k++){const o=ctx.createOscillator(),g=ctx.createGain(),s=t+k*.042;o.frequency.value=f;lpaEnv(g,s,.004,.018,.018);o.connect(g);lpaOut(g,pan);o.start(s);o.stop(s+.04);}}
-function lpaFrog(t){const ctx=LPA.ctx,f=110+Math.random()*60,pan=Math.random()*1.6-.8;for(let k=0;k<2+Math.floor(Math.random()*2);k++){const s=t+k*.32,o=ctx.createOscillator(),bp=lpaF('bandpass',560,4),g=ctx.createGain(),am=ctx.createOscillator(),ag=ctx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f,s);o.frequency.linearRampToValueAtTime(f*.85,s+.22);am.frequency.value=28;ag.gain.value=.5;am.connect(ag);ag.connect(g.gain);
-  lpaEnv(g,s,.02,.07,.22);o.connect(bp);bp.connect(g);lpaOut(g,pan);o.start(s);o.stop(s+.3);am.start(s);am.stop(s+.3);}}
-function lpaCar(t){const ctx=LPA.ctx,src=ctx.createBufferSource(),bp=lpaF('bandpass',300,1.4),g=ctx.createGain(),d=2+Math.random()*1.5;src.buffer=LPA.nb.pink;bp.frequency.setValueAtTime(260,t);bp.frequency.linearRampToValueAtTime(700,t+d/2);bp.frequency.linearRampToValueAtTime(280,t+d);
-  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.12,t+d/2);g.gain.linearRampToValueAtTime(0,t+d);src.connect(bp);bp.connect(g);lpaOut(g,Math.random()<.5?-.5:.5);src.start(t,Math.random()*2);src.stop(t+d);}
-function lpaHorn(t){const ctx=LPA.ctx,lp=lpaF('lowpass',1400),g=ctx.createGain(),pan=Math.random()*1.4-.7,n=Math.random()<.5?1:2;for(let k=0;k<n;k++){const s=t+k*.3;[392,494].forEach(f=>{const o=ctx.createOscillator();o.type='square';o.frequency.value=f;o.connect(lp);o.start(s);o.stop(s+.22);});}
-  g.gain.setValueAtTime(0,t);for(let k=0;k<n;k++){g.gain.setValueAtTime(.012,t+k*.3);g.gain.setValueAtTime(0,t+k*.3+.22);}lp.connect(g);lpaOut(g,pan);}
-function lpaTick2(t){const ctx=LPA.ctx,src=ctx.createBufferSource(),hp=lpaF('highpass',3000),g=ctx.createGain();src.buffer=LPA.nb.white;lpaEnv(g,t,.001,.05,.012);src.connect(hp);hp.connect(g);lpaOut(g,Math.random()*2-1);src.start(t,Math.random()*2);src.stop(t+.03);}
-function lpaThunder(delay){if(!LPA.on||!LPA.ctx)return;const ctx=LPA.ctx,t=ctx.currentTime+(delay||1),src=ctx.createBufferSource(),lp=lpaF('lowpass',420),g=ctx.createGain(),d=3+Math.random()*2.5;src.buffer=LPA.nb.brown;lp.frequency.setValueAtTime(420,t);lp.frequency.exponentialRampToValueAtTime(110,t+d);
-  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.9,t+.18);g.gain.exponentialRampToValueAtTime(.001,t+d);src.connect(lp);lp.connect(g);g.connect(LPA.master);src.start(t,Math.random());src.stop(t+d+.1);
-  if((delay||1)<1.2){const c2=ctx.createBufferSource(),hp=lpaF('highpass',1200),g2=ctx.createGain();c2.buffer=LPA.nb.white;lpaEnv(g2,t,.003,.12,.25);c2.connect(hp);hp.connect(g2);g2.connect(LPA.master);c2.start(t);c2.stop(t+.3);}}
-/* Levels for each time of day: [birds, traffic, market, crickets, frogs, cars, horns] (events per second for the last ones). */
-const LPA_MIX={daybreak:[1.3,.15,0,.15,.05,.03,0],morning:[.8,.5,.15,0,0,.18,.06],noon:[.25,.6,.6,0,0,.22,.08],afternoon:[.45,.55,.35,0,0,.2,.05],evening:[.3,.45,.2,.3,.05,.16,.04],dusk:[.05,.25,0,.7,.2,.06,.01],night:[0,.12,0,1,.3,.03,0]};
-function lpaTick(){if(!LPA.on||!LPA.ctx)return;const ctx=LPA.ctx,now=ctx.currentTime,v=Math.max(0,Math.min(1,(LP.sound&&LP.sound.vol!=null)?LP.sound.vol:.6)),S=lpSn(),wx=S.weather,M=LPA_MIX[lpTod()]||LPA_MIX.noon,wet=wx==='rain'||wx==='storm';
-  LPA.master.gain.setTargetAtTime(v,now,.3);const set=(k,x)=>LPA.L[k].gain.setTargetAtTime(x,now,.8);
-  set('rain',wet?(wx==='storm'?.55:.38):wx==='hail'?.15:0);set('wind',wx==='haze'?.35:wx==='storm'?.2:.03);set('traffic',M[1]*.5);set('market',M[2]*.12*(wet?.4:1));
-  const dt=.15,r=x=>Math.random()<x*dt;
-  if(r(M[0]*(wet?.25:1)))lpaBird(now+Math.random()*.1);if(r(M[3]*3*(wet?.5:1)))lpaCricket(now+Math.random()*.1);if(r(M[4]*(wet?2.2:1)))lpaFrog(now+Math.random()*.1);
-  if(r(M[5]))lpaCar(now);if(r(M[6]))lpaHorn(now+Math.random()*.2);if(wx==='hail')for(let k=0;k<4;k++)if(Math.random()<.6)lpaTick2(now+Math.random()*.15);}
+/* Birds: short songs with a warble, a few notes each. */
+function lpaBird(t){const ctx=LPA.ctx,pan=Math.random()*1.8-.9,kind=Math.floor(Math.random()*3),n=kind===2?2:3+Math.floor(Math.random()*4),f0=kind===0?2600+Math.random()*1600:kind===1?3200+Math.random()*1500:1800+Math.random()*700;
+  for(let k=0;k<n;k++){const s=t+k*(kind===2?.28:.11+Math.random()*.05),d=kind===2?.22:.06+Math.random()*.05,o=ctx.createOscillator(),m=ctx.createOscillator(),mg=ctx.createGain(),g=ctx.createGain();
+    o.frequency.setValueAtTime(f0*(kind===2?(k?.84:1):(1+Math.random()*.3)),s);o.frequency.exponentialRampToValueAtTime(f0*(kind===1?1.5:kind===2?(k?.8:.96):.85+Math.random()*.4),s+d);
+    m.frequency.value=kind===2?6:30+Math.random()*40;mg.gain.value=kind===2?40:f0*.08;m.connect(mg);mg.connect(o.frequency);lpaEnv(g,s,.008,kind===2?.035:.03,d*.4,d*.6);o.connect(g);lpaOut(g,pan,.35);o.start(s);m.start(s);o.stop(s+d+.1);m.stop(s+d+.1);}}
+/* Owls: a soft hoo, then a wavering hoo-hoo-hoo. */
+function lpaOwl(t){const ctx=LPA.ctx,pan=Math.random()*1.6-.8,f=360+Math.random()*60,notes=[[0,.32],[.9,.1],[1.06,.1],[1.22,.42]];
+  notes.forEach(([o0,d])=>{const s=t+o0,o=ctx.createOscillator(),h=ctx.createOscillator(),hg=ctx.createGain(),lp=lpaF('lowpass',900),g=ctx.createGain();o.frequency.setValueAtTime(f*.97,s);o.frequency.linearRampToValueAtTime(f*1.03,s+d*.4);o.frequency.linearRampToValueAtTime(f*.94,s+d);
+    h.frequency.value=f*2;hg.gain.value=.12;h.connect(hg);hg.connect(lp);o.connect(lp);lp.connect(g);lpaEnv(g,s,.05,.06,d*.5,.18);lpaOut(g,pan,.6);o.start(s);h.start(s);o.stop(s+d+.3);h.stop(s+d+.3);});}
+/* Crickets: each one chirps on its own steady rhythm, three quick pulses at a time. */
+function lpaCricketVoices(now,level){LPA.cr.forEach(c=>{if(c.next<now){c.next=now+c.per*(.9+Math.random()*.2);if(Math.random()>level)return;const ctx=LPA.ctx;
+  for(let k=0;k<3;k++){const s=c.next+k*.04,o=ctx.createOscillator(),g=ctx.createGain(),bp=lpaF('bandpass',c.f,8);o.type='triangle';o.frequency.value=c.f;lpaEnv(g,s,.004,c.far?.006:.014,.012,.012);o.connect(bp);bp.connect(g);lpaOut(g,c.pan,c.far?.7:.4);o.start(s);o.stop(s+.05);}}});}
+/* Cicadas: a buzzing swell that rises and falls over a few seconds. */
+function lpaCicada(t){const ctx=LPA.ctx,d=4+Math.random()*4,src=ctx.createBufferSource(),bp=lpaF('bandpass',4800+Math.random()*1200,7),am=ctx.createOscillator(),ag=ctx.createGain(),g=ctx.createGain(),mod=ctx.createGain();
+  src.buffer=LPA.nb.white;am.frequency.value=160+Math.random()*80;ag.gain.value=.5;mod.gain.value=.5;am.connect(ag);ag.connect(mod.gain);src.connect(bp);bp.connect(mod);mod.connect(g);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+d*.4);g.gain.linearRampToValueAtTime(.04,t+d*.75);g.gain.linearRampToValueAtTime(0,t+d);lpaOut(g,Math.random()*1.6-.8,.5);src.start(t,Math.random()*2);am.start(t);src.stop(t+d);am.stop(t+d);}
+/* Toads trill; frogs croak. */
+function lpaFrog(t){const ctx=LPA.ctx,pan=Math.random()*1.6-.8;if(Math.random()<.5){const d=1.2+Math.random()*1.8,o=ctx.createOscillator(),bp=lpaF('bandpass',650,3),g=ctx.createGain(),am=ctx.createOscillator(),ag=ctx.createGain(),mod=ctx.createGain();
+    o.type='sawtooth';o.frequency.value=240+Math.random()*80;am.type='square';am.frequency.value=32+Math.random()*10;ag.gain.value=.5;mod.gain.value=.5;am.connect(ag);ag.connect(mod.gain);o.connect(bp);bp.connect(mod);mod.connect(g);lpaEnv(g,t,.15,.03,d-.3,.2);lpaOut(g,pan,.55);o.start(t);am.start(t);o.stop(t+d+.3);am.stop(t+d+.3);return;}
+  const f=110+Math.random()*50;for(let k=0;k<2+Math.floor(Math.random()*2);k++){const s=t+k*.36,o=ctx.createOscillator(),bp=lpaF('bandpass',520,5),g=ctx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f,s);o.frequency.linearRampToValueAtTime(f*.82,s+.2);lpaEnv(g,s,.015,.06,.1,.12);o.connect(bp);bp.connect(g);lpaOut(g,pan,.5);o.start(s);o.stop(s+.3);}}
+function lpaCar(t){const ctx=LPA.ctx,src=ctx.createBufferSource(),bp=lpaF('bandpass',300,1.2),g=ctx.createGain(),d=2.2+Math.random()*1.5,p=ctx.createStereoPanner?ctx.createStereoPanner():null,dir=Math.random()<.5?-1:1;src.buffer=LPA.nb.pink;
+  bp.frequency.setValueAtTime(240,t);bp.frequency.linearRampToValueAtTime(620,t+d/2);bp.frequency.linearRampToValueAtTime(260,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.1,t+d/2);g.gain.linearRampToValueAtTime(0,t+d);
+  src.connect(bp);bp.connect(g);if(p){p.pan.setValueAtTime(-.8*dir,t);p.pan.linearRampToValueAtTime(.8*dir,t+d);g.connect(p);const dd=ctx.createGain(),w=ctx.createGain();dd.gain.value=.7;w.gain.value=.3;p.connect(dd);p.connect(w);dd.connect(LPA.dry);w.connect(LPA.wet);}else lpaOut(g,0,.3);src.start(t,Math.random()*2);src.stop(t+d);}
+/* A distant car horn: two slightly out-of-tune notes, a beep or two. */
+function lpaHorn(t){const ctx=LPA.ctx,lp=lpaF('lowpass',1700),ws=ctx.createWaveShaper(),g=ctx.createGain(),pan=Math.random()*1.6-.8,n=Math.random()<.6?1:2,pitch=.9+Math.random()*.25;
+  const cv=new Float32Array(256);for(let i=0;i<256;i++){const x=i/128-1;cv[i]=Math.tanh(2.5*x);}ws.curve=cv;
+  for(let k=0;k<n;k++){const s=t+k*.26,d=k===n-1?.32+Math.random()*.2:.16;[415,495].forEach(f=>{const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=f*pitch;o.connect(ws);o.start(s);o.stop(s+d);});
+    g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(.022,s+.01);g.gain.setValueAtTime(.022,s+d-.02);g.gain.linearRampToValueAtTime(0,s+d);}
+  ws.connect(lp);lp.connect(g);lpaOut(g,pan,.65);}
+function lpaDrop(t,hard){const ctx=LPA.ctx,src=ctx.createBufferSource(),hp=lpaF(hard?'highpass':'bandpass',hard?3200:2400+Math.random()*2000,hard?0:4),g=ctx.createGain();src.buffer=LPA.nb.white;lpaEnv(g,t,.001,hard?.05:.02,.002,hard?.02:.03);src.connect(hp);hp.connect(g);lpaOut(g,Math.random()*2-1,.3);src.start(t,Math.random()*2);src.stop(t+.06);}
+function lpaThunder(delay){if(!LPA.on||!LPA.ctx||!lpaOk('rain'))return;const ctx=LPA.ctx,t=ctx.currentTime+(delay||1),src=ctx.createBufferSource(),lp=lpaF('lowpass',500),g=ctx.createGain(),d=3.5+Math.random()*3;src.buffer=LPA.nb.brown;lp.frequency.setValueAtTime(500,t);lp.frequency.exponentialRampToValueAtTime(90,t+d);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.8,t+.25);g.gain.setTargetAtTime(.35,t+.6,.4);g.gain.exponentialRampToValueAtTime(.001,t+d);src.connect(lp);lp.connect(g);lpaOut(g,Math.random()-.5,.6);src.start(t,Math.random());src.stop(t+d+.1);
+  if((delay||1)<1.2){const c2=ctx.createBufferSource(),hp=lpaF('highpass',900),g2=ctx.createGain();c2.buffer=LPA.nb.white;lpaEnv(g2,t,.004,.09,.05,.3);c2.connect(hp);hp.connect(g2);lpaOut(g2,0,.5);c2.start(t);c2.stop(t+.5);}}
+/* What you hear at each time of day, per second: [birds, owls, crickets, cicadas, frogs, cars, horns], plus traffic and market levels. */
+const LPA_MIX={daybreak:{b:1.4,o:.04,c:.2,ci:0,f:.05,car:.05,h:.02,tr:.15,mk:0},morning:{b:.9,o:0,c:0,ci:.02,f:0,car:.2,h:.07,tr:.45,mk:.3},noon:{b:.25,o:0,c:0,ci:.12,f:0,car:.25,h:.09,tr:.55,mk:.7},
+ afternoon:{b:.4,o:0,c:0,ci:.12,f:0,car:.22,h:.07,tr:.5,mk:.45},evening:{b:.35,o:0,c:.35,ci:.06,f:.05,car:.18,h:.06,tr:.45,mk:.25},dusk:{b:.06,o:.04,c:.75,ci:.02,f:.2,car:.08,h:.02,tr:.25,mk:0},night:{b:0,o:.07,c:1,ci:0,f:.3,car:.03,h:0,tr:.1,mk:0}};
+function lpaTick(){if(!LPA.on||!LPA.ctx)return;const ctx=LPA.ctx,now=ctx.currentTime,v=Math.max(0,Math.min(1,(LP.sound&&LP.sound.vol!=null)?LP.sound.vol:.6)),S=lpSn(),wx=S.weather,M=LPA_MIX[lpTod()]||LPA_MIX.noon,wet=wx==='rain'||wx==='storm',cold=S.season==='winter',warm=!cold&&S.season!=='fall';
+  LPA.master.gain.setTargetAtTime(v*1.4,now,.3);const set=(k,on,x)=>LPA.L[k].gain.setTargetAtTime(on?x:0,now,.9);
+  set('rain',lpaOk('rain'),wet?(wx==='storm'?.5:.34):wx==='hail'?.12:0);set('wind',lpaOk('wind'),wx==='haze'?.32:wx==='storm'?.22:.025);set('traffic',lpaOk('traffic'),M.tr*.42);set('market',lpaOk('market'),M.mk*.08*(wet?.4:1));
+  const dt=.1,r=x=>Math.random()<x*dt;
+  if(lpaOk('birds')&&r(M.b*(wet?.2:1)*(cold?.5:1)))lpaBird(now+Math.random()*.1);
+  if(lpaOk('owls')&&r(M.o))lpaOwl(now+.05);
+  if(lpaOk('crickets'))lpaCricketVoices(now,M.c*(wet?.3:1)*(cold?.2:1));
+  if(lpaOk('cicadas')&&warm&&r(M.ci*(wet?0:1)))lpaCicada(now);
+  if(lpaOk('frogs')&&r(M.f*(wet?2.5:1)))lpaFrog(now+Math.random()*.1);
+  if(lpaOk('traffic')&&r(M.car))lpaCar(now);if(lpaOk('horns')&&r(M.h*lpLocal().horns))lpaHorn(now+Math.random()*.1);
+  if(lpaOk('rain')){if(wet)for(let k=0;k<3;k++)if(Math.random()<.5)lpaDrop(now+Math.random()*.1,false);if(wx==='hail')for(let k=0;k<4;k++)if(Math.random()<.6)lpaDrop(now+Math.random()*.1,true);}}
 document.addEventListener('visibilitychange',()=>{try{if(document.hidden)lpaStop();else if(LP.sound&&LP.sound.on&&state.screen==='lpWorld')lpaStart();}catch(e){}});
 function lpLite(){if(LP.lite!=null)return !!LP.lite;try{return (navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=3;}catch(e){return false;}}
 function lpSnTree(c,x,y,s,seed,dark){ /* y = top of canopy */
@@ -5185,7 +5302,7 @@ function lpSnTree(c,x,y,s,seed,dark){ /* y = top of canopy */
 }
 function lpSnHud(){return `<button class="lw-chip lw-btnchip lw-snchip" onclick="lp.snSheet(true)" aria-label="Season and weather">${lpSnLabel()}</button>`;}
 function lpHost(id,html){const old=document.getElementById(id);if(old)old.remove();if(!html)return;const d=document.createElement('div');d.id=id;d.className='lp';d.innerHTML=html;document.body.appendChild(d);}
-function lpSnSheetHTML(){const S=lpSn(),sky=LP.sky||'theme',b=(k,v,l,on)=>`<button type="button" class="lp-chip ${on?'sel':''}" aria-pressed="${on}" onclick="lp.snSet('${k}','${v}')">${l}</button>`,snd=LP.sound||{},vol=Math.round(((snd.vol!=null)?snd.vol:.6)*100);
+function lpSnSheetHTML(){try{lpLocalApply();}catch(e){}const S=lpSn(),sky=LP.sky||'theme',b=(k,v,l,on)=>`<button type="button" class="lp-chip ${on?'sel':''}" aria-pressed="${on}" onclick="lp.snSet('${k}','${v}')">${l}</button>`,snd=LP.sound||{},vol=Math.round(((snd.vol!=null)?snd.vol:.6)*100);
   return `<div class="lp-modal" onclick="if(event.target===this)lp.snSheet(false)"><div class="lp-sheet" role="dialog" aria-label="Sky, weather and sound">
     <div class="lp-row lp-between"><div class="lp-title">Sky, weather and sound</div><button class="lp-link" aria-label="Close" onclick="lp.snSheet(false)">✕</button></div>
     <p class="lp-sub" style="margin:4px 0 14px">Only changes the city. Your app stays ${LP.theme==='dark'?'black':'white'}.</p>
@@ -5194,8 +5311,10 @@ function lpSnSheetHTML(){const S=lpSn(),sky=LP.sky||'theme',b=(k,v,l,on)=>`<butt
     ${LP.weather==='storm'?'<p class="lp-small" style="margin:6px 0 0">Lightning is a soft brightening, never a flash, and switches off if your phone is set to reduce motion.</p>':''}
     <div class="lp-eyebrow" style="margin:16px 0 8px">Season</div><div class="lp-row" style="gap:6px;flex-wrap:wrap">${b('season','auto','Auto',!S.ownS)}${LP_SEASONS.map(x=>b('season',x[0],x[1],S.ownS&&LP.season===x[0])).join('')}</div>
     <div class="lp-setrow" style="margin-top:12px"><div><b>Fireflies at night</b></div>${lpTog(LP.flies!==false,"LP.flies=LP.flies===false;lpSave();lpHost('lpSnHost',lpSnSheetHTML())")}</div>
-    <div class="lp-setrow"><div><b>City sound</b><span class="lp-d">Birds at daybreak, traffic and horns by day, crickets and frogs at night, and the weather. Stops when you leave the city.</span></div>${lpTog(!!snd.on,"lp.soundTog()")}</div>
-    ${snd.on?`<label class="lp-small" style="display:block;margin-top:8px">Volume <input type="range" min="0" max="100" value="${vol}" style="width:100%;accent-color:var(--lp-lit)" oninput="LP.sound.vol=this.value/100;lpSave()" aria-label="Volume"/></label>`:''}
+    <div class="lp-setrow"><div><b>City sound</b><span class="lp-d">Birds at daybreak, cicadas in the heat, traffic and horns by day, crickets, frogs and owls at night, and the weather. Stops when you leave the city.</span></div>${lpTog(!!snd.on,"lp.soundTog()")}</div>
+    ${snd.on?`<label class="lp-small" style="display:block;margin-top:8px">Volume <input type="range" min="0" max="100" value="${vol}" style="width:100%;accent-color:var(--lp-lit)" oninput="LP.sound.vol=this.value/100;lpSave()" aria-label="Volume"/></label>
+      <div class="lp-small" style="margin:10px 0 6px">Sounds you hear. Tap to switch one off. What plays also depends on the time of day and the weather.</div>
+      <div class="lp-row snd-tg" style="gap:6px;flex-wrap:wrap">${LPA_KEYS.map(k=>`<button type="button" class="lp-chip ${lpaOk(k[0])?'sel':''}" aria-pressed="${lpaOk(k[0])}" onclick="LP.sound.off=LP.sound.off||{};LP.sound.off['${k[0]}']=lpaOk('${k[0]}');lpSave();lpHost('lpSnHost',lpSnSheetHTML())">${lpaOk(k[0])?'✓ ':''}${k[1]}</button>`).join('')}</div>`:''}
     <div class="lp-setrow"><div><b>Light mode</b><span class="lp-d">Fewer people and effects, for older phones.${LP.lite==null&&lpLite()?' On automatically for this phone.':''}</span></div>${lpTog(lpLite(),"LP.lite=!lpLite();lpSave();LW.built=false;render()")}</div>
     <button class="lp-btn lp-sm" style="margin-top:18px;width:100%" onclick="lp.snSheet(false)">Done</button></div></div>`;}
 
@@ -5439,36 +5558,36 @@ function lpCityGateHTML(){return `<div class="lp-modal"><div class="lp-sheet" ro
   ${lpPlaceHTML('user')}</div></div>`;}
 /* The firefly: a guide with pre-written lines. Rules: never guilt, one unprompted line per visit, always a next step,
    quiet from midnight to 6am, quiet on rest days, quotes your goal at most once a day, and can be switched off in Settings. */
-/* The firefly, drawn with shading so it reads as a small 3D creature. Six moods change its face, glow and movement. */
+/* The firefly: an insect, not a person. Teal shell, glossy bug eyes, a glowing body. Moods show in the eyes, antennae, glow and movement. */
 const LP_FLY_MOODS={happy:'Happy',proud:'Proud',sleepy:'Sleepy',curious:'Curious',cheeky:'Cheeky',gentle:'Gentle'};
-function lpFlySVG(mood,size){const m=mood||'happy',id='fy'+Math.floor(Math.random()*1e6),glow={happy:1,proud:1,sleepy:.35,curious:.75,cheeky:.8,gentle:.6}[m]||.8;
-  const eye=(x)=>{
-    if(m==='happy'||m==='proud')return `<path d="M${x-3.4} 1.2Q${x} -3.4 ${x+3.4} 1.2" stroke="#2A1B10" stroke-width="1.8" fill="none" stroke-linecap="round"/>`;
-    if(m==='sleepy')return `<ellipse cx="${x}" cy="0.6" rx="3.3" ry="3.2" fill="#fff"/><circle cx="${x}" cy="1.4" r="1.8" fill="#2A1B10"/><path d="M${x-3.6} 0.4H${x+3.6}V-3.4H${x-3.6}Z" fill="url(#${id}h)"/><path d="M${x-3.6} 0.4H${x+3.6}" stroke="#2A1B10" stroke-width="1"/>`;
-    if(m==='gentle')return `<path d="M${x-3.2} 0Q${x} 2.8 ${x+3.2} 0" stroke="#2A1B10" stroke-width="1.7" fill="none" stroke-linecap="round"/>`;
-    const big=m==='curious'&&x>0?1.2:1;
-    return `<g class="fy-eye"><ellipse cx="${x}" cy="0" rx="${3.4*big}" ry="${3.8*big}" fill="#fff"/><circle cx="${x+.6}" cy=".4" r="${2.1*big}" fill="#2A1B10"/><circle cx="${x+1.3}" cy="-.6" r=".8" fill="#fff"/></g>`;};
-  const brow=m==='cheeky'?`<path d="M2.2-6.2Q5.2-8.4 8-6.4" stroke="#2A1B10" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M-8-5.2H-2.4" stroke="#2A1B10" stroke-width="1.3" stroke-linecap="round"/>`:'';
-  const mouth=m==='sleepy'?`<ellipse cx="0" cy="5.6" rx="1.3" ry="1.5" fill="#2A1B10"/>`:m==='cheeky'?`<path d="M-2 5Q1.5 7.4 4 4.4" stroke="#2A1B10" stroke-width="1.4" fill="none" stroke-linecap="round"/>`:m==='curious'?`<circle cx="0.5" cy="5.4" r="1.2" fill="#2A1B10"/>`:`<path d="M-3 4.4Q0 7.6 3 4.4" stroke="#2A1B10" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+function lpFlySVG(mood,size){const m=mood||'happy',id='fy'+Math.floor(Math.random()*1e6),glow={happy:1,proud:1,sleepy:.35,curious:.8,cheeky:.85,gentle:.6}[m]||.8;
+  const ant={happy:['M-3-11Q-8-22-15-24','M3-11Q8-22 15-24'],proud:['M-3-11Q-6-23-12-27','M3-11Q6-23 12-27'],sleepy:['M-3-11Q-10-16-16-12','M3-11Q10-16 16-12'],curious:['M-3-11Q-4-22-8-28','M3-11Q4-22 8-28'],cheeky:['M-3-11Q-8-22-15-24','M3-11Q6-23 10-27'],gentle:['M-3-11Q-9-19-15-19','M3-11Q9-19 15-19']}[m];
+  const tip=d=>{const q=d.split(/[ QM]/).filter(Boolean);const e=q[q.length-1].match(/-?\d+(\.\d+)?/g);return e;};
+  const eye=(x,side)=>{const sx=x;
+    if(m==='happy'||m==='proud'||(m==='cheeky'&&side>0))return `<path d="M${sx-3.2} -3.2Q${sx} -7.4 ${sx+3.2} -3.2" stroke="#0E1A1C" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+    const big=m==='curious'&&side>0?1.25:1,ry=(m==='gentle'?3.4:4.2)*big,rx=3.6*big;
+    let e=`<g class="fy-eye"><ellipse cx="${sx}" cy="-4" rx="${rx}" ry="${ry}" fill="#0E1A1C"/><ellipse cx="${sx+1.2*side}" cy="${-5.6}" rx="1.3" ry="1.6" fill="#fff" opacity=".9"/><circle cx="${sx-1*side}" cy="-2.2" r=".6" fill="#fff" opacity=".6"/></g>`;
+    if(m==='sleepy')e+=`<path d="M${sx-4.2} -4.2H${sx+4.2}V-9H${sx-4.2}Z" fill="url(#${id}k)"/><path d="M${sx-4} -4.2H${sx+4}" stroke="#0E1A1C" stroke-width="1"/>`;
+    return e;};
   const star=(x,y,r)=>{let p='';for(let k=0;k<8;k++){const rr=k%2?r*.35:r,a=k*Math.PI/4;p+=(k?'L':'M')+(x+rr*Math.sin(a)).toFixed(1)+' '+(y-rr*Math.cos(a)).toFixed(1);}return p+'Z';};
-  const extra=m==='proud'?[[-22,-20],[22,-18],[-20,8],[23,10]].map((p,i)=>`<path class="fy-spark" style="animation-delay:${i*.3}s" d="${star(p[0],p[1],4.5)}" fill="#FFD36B"/>`).join('')
+  const extra=m==='proud'?[[-22,-20],[22,-18],[-20,8],[23,10]].map((p,i)=>`<path class="fy-spark" style="animation-delay:${i*.3}s" d="${star(p[0],p[1],4.5)}" fill="#FFE27A"/>`).join('')
     :m==='sleepy'?`<text class="fy-z" x="14" y="-16" font-size="8" font-weight="700" fill="#8FA3BF" font-family="system-ui">z</text><text class="fy-z" style="animation-delay:.8s" x="19" y="-22" font-size="6" font-weight="700" fill="#8FA3BF" font-family="system-ui">z</text>`
-    :m==='curious'?`<text x="15" y="-17" font-size="9" font-weight="800" fill="#E8A33D" font-family="system-ui">?</text>`:'';
+    :m==='curious'?`<text x="15" y="-19" font-size="9" font-weight="800" fill="#E8A33D" font-family="system-ui">?</text>`:'';
   return `<svg class="fy fy-${m}" viewBox="-30 -32 60 66" width="${size||56}" height="${Math.round((size||56)*1.1)}" aria-hidden="true"><defs>
-    <radialGradient id="${id}g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFE9A0" stop-opacity="${.95*glow}"/><stop offset=".45" stop-color="#FFC23A" stop-opacity="${.45*glow}"/><stop offset="1" stop-color="#FFC23A" stop-opacity="0"/></radialGradient>
-    <radialGradient id="${id}a" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#FFF6C8"/><stop offset=".5" stop-color="#FFD050"/><stop offset="1" stop-color="#E88A1A"/></radialGradient>
-    <radialGradient id="${id}b" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#6B5A4A"/><stop offset="1" stop-color="#241A12"/></radialGradient>
-    <radialGradient id="${id}k" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#8A6A50"/><stop offset=".6" stop-color="#4A3424"/><stop offset="1" stop-color="#2A1B10"/></radialGradient>
-    <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".85"/><stop offset="1" stop-color="#BFD8EE" stop-opacity=".5"/></linearGradient>
-    <linearGradient id="${id}h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A4230"/><stop offset="1" stop-color="#3A2A1C"/></linearGradient></defs>
-    <circle class="fy-halo" cx="0" cy="17" r="22" fill="url(#${id}g)"/>
-    <g class="fy-wl"><ellipse cx="-11" cy="-4" rx="11" ry="6.5" transform="rotate(-28 -11 -4)" fill="url(#${id}w)" stroke="#9FB8CF" stroke-width=".5"/></g>
-    <g class="fy-wr"><ellipse cx="11" cy="-4" rx="11" ry="6.5" transform="rotate(28 11 -4)" fill="url(#${id}w)" stroke="#9FB8CF" stroke-width=".5"/></g>
-    <ellipse cx="0" cy="17" rx="7.5" ry="9" fill="url(#${id}a)"/><path d="M-6.5 12.5Q0 14.5 6.5 12.5" stroke="#C4761A" stroke-width=".8" fill="none" opacity=".6"/>
-    <ellipse cx="0" cy="6" rx="6.4" ry="6" fill="url(#${id}b)"/>
-    <g class="fy-head"><path d="M-4-10Q-9-21-13-23M4-10Q9-21 13-23" stroke="#2A1B10" stroke-width="1.3" fill="none" stroke-linecap="round"/><circle cx="-13" cy="-23" r="2" fill="#FFC23A"/><circle cx="13" cy="-23" r="2" fill="#FFC23A"/>
-      <circle cx="0" cy="-5" r="11.5" fill="url(#${id}k)"/><ellipse cx="-4" cy="-11" rx="4" ry="2.2" fill="#fff" opacity=".18"/>
-      <g transform="translate(0 -6)">${eye(-4.6)}${eye(4.6)}${brow}<ellipse cx="-7.4" cy="4" rx="2" ry="1.2" fill="#F08A8A" opacity=".55"/><ellipse cx="7.4" cy="4" rx="2" ry="1.2" fill="#F08A8A" opacity=".55"/>${mouth}</g></g>${extra}</svg>`;}
+    <radialGradient id="${id}g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#F4FF9A" stop-opacity="${.95*glow}"/><stop offset=".45" stop-color="#D8F25A" stop-opacity="${.42*glow}"/><stop offset="1" stop-color="#D8F25A" stop-opacity="0"/></radialGradient>
+    <radialGradient id="${id}a" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#FDFFD6"/><stop offset=".5" stop-color="#E9F56A"/><stop offset="1" stop-color="#B8C83A"/></radialGradient>
+    <radialGradient id="${id}b" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#5E8C88"/><stop offset=".6" stop-color="#2E5652"/><stop offset="1" stop-color="#1A3432"/></radialGradient>
+    <radialGradient id="${id}k" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#6FA39E"/><stop offset=".6" stop-color="#3B6C67"/><stop offset="1" stop-color="#223F3C"/></radialGradient>
+    <linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".85"/><stop offset="1" stop-color="#BFE0E6" stop-opacity=".45"/></linearGradient></defs>
+    <circle class="fy-halo" cx="0" cy="16" r="22" fill="url(#${id}g)"/>
+    <g class="fy-wl"><ellipse cx="-11" cy="2" rx="11" ry="6" transform="rotate(-24 -11 2)" fill="url(#${id}w)" stroke="#9FC4CC" stroke-width=".5"/></g>
+    <g class="fy-wr"><ellipse cx="11" cy="2" rx="11" ry="6" transform="rotate(24 11 2)" fill="url(#${id}w)" stroke="#9FC4CC" stroke-width=".5"/></g>
+    <ellipse cx="0" cy="16" rx="8" ry="10" fill="url(#${id}a)"/><path d="M-7 11Q0 13 7 11M-7.6 15.5Q0 17.5 7.6 15.5" stroke="#9AAA2A" stroke-width=".8" fill="none" opacity=".55"/>
+    <ellipse cx="0" cy="4" rx="7" ry="6.5" fill="url(#${id}b)"/><path d="M0-1.5V9" stroke="#14292A" stroke-width=".8" opacity=".5"/>
+    <g class="fy-head"><path d="${ant[0]}" stroke="#1A3432" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="${ant[1]}" stroke="#1A3432" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      ${[ant[0],ant[1]].map(d=>{const e=tip(d);return `<circle cx="${e[0]}" cy="${e[1]}" r="1.9" fill="#E9F56A"/>`;}).join('')}
+      <ellipse cx="0" cy="-5" rx="10" ry="8.5" fill="url(#${id}k)"/><ellipse cx="-3" cy="-10" rx="4" ry="1.8" fill="#fff" opacity=".2"/>
+      ${eye(-4.6,-1)}${eye(4.6,1)}</g>${extra}</svg>`;}
 
 const LP_GUIDE_NAME='Firefly';
 const LP_GUIDE={
