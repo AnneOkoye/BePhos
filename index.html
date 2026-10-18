@@ -853,7 +853,10 @@ button.lp-chip.sel{border-color:var(--lp-ink);color:var(--lp-ink);background:var
 .lp-envfx[data-fx="paper"]{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .5 0 0 0 0 .42 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");mix-blend-mode:multiply;opacity:.5;}
 .lp-imm{--imm-a:calc(env(safe-area-inset-top,0px) + 56px);}
 .lp-imm .lp-wrap{max-width:none;padding:0;}
-.lp-imm .lp-top{position:fixed;top:0;left:0;right:0;z-index:30;margin:0;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 14px;background:linear-gradient(color-mix(in srgb,var(--lp-bg) 94%,transparent),color-mix(in srgb,var(--lp-bg) 0%,transparent));}
+.lp-imm .lp-top{position:fixed;top:0;left:0;right:0;z-index:30;margin:0;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 14px;background:none;pointer-events:none;}
+.lp-imm .lp-top > *{pointer-events:auto;}
+.lp-imm .lp-top .lp-title,.lp-imm .lp-top .lp-small,.lp-imm .lp-top .lp-ic{background:color-mix(in srgb,var(--lp-bg) 88%,transparent);border-radius:99px;}
+.lp-imm .lp-top .lp-title,.lp-imm .lp-top .lp-small{padding:4px 10px;}
 .lp-imm .ls-wrap,.lp-imm .lw-wrap{position:fixed;inset:0;width:100%;height:100%;margin:0;left:0;transform:none;border:0;border-radius:0;z-index:5;}
 .lp-imm .ls-wrap canvas,.lp-imm .lw-wrap canvas{height:100%!important;}
 .lp-imm .ls-where{position:fixed;left:12px;top:var(--imm-a);z-index:20;margin:0;padding:5px 12px;border-radius:99px;background:color-mix(in srgb,var(--lp-bg) 88%,transparent);border:1px solid var(--lp-line);min-height:0;font-size:13px;}
@@ -870,6 +873,14 @@ button.lp-chip.sel{border-color:var(--lp-ink);color:var(--lp-ink);background:var
 .lw-emomore{position:absolute;left:84px;top:122px;display:none;grid-template-columns:repeat(3,auto);gap:6px;padding:8px;border-radius:14px;border:1px solid var(--lp-line);background:color-mix(in srgb,var(--lp-bg) 94%,transparent);}.lw-emomore.on{display:grid;}.lw-emomore button{min-height:34px;padding:0 10px;border-radius:99px;border:1px solid var(--lp-line);background:var(--lp-surface);color:var(--lp-ink);font:600 12px var(--lp-sans,system-ui);cursor:pointer;}
 .lw-emotes{position:absolute;left:10px;top:122px;display:flex;flex-direction:column;gap:6px;}
 .lw-emol-s{display:none;}
+.lp-revbtn{position:fixed;right:0;top:38%;z-index:60;writing-mode:vertical-rl;padding:12px 4px;border:0;border-radius:8px 0 0 8px;background:#1F2A1F;color:#fff;font:700 10.5px var(--sans);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;opacity:.85;box-shadow:0 4px 14px rgba(0,0,0,.25);}.lp-revbtn:hover,.lp-revbtn:focus-visible{opacity:1;}
+.lp-ix h2{font:700 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--lp-muted);margin:22px 0 8px;}
+.lp-ix ol{list-style:none;margin:0;padding:0;border:1px solid var(--lp-line);border-radius:14px;overflow:hidden;background:var(--lp-surface);}
+.lp-ix li+li{border-top:1px solid var(--lp-line);}
+.lp-ix button{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:8px 14px;border:0;background:none;color:var(--lp-ink);font:600 14.5px var(--sans);text-align:left;cursor:pointer;}
+.lp-ix button:hover,.lp-ix button:focus-visible{background:var(--lp-surface2);}
+.lp-ix button b{min-width:26px;color:var(--lp-faint);font-weight:700;font-size:12.5px;}
+.lp-ix button span{margin-left:auto;font-weight:500;font-size:12px;color:var(--lp-faint);}
 @media (max-width:600px){.lw-emotes button:not(#lwEmoBtn){display:none;}.lw-emol-l{display:none;}.lw-emol-s{display:inline;}.lw-emomore{left:10px;top:calc(var(--imm-a,0px) + 192px)!important;}}
 body:has(.lp-imm) #toast{bottom:auto;top:34vh;}
 .lw-emotes button{min-height:34px;padding:0 12px;border-radius:99px;border:1px solid var(--lp-line);background:color-mix(in srgb,var(--lp-bg) 88%,transparent);color:var(--lp-ink);font:600 12px var(--sans);cursor:pointer;}
@@ -1151,6 +1162,9 @@ function lmCtaBlock(note){
   </div>`;
 }
 /* One entry point for every "start" button: people already set up go to Today. */
+/* A one-way fingerprint of email+password, kept on this device so you can log back in after logging out
+   while the account service is offline. The password itself is never stored. */
+async function lpPwHash(em,pw){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('merros:'+em.toLowerCase()+':'+pw));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){return null;}}
 function lpStart(){ if(LP.user&&LP.onboarded) go('lpDock'); else go('lpGoals'); }
 
 function screenLanding(){
@@ -1313,7 +1327,9 @@ function screenLanding(){
 /* ===================== LAMP APP (screens 2-45) ===================== */
 /* Local-first: state lives in localStorage under LP_KEY. Community content (pods, districts,
    network) is clearly marked "Preview" until a backend exists for it. */
-const LP_KEY='merros_lp_v1';
+/* Sample and review modes (?demo=1, ?screens=1) keep their own storage, so they never overwrite a real account on this device. */
+const LP_REVIEW=/[?&]screens=1\b/.test(location.search);
+const LP_KEY=(LP_REVIEW||/[?&]demo=1\b/.test(location.search))?'merros_lp_demo':'merros_lp_v1';
 const LP_TIERS=[
   {k:'lantern',name:'Lantern',min:1,max:2},
   {k:'post',name:'Post lamp',min:3,max:4},
@@ -1579,10 +1595,11 @@ const lp={
     if(!/^\S+@\S+\.\S+$/.test(em)){err.textContent='That email does not look right.';return;}
     if(pw.length<8){err.textContent='Use at least 8 characters for the password.';return;}
     if(!document.getElementById('lpAge').checked){err.textContent='Please confirm you’re 18 or older and agree to the terms.';return;}
+    if(LP.away){err.innerHTML=(LP.away.email||'').toLowerCase()===em.toLowerCase()?'You already have an account on this device. <button class="lp-link" onclick="go(\'lpLogin\')">Log in instead</button>.':'This device already holds '+lpEsc(LP.away.callsign)+'’s street. <button class="lp-link" onclick="go(\'lpLogin\')">Log in</button> as '+lpEsc(LP.away.callsign)+' first. To start fresh, delete that data in Settings.';return;}
     const btn=document.getElementById('lpGo'); btn.disabled=true; btn.textContent='One moment';
     let synced=false;
     try{ if(window.Merros&&Merros.auth){ const r=await Promise.race([Merros.auth.signUpWithPassword(em,pw),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6000))]); synced=!!r; } }catch(e){ synced=false; }
-    const keep={draft:LP.draft,mode:LP.mode,theme:LP.theme,podPrefs:LP.podPrefs};LP=Object.assign(lpBlank(),keep); LP.user={callsign:cs,email:em,synced,sigil:{k:null,t:0},city:null,tz:lpDeviceTz(),joined:lpToday()}; lpSave();
+    const keep={draft:LP.draft,mode:LP.mode,theme:LP.theme,podPrefs:LP.podPrefs};LP=Object.assign(lpBlank(),keep); LP.user={callsign:cs,email:em,synced,sigil:{k:null,t:0},city:null,tz:lpDeviceTz(),joined:lpToday(),pwh:await lpPwHash(em,pw)}; lpSave();
     go('lpConfirm');
   },
   placeQ(v,who){clearTimeout(lpT.plTm);const box=document.getElementById('lpRes_'+who),note=document.getElementById('lpResNote_'+who);if(!box)return;
@@ -1607,12 +1624,16 @@ const lp={
     const em=(document.getElementById('lpLe').value||'').trim(),pw=document.getElementById('lpLp').value||'',err=document.getElementById('lpLerr');err.textContent='';
     if(!/^\S+@\S+\.\S+$/.test(em)||!pw){err.textContent='Enter your email and password.';return;}
     const b=document.getElementById('lpLgo');b.disabled=true;b.textContent='One moment';
+    if(LP.away&&(LP.away.email||'').toLowerCase()===em.toLowerCase()){
+      const h=await lpPwHash(em,pw);
+      if(LP.away.pwh&&h&&h!==LP.away.pwh){b.disabled=false;b.textContent='Log in';err.textContent='That password doesn’t match the account on this device.';return;}
+      LP.user=LP.away;if(!LP.user.pwh&&h)LP.user.pwh=h;delete LP.away;lpSave();toast('Welcome back, '+LP.user.callsign);lpStart();return;}
     try{
       if(!(window.Merros&&Merros.auth))throw new Error('The account service did not load.');
       await Promise.race([Merros.auth.signInWithPassword(em,pw),new Promise((_,rej)=>setTimeout(()=>rej(new Error('The account service did not answer.')),8000))]);
       let cs=em.split('@')[0].toUpperCase().replace(/[^A-Z0-9_]/g,'').slice(0,12)||'YOU';
       try{const pr=Merros.profile&&await Merros.profile.getMyProfile();if(pr&&pr.callsign)cs=pr.callsign;}catch(e){}
-      LP.user={callsign:cs,email:em,synced:true,sigil:{k:null,t:0},city:null,tz:lpDeviceTz(),joined:lpToday()};lpSave();
+      LP.user={callsign:cs,email:em,synced:true,sigil:{k:null,t:0},city:null,tz:lpDeviceTz(),joined:lpToday(),pwh:await lpPwHash(em,pw)};lpSave();
       lpStart();
     }catch(e){b.disabled=false;b.textContent='Log in';err.textContent='We couldn’t log you in. '+((e&&e.message)||'Please try again.');}
   },
@@ -3453,6 +3474,7 @@ function lpSettingsScreen(){
     <hr class="lp-hr"/>
     ${link('Notifications','go(\'lpNotifs\')','')}${link('Safety & reporting','go(\'lpSafety\')','')}${link('Help','go(\'lpHelp\')','')}${link('Terms of use','go(\'lpTerms\')','')}${link('Privacy','go(\'lpPrivacy\')','')}
     ${link('Export everything','lp.exportAll()','Downloads your data as a file')}
+    ${link('Log out','lp.logout()','Your street stays on this device. Log in with the same email to get it back.')}
     ${lpT.confirmDel?`<div class="lp-card" style="margin-top:16px"><b>Delete everything on this device?</b><p class="lp-sub" style="margin-top:4px">This clears your street, lines and rooms here. It can’t be undone.${LP.user&&LP.user.synced?' To remove your account itself, send us a message from Help.':''}</p><div class="lp-row" style="margin-top:14px"><button class="lp-btn lp-danger lp-sm" onclick="lp.deleteAll()">Delete</button><button class="lp-btn lp-ghost lp-sm" onclick="lpT.confirmDel=false;render()">Keep</button></div></div>`:`<button class="lp-link" style="color:var(--lp-bad);margin-top:18px" onclick="lpT.confirmDel=true;render()">Delete my account</button>`}`);
 }
 function lpSafetyScreen(){
@@ -3561,7 +3583,7 @@ function lpTermsBody(){return lpLegal('Terms of use',[
  ['Changes','If these terms change, the date at the top changes too.']]);}
 function lpPrivacyBody(){return lpLegal('Privacy',[
  ['The short version','Almost everything you do in Merros stays on your device. We don’t sell data, there are no advertising or analytics trackers on this site, and your daily lines are never used to choose ads.'],
- ['What stays on your device','Your callsign, sprints, daily lines, check-ins, pod, posts, threads, logs and settings are saved in this browser’s storage on this device. They aren’t sent to us.'],
+ ['What stays on your device','Your callsign, sprints, daily lines, check-ins, pod, posts, threads, logs and settings are saved in this browser’s storage on this device. They aren’t sent to us. So you can log back in after logging out, a one-way fingerprint of your email and password is kept here too. The password itself is never stored.'],
  ['What goes to our account service','When you sign up or log in, your email address and password are sent to Supabase, the service that handles Merros accounts. Supabase stores the password in scrambled (hashed) form.'],
  ['Other services this site contacts','Google Fonts, for the typefaces. jsDelivr, to load the account service’s code. OpenStreetMap’s Overpass service, with your chosen city’s location, to find local street names. Open Trivia DB, for questions in the dark room. Like any website, these services see your IP address when your browser contacts them.'],
  ['Pod matching details','If you ask to be matched into a pod, your age band, your gender if you give it, and your pod preferences (age, gender, goal area, time zone) are saved on this device. Gender is optional. Once matching is live they will be used only to find your pod, and other people will see your age band, not your exact age.'],
@@ -3578,6 +3600,7 @@ Object.assign(lp,{
   personClose(){lpHost('lpPersonHost','');},
   personMsg(n){const k=n.toLowerCase();lpHost('lpPersonHost','');if(LP.chat[k]){lpT.thread=k;go('lpChat');}else toast('You can message people in your pod or district');},
   witness(n){LP.witnessing=LP.witnessing||[];const i=LP.witnessing.indexOf(n);if(i>=0){LP.witnessing.splice(i,1);toast('You stopped witnessing '+n);}else{if(!lpOpenToWitness(n)){toast(n+' has not opened witnesses');return;}LP.witnessing.push(n);toast('You are now a witness to '+n);}lpSave();if(state.screen==='lpProfile')render();lpHost('lpPersonHost',lpPersonHTML(n));},
+  logout(){if(!LP.user)return;LP.away=LP.user;LP.user=null;lpSave();toast('Logged out. Your street stays on this device.');go('landing');},
   witnessOpen(){LP.prefs.witnesses=!LP.prefs.witnesses;lpSave();render();},
   faq(k){lpT.open['f'+k]=!lpT.open['f'+k];render();},
   sky(){const o=['clock','day','night'];LP.sky=o[(o.indexOf(LP.sky||'clock')+1)%3];lpSave();if(LS.cv)lsPal();if(LW.cv)lwPal();render();},
@@ -3985,6 +4008,7 @@ Object.assign(lp,{
 function lwRefreshOwned(){(LW.blds||[]).forEach(b=>{if(b.vid){const o=LP.owned&&LP.owned[b.vid];b.sign=o&&o.sign?o.sign:b.name0;b.own=!!o;}});(LW.pois||[]).forEach(p=>{if(!p.vid)return;if(p.sale){p.r=lpOwned(p.vid)?0:42;return;}p.label=lpOwned(p.vid)?'Enter your '+p.vname:(p.tour?'Visit ':'Step into ')+p.vname;});}
 
 function lpAfterRender(){
+  if(lpT.review){let rb=document.getElementById('lpRevBtn');if(!rb){rb=document.createElement('button');rb.id='lpRevBtn';rb.className='lp-revbtn';rb.textContent='All screens';rb.onclick=()=>lp.reviewIndex();document.body.appendChild(rb);}rb.hidden=state.screen==='lpIndex';}
   if(state.screen==='lpFeed'||state.screen==='lpWorld')lpLiveStart();else lpLiveStop();
   if(state.screen!=='lpSettings'&&state.screen!=='lpSignup'){const sh=document.getElementById('lpSigHost');if(sh)sh.remove();}
   ['lpSnHost','lpVenueHost','lpWalletHost','lpAdHost','lpLegalHost','lpPlanHost','lpPersonHost'].forEach(id=>{const e=document.getElementById(id);if(e)e.remove();});
@@ -4015,7 +4039,7 @@ function lpGameScreen(){
 Object.assign(LP_SCREENS,{lpGame:lpGameScreen});
 const Screens = Object.assign({ landing: screenLanding }, LP_SCREENS);
 /* Screens a visitor can open without an account. Everything else sends them to the landing page. */
-const LP_PUBLIC = new Set(['landing','lpLogin','lpGoals','lpDuration','lpMode','lpPodPrefs','lpSignup','lpConfirm','lpHelp','lpTerms','lpPrivacy']);
+const LP_PUBLIC = new Set(['lpIndex','landing','lpLogin','lpGoals','lpDuration','lpMode','lpPodPrefs','lpSignup','lpConfirm','lpHelp','lpTerms','lpPrivacy']);
 function render(fresh){
   const y = window.scrollY;
   if(!LP.user && !LP_PUBLIC.has(state.screen)) state.screen='landing';
@@ -4029,11 +4053,45 @@ function render(fresh){
   if(typeof lpAfterRender==='function') lpAfterRender();
   if(!fresh) requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0, y)));
 }
+/* ---------- review index (?screens=1): every screen in one list, with sample data ---------- */
+const LP_IX=[
+ ['Getting started',[['landing','Landing','out'],['lpLogin','Log in','out'],['lpGoals','Start 1: What you’re finishing','out'],['lpDuration','Start 2: How long','out'],['lpMode','Start 3: Solo or pod','out'],['lpPodPrefs','Start 4: Pod preferences','out'],['lpSignup','Start 5: Sign up','out'],['lpConfirm','Confirm sprint','confirm'],['lpPodFinding','Looking for your pod','finding']]],
+ ['Today',[['lpDock','Today'],['lpAfter','After check-in','after'],['lpWeekly','Weekly check-in'],['lpComplete','Sprint complete'],['lpNotifs','Notifications'],['lpSearch','Search']]],
+ ['Pod',[['lpPodTab','Pod'],['lpPodMatch','Pod match (no pod yet)','nopod'],['lpChat','Pod chat'],['lpMessages','Messages'],['lpCharter','Pod charter'],['lpAnchor','Anchor dashboard'],['lpInvite','Invite to pod'],['lpPodSettings','Pod settings']]],
+ ['Street and house',[['lpStreet','Street'],['lpLamp','Lamp detail','lamp'],['lpLedger','Ledger'],['lpHouse','Your house'],['lpRoom','Room','room'],['lpMirror','Mirror room','room'],['lpRoomLit','Room lit','room'],['lpGame','The dark room game']]],
+ ['Town',[['lpWorld','Town'],['lpDistricts','Districts'],['lpDistrict','District'],['lpDistrictCreate','Start a district'],['lpLead','Lead a district'],['lpRoles','District roles'],['lpActivity','District activity'],['lpClearing','Clearing'],['lpCampfire','Campfire'],['lpTrail','Trail'],['lpFeed','Feed'],['lpPost','Post'],['lpNewPost','New post']]],
+ ['Forums',[['lpForums','Forums'],['lpBoard','Forum board','board'],['lpThread','Forum thread','thread'],['lpNewThread','New thread']]],
+ ['Me',[['lpProfile','Me'],['lpSettings','Settings'],['lpSafety','Safety and reporting']]],
+ ['Help and legal',[['lpHelp','Help'],['lpTerms','Terms'],['lpPrivacy','Privacy']]]];
+function lpIndexScreen(){let n=0;
+  return lpShell(`<div class="lp-top"><span class="lp-title">ALL SCREENS</span></div>
+    <h1 class="lp-h2">Every screen in Merros</h1>
+    <p class="lp-sub" style="margin-top:6px">Tap any screen to open it with sample data. The “All screens” tab on the right brings you back here. Nothing you do here touches a real account.</p>
+    <div class="lp-ix">${LP_IX.map(g=>`<h2>${g[0]}</h2><ol>${g[1].map(x=>{n++;return `<li><button onclick="lp.reviewOpen('${x[0]}','${x[2]||''}')"><b>${n}</b>${x[1]}${x[2]==='out'?'<span>logged out</span>':''}</button></li>`;}).join('')}</ol>`).join('')}</div>
+    <p class="lp-small" style="margin:20px 0 10px">${n} screens. Some only appear at certain moments for a real person, for example Sprint complete at the end of a sprint.</p>`,null);}
+Object.assign(LP_SCREENS,{lpIndex:lpIndexScreen});Screens.lpIndex=lpIndexScreen;
+Object.assign(lp,{
+  reviewIndex(){if(lpT.review){LP=JSON.parse(lpT.review);lpSave();}go('lpIndex');},
+  reviewOpen(k,setup){if(lpT.review)LP=JSON.parse(lpT.review);
+    const today=lpToday();
+    if(setup==='out'||setup==='confirm'||setup==='finding'){LP.draft=Object.assign(lpBlank().draft||{},LP.draft||{},{goals:['Finish the first draft of chapter one'],done:['it’s 3,000 words and I’ve sent it to someone'],unit:'weeks',len:6,weeks:6});LP.mode='alongside';}
+    if(setup==='out'){LP.user=null;}
+    if(setup==='finding'){LP.pod=null;LP.podPrefs=Object.assign(lpPodPrefsDefault(),{age:'25–34',gender:'Woman',wantGender:'women'});LP.podReq=Object.assign({},LP.podPrefs,{ts:Date.now()});}
+    if(setup==='nopod'){LP.pod=null;LP.podReq=null;}
+    if(setup==='after'&&LP.sprint){LP.sprint.lines[today]={kind:'progress',text:'Drafted the opening scene.',ts:Date.now()};}
+    if(setup==='lamp'){lpT.lamp=LP.finished[LP.finished.length-1].id;}
+    if(setup==='room'){lpT.room='study';}
+    if(setup==='board'){lpT.board=LP_BOARDS[0][0];}
+    if(setup==='thread'){const t=lpFThreads()[0];lpT.thread2=t.id;lpT.board=t.board;}
+    if(k==='lpChat')lpT.thread='pod';
+    lpSave();state.screen='';go(k,{force:true});}
+});
 /* Start: ?demo=1 loads the sample street for reviewing screens. Otherwise a signed-up
    person lands on Today, everyone else on the landing page. */
 (function boot(){
-  if(/[?&]demo=1\b/.test(location.search)) lpSeedDemo();
-  state.screen = (LP.user && LP.onboarded) ? 'lpDock' : 'landing';
+  if(LP_REVIEW||/[?&]demo=1\b/.test(location.search)) lpSeedDemo();
+  if(LP_REVIEW){ lpT.review=JSON.stringify(LP); }
+  state.screen = LP_REVIEW ? 'lpIndex' : (LP.user && LP.onboarded) ? 'lpDock' : 'landing';
   try{ history.replaceState({s:state.screen},'',location.pathname+location.search); }catch(e){}
   render(true);
 })();
