@@ -829,7 +829,7 @@ button.lp-chip.sel{border-color:var(--lp-ink);color:var(--lp-ink);background:var
 .lp-breathe{opacity:.28;animation:lpBreathe 7s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
 @keyframes lpBreathe{0%,100%{opacity:.16;transform:scale(.95)}50%{opacity:.34;transform:scale(1.04)}}
 .lp-hero-lamp{display:grid;place-items:center;padding:8px 0;}
-.lp-sigil{display:inline-grid;place-items:center;border-radius:50%;background:var(--lp-surface);border:1px solid var(--lp-line);overflow:hidden;}
+.lp-sigil{display:inline-grid;place-items:center;border-radius:50%;background:transparent;border:1px solid transparent;overflow:visible;}.lp-sigil[style*=dashed]{border-color:var(--lp-faint);}
 .lp-sw{width:22px;height:22px;border-radius:50%;border:2px solid var(--lp-bg);box-shadow:0 0 0 1px var(--lp-line);cursor:pointer;padding:0;}
 .lp-sw.sel{box-shadow:0 0 0 2px var(--lp-ink);}
 .lp-tsw{transform-box:view-box;transform-origin:50% 92%;animation:lpTsw 5.2s ease-in-out infinite;}
@@ -1224,6 +1224,68 @@ body:has(.lp-imm) #toast{bottom:auto;top:34vh;}
 .lp-resrow:last-child{border-bottom:0;}.lp-resrow:hover,.lp-resrow:focus-visible{background:var(--lp-surface2);}
 .lp-resrow span{font-size:12.5px;color:var(--lp-muted);}
 .lp-citychip{padding:12px 14px;border:1px solid var(--lp-line);border-radius:12px;background:var(--lp-surface);}
+.lg-full{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;background:var(--lp-bg);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+.lg-bar{display:flex;gap:8px;align-items:center;padding:10px 12px 0;}
+.lg-bar .lg-modes{flex:1;margin:0;min-width:0;}
+.lg-full .lg-mode{min-height:40px;font-size:13.5px;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lg-x{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--lp-line);background:var(--lp-surface);color:var(--lp-ink);display:flex;align-items:center;justify-content:center;cursor:pointer;font:600 18px var(--sans);}
+.lg-x svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.lg-full .lg-panel{margin:8px 12px 0;padding:8px 12px;}
+.lg-full .lg-q{font-size:13.5px;}.lg-full .lg-stats{margin-top:4px}.lg-full .lg-earn{margin-top:2px;font-size:12.5px}
+.lg-full .lg-stage{flex:1;min-height:0;margin:8px 12px 12px;}
+.lg-full .lg-stage canvas{height:100%;}
+.lg-sheet{position:absolute;left:12px;right:12px;bottom:12px;max-width:520px;margin:0 auto;z-index:3;max-height:72%;overflow:auto;padding:14px 16px;border:1px solid var(--lp-line);border-radius:16px;background:var(--lp-surface);box-shadow:0 16px 40px rgba(0,0,0,.25);font-size:14px;line-height:1.45;}
+.lg-sheet[hidden]{display:none;}.lg-sheet .lg-ctl{margin-top:10px;border:0;padding:0;background:none;}
+.lg-howl{margin:10px 0 10px 18px;padding:0;display:grid;gap:6px;}
+@media (max-width:420px){.lg-full .lg-mode{font-size:12.5px}.lg-x{width:40px;height:40px}.lg-bar{gap:6px;padding:8px 8px 0}.lg-full .lg-panel{margin:6px 8px 0}.lg-full .lg-stage{margin:6px 8px 8px}}
+.fm-tabs{display:flex;gap:18px;border-bottom:1px solid var(--lp-line);margin:0 0 12px;}
+.fm-tabs button{border:0;background:none;padding:8px 0 10px;font:600 14px var(--sans);color:var(--lp-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.fm-tabs button.on{color:var(--lp-ink);border-bottom-color:var(--lp-lit);}
+.fm-stats{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12.5px;color:var(--lp-muted);padding:8px 12px;border:1px solid var(--lp-line);border-radius:10px;background:var(--lp-surface);}
+.fm-stats b{color:var(--lp-ink);}
+.fm-sec{margin-top:16px;border:1px solid var(--lp-line);border-radius:12px;overflow:hidden;background:var(--lp-surface);}
+.fm-cath{margin:0;padding:8px 12px;font:700 11.5px var(--sans)!important;letter-spacing:.08em;text-transform:uppercase;color:var(--lp-ink);background:var(--lp-surface2);border-bottom:1px solid var(--lp-line);}
+.fm-board{display:flex;gap:12px;width:100%;text-align:left;padding:11px 12px;border:0;border-bottom:1px solid var(--lp-line);background:none;color:var(--lp-ink);font:inherit;cursor:pointer;}
+.fm-board:last-child{border-bottom:0;}.fm-board:hover{background:var(--lp-surface2);}
+.fm-bmain{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.fm-bn{font-size:15px;color:var(--fm-link);}.fm-bd{font-size:12.5px;color:var(--lp-muted);line-height:1.35;}
+.fm-last{font-size:12px;color:var(--lp-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fm-n{flex:none;text-align:right;font-size:11.5px;color:var(--lp-muted);line-height:1.5;}.fm-n b{color:var(--lp-ink);font-variant-numeric:tabular-nums;}
+.fm-front{list-style:none;margin:0;padding:4px 12px;}
+.fm-front li{padding:8px 0;border-bottom:1px dashed var(--lp-line);font-size:14px;line-height:1.4;}.fm-front li:last-child{border-bottom:0;}
+.fm-t{border:0;background:none;padding:0;font:600 14.5px/1.35 var(--sans);color:var(--fm-link);cursor:pointer;text-align:left;}
+.fm-t:hover,.fm-bl:hover{text-decoration:underline;}
+.fm-meta{font-size:12px;color:var(--lp-muted);}.fm-meta b{color:var(--lp-ink);font-weight:600;}
+.fm-bl{border:0;background:none;padding:0;font:600 12px var(--sans);color:var(--lp-ink);cursor:pointer;}
+body.lp-on{--fm-link:#2B5C8A;}body.lp-on[data-lp="dark"]{--fm-link:#8FB8E0;}
+.fm-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:6px;}
+.fm-pk{display:flex;flex-direction:column;gap:2px;text-align:left;padding:10px 12px;border:1px solid var(--lp-line);border-radius:12px;background:var(--lp-surface);color:var(--lp-ink);font:inherit;cursor:pointer;}
+.fm-pk span{font-size:12px;color:var(--lp-muted);line-height:1.35;}
+.fm-pk.on{border-color:var(--lp-ink);box-shadow:0 0 0 1px var(--lp-ink);}
+.lg-promo{align-items:center;}
+.fly{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;justify-content:center;pointer-events:none;}
+.fly-in{pointer-events:auto;display:flex;gap:10px;align-items:flex-start;max-width:440px;width:100%;padding:12px 12px 12px 10px;border:1px solid var(--lp-line);border-radius:16px;background:var(--lp-surface);color:var(--lp-ink);box-shadow:0 12px 32px rgba(0,0,0,.18);animation:flyIn .45s cubic-bezier(.2,1.2,.4,1);}
+.fly-in svg{flex:none;animation:flyBob 2.6s ease-in-out infinite;}.fly-glow{animation:flyGlow 1.6s ease-in-out infinite;transform-origin:0 9px;}
+.fly-body{flex:1;min-width:0}.fly-body p{margin:2px 0 0;font-size:14.5px;line-height:1.45;}
+.fly-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.fly-x{flex:none;border:0;background:none;color:var(--lp-muted);font-size:16px;cursor:pointer;width:32px;height:32px;}
+@keyframes flyIn{from{transform:translateY(16px);opacity:0}}@keyframes flyBob{50%{transform:translateY(-3px)}}@keyframes flyGlow{50%{opacity:.7;transform:scale(1.25)}}
+@media (prefers-reduced-motion:reduce){.fly-in,.fly-in svg,.fly-glow{animation:none}}
+.sg-sheet{max-height:88vh;overflow:auto;padding-top:0;}
+.sg-top{position:sticky;top:0;z-index:2;background:var(--lp-surface);padding:16px 0 10px;border-bottom:1px solid var(--lp-line);margin-bottom:6px;}
+.sg-prev{display:flex;gap:16px;align-items:center;margin-top:10px;}.sg-big{flex:none;width:104px;height:104px;display:grid;place-items:center;}
+.sg-spin{font-size:15px;}.sg-spin span{display:inline-block;margin-right:4px;transition:transform .4s}.sg-spin:active span{transform:rotate(180deg)}
+.sg-h{display:flex;justify-content:space-between;align-items:center;margin:16px 0 8px;}
+.sg-lock{border:1px solid var(--lp-line);background:none;border-radius:99px;padding:4px 10px;font:600 12px var(--sans);color:var(--lp-muted);cursor:pointer;min-height:30px;}
+.sg-lock.on{border-color:var(--lp-ink);color:var(--lp-ink);background:var(--lp-surface2);}
+.sg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px;}
+.sg-pick{display:grid;place-items:center;aspect-ratio:1;border:1px solid var(--lp-line);border-radius:12px;background:var(--lp-bg);cursor:pointer;padding:4px;}
+.sg-pick.on{border-color:var(--lp-ink);box-shadow:0 0 0 2px var(--lp-ink);}
+.sg-sw{width:34px;height:34px;border-radius:50%;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);}
+.sg-fams{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.sg-fams button{border:1px solid var(--lp-line);background:none;border-radius:99px;padding:6px 12px;font:600 13px var(--sans);color:var(--lp-muted);cursor:pointer;}
+.sg-fams button.on{background:var(--lp-ink);color:var(--lp-bg);border-color:var(--lp-ink);}
+.lp-link[disabled]{opacity:.4;cursor:default;text-decoration:none;}.lg-short{display:none}@media (max-width:420px){.lg-full .lg-long{display:none}.lg-full .lg-short{display:inline}}
 .lg-intro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:rgba(20,15,6,.55);color:#fff;text-align:center;padding:24px;cursor:pointer;}
 .lg-intro b{font:600 24px var(--serif);}.lg-intro span{font-size:14px;opacity:.9;max-width:260px;}
 .lg-intro i{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle,#FFD27A,#EFA21B 60%,transparent 72%);animation:lgPing 1.6s ease-in-out infinite;margin-top:8px;}
@@ -1575,7 +1637,7 @@ function lpBlank(){return {
 };}
 function lpLoad(){try{const r=localStorage.getItem(LP_KEY);if(r){const o=JSON.parse(r);if(o&&o.v===1)return Object.assign(lpBlank(),o);}}catch(e){}return lpBlank();}
 let LP=lpLoad();
-(function(){try{if(LP.user&&LP.user.sigil&&LP.texv!==3){LP.user.sigil.t=0;LP.texv=3;}}catch(e){}})();
+(function(){try{if(LP.user&&LP.user.sigil&&LP.texv!==4){LP.user.sigil.t=0;LP.texv=4;}}catch(e){}})();
 let lpT={sig:{k:null,t:0},sigName:'',kind:null,text:'',weekly:null,tab:'feed',thread:'pod',lamp:null,room:null,district:null,post:null,
   open:{},q:'',proposing:false,reporting:null,confirmDel:false,flash:null,voice:false,posting:{kind:'win',takeaway:'',lesson:'',cta:'Message',lamp:true,scope:'network'}};
 function lpSave(){try{localStorage.setItem(LP_KEY,JSON.stringify(LP));}catch(e){}}
@@ -1641,8 +1703,8 @@ function lpFocusDoneScreen(i){const x=lpT.fdone,tot=lpFocusMin(x.day),b=lpT.brk,
     <div class="lp-nexts">
       ${act(LP_FLAME,'Another block',(x.mins>=25?x.mins:25)+' minutes, same task','lp.focusAgain()')}
       ${act(lpIcon('cup'),'Take 5 minutes','A short break, then back','lp.focusBreak(true)')}
-      ${logged?act(lpIcon('moon'),'A minute in the dark room','Three short games. Can earn a log','lpT.gameFrom=\'lpFocus\';go(\'lpGame\')'):act(lpIcon('pen'),'Write today’s line','Tell your pod you showed up','lpT.fdone=null;go(\'lpDock\')')}
-      ${act(lpIcon('home'),'Back to Today','See your sprint','lpT.fdone=null;go(\'lpDock\')')}
+      ${act(lpIcon('play'),'A minute in the dark room',logged?'Three short games. Can earn a log':'Three short games','lpT.gameFrom=\'lpFocus\';go(\'lpGame\')')}
+      ${logged?act(lpIcon('home'),'Back to Today','See your sprint','lpT.fdone=null;go(\'lpDock\')'):act(lpIcon('pen'),'Write today’s line','Tell your pod you showed up','lpT.fdone=null;go(\'lpDock\')')}
     </div>`,'dock');}
 function lpFocusAway(){const f=LP.focus;if(!f)return;if(document.hidden){f.awayAt=Date.now();lpSave();}else if(f.awayAt){const gone=Date.now()-f.awayAt;f.awayAt=null;lpSave();if(gone>20000&&state.screen==='lpFocus')lpHost('lpFocusAsk',`<div class="lp-modal"><div class="lp-sheet" role="dialog" aria-label="While you were away"><div class="lp-title">You were away ${Math.round(gone/60000)||'<1'} min</div><p class="lp-small" style="margin:6px 0 14px">Were you working on ${lpEsc(f.task)}? Be honest. Only you and your pod see the cracks.</p><div class="lp-row" style="gap:8px;flex-wrap:wrap"><button class="lp-btn lp-sm" onclick="lpHost('lpFocusAsk','')">Yes, I was working</button><button class="lp-btn lp-ghost lp-sm" onclick="lpHost('lpFocusAsk','');lp.focusCrack()">I got distracted</button></div></div></div>`);}}
 document.addEventListener('visibilitychange',()=>{try{lpFocusAway();}catch(e){}});
@@ -1768,7 +1830,7 @@ function lpTreeArt(i){
 const LP_TEX=['Plain','Pixel art','ASCII','Glitch','Line art','Mosaic','Low-poly','Halftone','Collage','Woodcut'];
 const LP_TEX_NOSWAY={1:1,3:1,5:1};
 /* Styles people can pick. The same style is applied to their street and city. */
-const LP_TEX_ON=[0,1,3,4,5,8];
+const LP_TEX_ON=[0]; /* styles removed Oct 2026: they made the city hard to read */
 /* Street and city in the chosen style: pixel and mosaic render at low resolution and scale up
    sharply; glitch, line art and collage use cheap filters and overlays so phones keep up. */
 function lpEnvK(){return {1:.34,5:.125}[lpEnvTex()]||null;}
@@ -1795,17 +1857,90 @@ const LP_TEX_DEFS=(function(){
 })();
 function lpSigilIdx(name,p){const k=p&&p.k!=null?p.k:null;return k!=null?((k%30)+30)%30:lpHash(String(name||'?').toUpperCase())%30;}
 function lpSigilPrefs(name){return (LP.user&&name&&String(name).toUpperCase()===LP.user.callsign&&LP.user.sigil)||null;}
-/* A tree for you: derived from your callsign unless you pick one. */
-function lpSigil(name,size,over){
-  const p=over||lpSigilPrefs(name)||{k:null,t:0}, i=lpSigilIdx(name,p);
-  if(p.photo&&p.use!==false)return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="-50 -50 100 100" role="img" aria-label="Profile photo"><defs><clipPath id="lpPhC"><circle r="50"/></clipPath></defs><image href="${p.photo}" x="-50" y="-50" width="100" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#lpPhC)"/></svg>`;
-  const T=lpTreeArt(i), tx0=size>=30?(p.t||0):0, tx=tx0>0&&LP_TEX_ID[tx0]?tx0:0, sway=size>=56&&!LP_TEX_NOSWAY[tx];
-  const lp=(lpHash(String(name||'?'))%50)/10;
-  const body=tx===0?T.art:`<g filter="url(#${LP_TEX_ID[tx]})">${T.art}</g>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="-50 -50 100 100" role="img" aria-label="${LP_TREES[i][0]} sigil"><defs>${T.defs}${tx>0?LP_TEX_DEFS[tx]:''}</defs>${T.shadow}<g${sway?` class="lp-tsw" style="animation-delay:-${lp}s"`:''}>${body}</g></svg>`;
+/* ---------- Sigils: shape + colours + pattern + emblem (or a photo). Spin to shuffle, lock what you like. ---------- */
+const SG_SHAPES=[
+ {n:'Circle',d:'<circle r="46"/>',s:1,y:0},
+ {n:'Square',d:'<rect x="-44" y="-44" width="88" height="88" rx="5"/>',s:1,y:0},
+ {n:'Rounded',d:'<rect x="-44" y="-44" width="88" height="88" rx="22"/>',s:1,y:0},
+ {n:'Shield',d:'<path d="M-42-45H42V0C42 27 22 40 0 48-22 40-42 27-42 0Z"/>',s:.9,y:-3},
+ {n:'Hexagon',d:'<path d="M0-48 41.6-24V24L0 48-41.6 24V-24Z"/>',s:.9,y:0},
+ {n:'Octagon',d:'<path d="M-19-46H19L46-19V19L19 46H-19L-46 19V-19Z"/>',s:.96,y:0},
+ {n:'Arch',d:'<path d="M-42 46V-4A42 42 0 0 1 42-4V46Z"/>',s:.88,y:6},
+ {n:'Diamond',d:'<path d="M0-49 49 0 0 49-49 0Z"/>',s:.64,y:0},
+ {n:'Triangle',d:'<path d="M0-46 49 40H-49Z"/>',s:.56,y:14},
+ {n:'Trapezium',d:'<path d="M-27-40H27L48 40H-48Z"/>',s:.76,y:3}];
+const SG_PALS=[['Midnight and amber','#1F3A5F','#E8A33D'],['Forest and cream','#2F5D3A','#E8DCC4'],['Plum and ivory','#5B3473','#F1E6D0'],['Brick and charcoal','#8E3B2A','#262626'],
+ ['Ochre and ink','#B5651D','#1E1E1E'],['Teal and sand','#1F6B6B','#E9D8B4'],['Indigo and coral','#2B2F6B','#E07A5F'],['Olive and gold','#55632B','#D9B44A'],
+ ['Rose and wine','#E3A1AA','#6B1F33'],['Sky and navy','#9CC3E6','#1B2A4A'],['Black and gold','#151515','#C9962E'],['Clay and sage','#C2643F','#A7BC93']];
+const SG_PATS=[['Plain',()=>''],['Split',b=>`<rect x="0" y="-50" width="50" height="100" fill="${b}"/>`],['Diagonal',b=>`<path d="M-50-50H-12L50 28V50Z" fill="${b}"/>`],
+ ['Chevron',b=>`<path d="M-50 50V30L0-2 50 30V50Z" fill="${b}"/>`],['Stripes',b=>[-38,-14,10,34].map(y=>`<rect x="-50" y="${y}" width="100" height="10" fill="${b}"/>`).join('')],
+ ['Quartered',b=>`<rect x="0" y="-50" width="50" height="50" fill="${b}"/><rect x="-50" y="0" width="50" height="50" fill="${b}"/>`]];
+/* Emblems are drawn in one colour in a box about 72 wide, centred on 0,0. Holes use evenodd. */
+const SG_FAM=[['light','Light'],['plants','Flowers and plants'],['animals','Animals'],['things','Things'],['trees','Trees']];
+const SG_EM={
+ lamp:['Lamp','light','<path d="M-6-34H6L8-28H-8Z"/><path d="M-15-28H15L11-20H-11Z"/><path fill-rule="evenodd" d="M-12-20H12V12H-12ZM0-13C5-6 7-2 7 2A7 7 0 0 1-7 2C-7-2-5-6 0-13Z"/><path d="M-4 12H4V26H-4ZM-15 26H15V33H-15Z"/>'],
+ torch:['Torch','light','<path d="M-5 36-8-6H8L5 36Z"/><path d="M-12-14H12L9-6H-9Z"/><path d="M1-46C10-35 17-27 17-19A17 13 0 0 1-17-19C-17-25-13-29-9-33-8-27-5-25-2-24-4-32-2-39 1-46Z"/>'],
+ flame:['Flame','light','<path fill-rule="evenodd" d="M1-40C13-26 25-14 25 4A25 23 0 0 1-25 4C-25-7-19-13-13-20-12-11-8-8-3-7-6-19-3-30 1-40ZM0 4C5 10 8 14 8 19A8 8 0 0 1-8 19C-8 14-5 10 0 4Z"/>'],
+ star:['Star','light',(()=>{let p='';for(let i=0;i<10;i++){const r=i%2?15:38,a=-Math.PI/2+i*Math.PI/5;p+=(i?'L':'M')+(r*Math.cos(a)).toFixed(1)+' '+(r*Math.sin(a)).toFixed(1);}return `<path d="${p}Z"/>`;})()],
+ sun:['Sun','light','<circle r="15"/>'+[0,1,2,3,4,5,6,7].map(i=>`<rect x="-3.5" y="-38" width="7" height="14" rx="3" transform="rotate(${i*45})"/>`).join('')],
+ moon:['Moon','light','<path d="M4.7-33.7A34 34 0 1 0 32.2 11 27 27 0 1 1 4.7-33.7Z"/><circle cx="26" cy="-26" r="3"/><circle cx="34" cy="-12" r="2"/>'],
+ firefly:['Firefly','light','<ellipse cx="-11" cy="-12" rx="14" ry="8" transform="rotate(-30 -11 -12)" opacity=".55"/><ellipse cx="11" cy="-12" rx="14" ry="8" transform="rotate(30 11 -12)" opacity=".55"/><circle cy="-22" r="6"/><ellipse cy="-6" rx="6" ry="11"/><circle cy="15" r="10"/><circle cy="15" r="17" opacity=".25"/><circle cy="15" r="25" opacity=".12"/>'],
+ hibiscus:['Hibiscus','plants',[0,1,2,3,4].map(i=>`<ellipse cy="-17" rx="13" ry="17" transform="rotate(${i*72})"/>`).join('')+'<path d="M0 0 18-28" stroke="currentColor" stroke-width="3"/><circle cx="19" cy="-31" r="4"/><circle cx="24" cy="-26" r="3"/>'],
+ lotus:['Lotus','plants','<path d="M0-32C10-20 10 2 0 14-10 2-10-20 0-32Z"/><path d="M-5 14C-20 8-28-6-26-20-12-14-5-2-5 14Z"/><path d="M5 14C20 8 28-6 26-20 12-14 5-2 5 14Z"/><path d="M-8 16C-24 16-36 8-40-2-26-4-14 4-8 16Z"/><path d="M8 16C24 16 36 8 40-2 26-4 14 4 8 16Z"/><rect x="-34" y="22" width="68" height="5" rx="2.5"/>'],
+ sunflower:['Sunflower','plants',[...Array(12)].map((_,i)=>`<ellipse cy="-25" rx="6" ry="12" transform="rotate(${i*30})"/>`).join('')+'<path fill-rule="evenodd" d="M-15 0A15 15 0 1 0 15 0 15 15 0 1 0-15 0ZM-6-5A2.5 2.5 0 1 0-1-5 2.5 2.5 0 1 0-6-5ZM2 2A2.5 2.5 0 1 0 7 2 2.5 2.5 0 1 0 2 2ZM-7 5A2.5 2.5 0 1 0-2 5 2.5 2.5 0 1 0-7 5ZM2-8A2.5 2.5 0 1 0 7-8 2.5 2.5 0 1 0 2-8Z"/>'],
+ leaf:['Leaf','plants','<path fill-rule="evenodd" d="M-30 32C-34-6-4-34 34-34 36 4 8 34-30 32ZM-24 26-21 29 22-24 19-27Z"/>'],
+ rose:['Rose','plants','<path fill-rule="evenodd" d="M0-30C14-30 24-20 24-6 24 10 12 20 0 20-12 20-24 10-24-6-24-20-14-30 0-30ZM-2-20C-12-18-14-6-6 0 2 6 12 0 10-8 8-14 0-16-4-10-2-6 2-6 4-8"/><path d="M-2 20H2V40H-2Z"/><path d="M2 30C10 24 18 26 22 30 14 34 8 34 2 30Z"/>'],
+ palm:['Palm','plants','<path d="M-2 40C-1 20 0 0 2-30H5C3 0 2 20 2 40Z"/>'+[-60,-35,-10,15,40,65].map((a,i)=>`<ellipse cx="0" cy="-16" rx="6" ry="20" transform="rotate(${a} 3 -30) translate(0 -2)"/>`).join('')],
+ tortoise:['Tortoise','animals','<path fill-rule="evenodd" d="M-30 8A30 25 0 0 1 30 8ZM-7-12H7L12-4 7 4H-7L-12-4ZM-24 2-18-8H-14L-18 2ZM24 2 18-8H14L18 2Z"/><circle cx="37" cy="0" r="8"/><path d="M-24 8H-14L-16 20H-26ZM14 8H24L26 20H16ZM-30 6-40 10-30 12Z"/>'],
+ owl:['Owl','animals','<path d="M-22-30-12-20H12L22-30 20-12H-20Z"/><path fill-rule="evenodd" d="M-24-14C-24-30 24-30 24-14V16C24 30 12 38 0 38-12 38-24 30-24 16ZM-19-8A9 9 0 1 0-1-8 9 9 0 1 0-19-8ZM1-8A9 9 0 1 0 19-8 9 9 0 1 0 1-8ZM-4 2H4L0 9Z"/><circle cx="-10" cy="-8" r="4"/><circle cx="10" cy="-8" r="4"/>'],
+ bee:['Bee','animals','<ellipse cx="-15" cy="-14" rx="16" ry="9" transform="rotate(-30 -15 -14)" opacity=".5"/><ellipse cx="15" cy="-14" rx="16" ry="9" transform="rotate(30 15 -14)" opacity=".5"/><circle cy="-22" r="8"/><path fill-rule="evenodd" d="M0-14C11-14 16-2 16 8 16 22 6 32 0 36-6 32-16 22-16 8-16-2-11-14 0-14ZM-16 0H16V5H-16ZM-16 12H16V17H-16Z"/>'],
+ eagle:['Eagle','animals','<path d="M0-30C6-30 9-25 8-20L14-16 8-14 9-6C18-14 30-22 44-22 38-10 28-2 14 4L10 6 14 30 6 26 0 38-6 26-14 30-10 6-14 4C-28-2-38-10-44-22-30-22-18-14-9-6L-8-14-14-16-8-20C-9-25-6-30 0-30Z"/>'],
+ elephant:['Elephant','animals','<path fill-rule="evenodd" d="M-6-22C14-26 34-18 36 0 37 10 34 16 30 18V32H22V20H6V32H-2V18C-8 16-12 12-14 8-16 14-18 22-24 30L-30 26C-25 18-24 10-24 2-24-12-18-20-6-22ZM-14-8A3 3 0 1 0-8-8 3 3 0 1 0-14-8Z"/><path d="M-6-18C2-18 6-8 2 4-4 6-10 2-10-6-10-12-9-16-6-18Z" opacity=".35"/>'],
+ butterfly:['Butterfly','animals','<path d="M-2-6C-14-34-38-30-36-12-34 0-18 2-4 0ZM2-6C14-34 38-30 36-12 34 0 18 2 4 0ZM-3 2C-20 6-28 24-16 30-8 34-2 20-2 6ZM3 2C20 6 28 24 16 30 8 34 2 20 2 6Z"/><ellipse rx="3" ry="18" cy="2"/><path d="M-1-15-8-28M1-15 8-28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'],
+ fish:['Fish','animals','<path fill-rule="evenodd" d="M-36 0C-22-20 8-22 22 0 8 22-22 20-36 0ZM-24-3A3 3 0 1 0-18-3 3 3 0 1 0-24-3Z"/><path d="M18 0 38-16V16Z"/>'],
+ key:['Key','things','<path fill-rule="evenodd" d="M0-40A17 17 0 1 0 0-6 17 17 0 1 0 0-40ZM0-31A8 8 0 1 0 0-15 8 8 0 1 0 0-31Z"/><path d="M-4-8H4V40H-4ZM4 18H16V25H4ZM4 31H12V38H4Z"/>'],
+ quill:['Quill','things','<path fill-rule="evenodd" d="M30-40C4-38-18-14-22 22L-14 18C-6-8 10-26 30-40ZM30-40C24-14 6 8-14 18L-22 22C-14 0 4-24 30-40Z"/><path d="M-22 20-30 38-20 26Z"/>'],
+ book:['Book','things','<path fill-rule="evenodd" d="M-38-24C-26-30-10-30-2-22V30C-10 22-26 22-38 28ZM-32-14C-24-18-14-18-8-14V-11C-14-15-24-15-32-11ZM-32-2C-24-6-14-6-8-2V1C-14-3-24-3-32 1Z"/><path fill-rule="evenodd" d="M38-24C26-30 10-30 2-22V30C10 22 26 22 38 28ZM32-14C24-18 14-18 8-14V-11C14-15 24-15 32-11ZM32-2C24-6 14-6 8-2V1C14-3 24-3 32 1Z"/>'],
+ compass:['Compass','things','<path fill-rule="evenodd" d="M-34 0A34 34 0 1 0 34 0 34 34 0 1 0-34 0ZM-27 0A27 27 0 1 0 27 0 27 27 0 1 0-27 0Z"/><path d="M0-24 7 0 0 24-7 0Z"/><path d="M-2-40H2V-32H-2Z"/>'],
+ drum:['Drum','things','<path fill-rule="evenodd" d="M-24-30H24V-22L12 4 18 30H-18L-12 4-24-22ZM-17-21-9 3H-5L-13-21ZM17-21 9 3H5L13-21ZM-2-21V3H2V-21Z"/><ellipse cy="-30" rx="24" ry="6"/>'],
+ mountain:['Mountain','things','<path d="M-40 34-10-18 2 0 16-26 42 34Z"/><path d="M14-26V-44H17V-26Z"/><path d="M17-44 32-39 17-34Z"/>'],
+ boat:['Boat','things','<path d="M-38 10H38L26 28H-26Z"/><path d="M-1-38H3V10H-1Z"/><path d="M5-34 32 4H5Z"/><path d="M-3-26-26 4H-3Z"/>'],
+ anchor:['Anchor','things','<path fill-rule="evenodd" d="M0-40A8 8 0 1 0 0-24 8 8 0 1 0 0-40ZM0-35A3 3 0 1 0 0-29 3 3 0 1 0 0-35Z"/><path d="M-3-24H3V32H-3ZM-14-16H14V-10H-14Z"/><path d="M-34 6-28 2C-24 18-12 28 0 30 12 28 24 18 28 2L34 6C30 26 14 38 0 38-14 38-30 26-34 6Z"/>']
+};
+const SG_EMKEYS=Object.keys(SG_EM).concat([...Array(30)].map((_,i)=>'tree'+i));
+function sgFam(k){return k.startsWith('tree')?'trees':SG_EM[k][1];}
+function sgEmName(k){return k.startsWith('tree')?LP_TREES[+k.slice(4)][0]:SG_EM[k][0];}
+function sgLum(h){const n=parseInt(h.slice(1),16),c=[n>>16,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+function sgCon(a,b){const x=sgLum(a),y=sgLum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
+/* Emblem colour: whichever reads best against the field. With a pattern it has to read against both colours. */
+function sgInk(a,b,plain){const c=['#FFF7E8','#151515',b,a];let best=c[0],bs=-1;c.forEach(x=>{const s=plain?sgCon(x,a):Math.min(sgCon(x,a),sgCon(x,b)*1.15);if(x!==a&&s>bs){bs=s;best=x;}});return best;}
+function sgDefault(name){const h=lpHash(String(name||'?').toUpperCase()),g=lpHash('sg'+String(name||'?').toUpperCase());const ems=Object.keys(SG_EM);
+  return {v:2,sh:h%10,pal:(h>>>5)%12,pat:(g%3===0)?0:(g>>>3)%6,em:ems[(g>>>7)%ems.length]};}
+function sgOf(name,p){if(p&&p.v===2)return p;const d=sgDefault(name);if(p&&p.k!=null)d.em='tree'+(((p.k%30)+30)%30);return d;}
+let sgN=0;
+function sgSVG(o,size,marks){
+  const S=SG_SHAPES[o.sh]||SG_SHAPES[0],P=SG_PALS[o.pal]||SG_PALS[0],small=size<40,a=P[1],b=P[2],pat=small?0:o.pat||0,ink=sgInk(a,b,!pat),id='sg'+(++sgN)+'_'+Math.floor(Math.random()*1e6);
+  const sc=S.s*(o.em&&o.em.startsWith('tree')?.82:.78);
+  let em='';
+  if(o.em&&o.em.startsWith('tree')){const T=lpTreeArt(+o.em.slice(4)%30);em=`<g filter="url(#${id}f)" transform="translate(0 ${S.y-4}) scale(${sc})">${T.art}</g>`;}
+  else if(SG_EM[o.em]){em=`<g fill="${ink}" color="${ink}" transform="translate(0 ${S.y}) scale(${sc})">${SG_EM[o.em][2]}</g>`;}
+  const gold='#C9962E',border=marks&&marks.border,star=marks&&marks.star&&!small;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="-54 -56 108 110" role="img" aria-label="${o.em?sgEmName(o.em):'Sigil'} on a ${S.n.toLowerCase()}"><defs><clipPath id="${id}c">${S.d}</clipPath>${o.em&&o.em.startsWith('tree')?`<filter id="${id}f"><feFlood flood-color="${ink}"/><feComposite in2="SourceAlpha" operator="in"/></filter>`:''}</defs>
+    <g clip-path="url(#${id}c)"><rect x="-55" y="-55" width="110" height="110" fill="${a}"/>${SG_PATS[pat][1](b)}</g>${em}
+    <g fill="none" stroke="${border?gold:'rgba(0,0,0,.28)'}" stroke-width="${border?(small?7:6):1.5}" stroke-linejoin="round">${S.d}</g>
+    ${star?`<path d="M0-56 3.2-49H10.6L4.7-44.6 6.9-37.6 0-41.9-6.9-37.6-4.7-44.6-10.6-49H-3.2Z" fill="${gold}" stroke="#fff" stroke-width="1"/>`:''}</svg>`;}
+
+function lpSigMarks(){return {border:(LP.finished||[]).length>=3,star:(LP.anchorWeeks||0)>=1};}
+/* Your sigil, or a stranger's made from their callsign. Earned marks show on your own. */
+function lpSigil(name,size,over,marks){
+  const own=LP.user&&name&&String(name).toUpperCase()===LP.user.callsign, p=over||lpSigilPrefs(name)||null;
+  if(p&&p.photo&&p.use!==false)return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="-50 -50 100 100" role="img" aria-label="Profile photo"><defs><clipPath id="lpPhC"><circle r="50"/></clipPath></defs><image href="${p.photo}" x="-50" y="-50" width="100" height="100" preserveAspectRatio="xMidYMid slice" clip-path="url(#lpPhC)"/></svg>`;
+  return sgSVG(sgOf(name,p),size,marks||(own&&!over?lpSigMarks():null));
 }
+/* Street trees still use the tree drawings. */
+function lpTreeSVG(k,size){const T=lpTreeArt(((k%30)+30)%30);return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="-50 -50 100 100"><defs>${T.defs}</defs>${T.shadow}${T.art}</svg>`;}
 function lpIcon(n){
-  const p={cup:'<path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16M9 3c-.6 1 .6 2 0 3M12.5 3c-.6 1 .6 2 0 3"/>',home:'<path d="M4 11l8-6.5 8 6.5"/><path d="M6 9.5V20h12V9.5"/>',pen:'<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',msg:'<path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v7a2.5 2.5 0 01-2.5 2.5H10l-4.5 3.5V16A2.5 2.5 0 014 13.5z"/>',bell:'<path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15z"/><path d="M10 21h4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/>',plus:'<path d="M12 5v14M5 12h14"/>',home:'<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>'};
+  const p={play:'<rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7.5 10.5v4M5.5 12.5h4"/><circle cx="15.5" cy="11.5" r=".9"/><circle cx="17.8" cy="13.8" r=".9"/>',cup:'<path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16M9 3c-.6 1 .6 2 0 3M12.5 3c-.6 1 .6 2 0 3"/>',pen:'<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',msg:'<path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v7a2.5 2.5 0 01-2.5 2.5H10l-4.5 3.5V16A2.5 2.5 0 014 13.5z"/>',bell:'<path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15z"/><path d="M10 21h4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/>',plus:'<path d="M12 5v14M5 12h14"/>',home:'<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>'};
   return `<svg viewBox="0 0 24 24" aria-hidden="true">${p[n]||''}</svg>`;
 }
 /* lamp: tier = lantern|post|tall|double, st = lit|dim|dark. viewBox 0 0 80 120, ground at y=116 */
@@ -1851,6 +1986,7 @@ function lpBar(title,tab){
   return `<div class="lp-top"><span class="lp-title">${title}</span><div class="lp-icons">
     <button class="lp-ic" aria-label="Merroes home page" title="Home page" onclick="go('landing')">${lpIcon('home')}</button>
     <button class="lp-ic" aria-label="${LP.theme==='dark'?'Switch to white':'Switch to black'}" title="${LP.theme==='dark'?'White':'Black'}" onclick="lp.theme()">${lpIcon(LP.theme==='dark'?'sun':'moon')}</button>
+    <button class="lp-ic" aria-label="Play a one-minute game" title="Games" onclick="lpT.gameFrom=state.screen;go('lpGame')">${lpIcon('play')}</button>
     <button class="lp-ic" aria-label="Send feedback" title="Feedback" onclick="lp.fbSheet(true)">${lpIcon('msg')}</button>
     <button class="lp-ic" aria-label="Search" onclick="go('lpSearch')">${lpIcon('search')}</button>
     <button class="lp-ic" aria-label="Notifications${u?', '+u+' new':''}" onclick="go('lpNotifs')">${lpIcon('bell')}${u?'<span class="lp-badge"></span>':''}</button></div></div>`;
@@ -1873,14 +2009,23 @@ const lp={
   sigilDraw(){const el=document.getElementById('lpSig');if(el)el.innerHTML=lpSigil(lpT.sigName||'?',96,lpT.sig);document.querySelectorAll('#lpSwatch button').forEach((b,i)=>b.classList.toggle('sel',(lpT.sig.t||0)===i));},
   sigilNext(){let k;do{k=Math.floor(Math.random()*30);}while(k===lpSigilIdx(lpT.sigName,lpT.sig));lpT.sig.k=k;lpT.sig.use=false;lp.sigilDraw();},
   sigilTex(t){lpT.sig.t=t;lp.sigilDraw();},
-  sigilTarget(){return lpT.sigFor==='signup'?lpT.sig:(LP.user.sigil=LP.user.sigil||{k:null,t:0});},
+  sigilTarget(){const signup=lpT.sigFor==='signup';let t=signup?(lpT.sig=lpT.sig||{}):(LP.user.sigil=LP.user.sigil||{});if(t.v!==2){const d=sgOf(signup?(lpT.sigName||'?'):lpName(),t);Object.assign(t,d);delete t.k;delete t.t;}return t;},
+  sgSave(){if(lpT.sigFor!=='signup')lpSave();lp.sigilHost();if(lpT.sigFor==='signup')lp.sigilDraw();try{LW.imgs={};}catch(e){}},
+  sgSet(k,v){const s=lp.sigilTarget();(lpT.sgHist=lpT.sgHist||[]).push({sh:s.sh,pal:s.pal,pat:s.pat,em:s.em});if(lpT.sgHist.length>5)lpT.sgHist.shift();s[k]=v;s.use=false;lp.sgSave();},
+  sgSpin(){const s=lp.sigilTarget(),lk=lpT.sgLock||{},r=n=>Math.floor(Math.random()*n),diff=(cur,n)=>{let v;do{v=r(n);}while(v===cur&&n>1);return v;};
+    (lpT.sgHist=lpT.sgHist||[]).push({sh:s.sh,pal:s.pal,pat:s.pat,em:s.em});if(lpT.sgHist.length>5)lpT.sgHist.shift();
+    if(!lk.sh)s.sh=diff(s.sh,SG_SHAPES.length);if(!lk.pal)s.pal=diff(s.pal,SG_PALS.length);if(!lk.pat)s.pat=Math.random()<.35?0:diff(s.pat,SG_PATS.length);
+    if(!lk.em){let k;do{const f=SG_FAM[r(SG_FAM.length)][0],L=SG_EMKEYS.filter(x=>sgFam(x)===f);k=L[r(L.length)];}while(k===s.em);s.em=k;lpT.sgFam=sgFam(k);}
+    s.use=false;lpEvt('sigil_spin',{});lp.sgSave();},
+  sgBack(){const h=lpT.sgHist||[];if(!h.length)return;const s=lp.sigilTarget();Object.assign(s,h.pop());s.use=false;lp.sgSave();},
+  sgLock(k){lpT.sgLock=lpT.sgLock||{};lpT.sgLock[k]=!lpT.sgLock[k];lp.sigilHost();},
   sigilPhoto(inp){const f=inp.files&&inp.files[0];if(!f)return;if(!/^image\//.test(f.type)){toast('Choose an image file');return;}
     const rd=new FileReader();rd.onload=()=>{const im=new Image();im.onload=()=>{const S=192,cv=document.createElement('canvas');cv.width=cv.height=S;const x=cv.getContext('2d'),m=Math.min(im.width,im.height);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,S,S);
         const s=lp.sigilTarget();s.photo=cv.toDataURL('image/jpeg',.82);s.use=true;if(lpT.sigFor!=='signup')lpSave();lp.sigilHost();if(lpT.sigFor==='signup')lp.sigilDraw();};im.onerror=()=>toast('That image could not be read');im.src=rd.result;};rd.readAsDataURL(f);},
   sigilUse(on){const s=lp.sigilTarget();s.use=on;if(lpT.sigFor!=='signup')lpSave();lp.sigilHost();if(lpT.sigFor==='signup')lp.sigilDraw();},
   sigilDropPhoto(){const s=lp.sigilTarget();delete s.photo;s.use=false;if(lpT.sigFor!=='signup')lpSave();lp.sigilHost();if(lpT.sigFor==='signup')lp.sigilDraw();},
   sigilPick(k,t){const s=lp.sigilTarget();if(k!=null){s.k=k;s.use=false;}if(t!==undefined)s.t=t;if(lpT.sigFor!=='signup')lpSave();lp.sigilHost();if(lpT.sigFor==='signup')lp.sigilDraw();},
-  sigilHost(){const el=document.getElementById('lpSigHost');if(el)el.innerHTML=lpSigilSheet();},
+  sigilHost(){const el=document.getElementById('lpSigHost');if(!el)return;const sh=el.querySelector('.lp-sheet'),y=sh?sh.scrollTop:0;el.innerHTML=lpSigilSheet();const n=el.querySelector('.lp-sheet');if(n)n.scrollTop=y;},
   sigilSheet(on,who){const el=document.getElementById('lpSigHost');if(el)el.remove();
     if(on){lpT.sigFor=who;const d=document.createElement('div');d.id='lpSigHost';d.className='lp';d.innerHTML=lpSigilSheet();document.body.appendChild(d);}
     else if(lpT.sigFor!=='signup')render();},
@@ -1983,7 +2128,9 @@ const lp={
     const i=lpInfo(); if(!i||i.logged) return;
     const kind=lpT.kind||'showed';
     if(kind==='rest'){const w0=lpAdd(i.s.start,(i.week-1)*7);if(Object.keys(i.s.lines).some(d=>d>=w0&&i.s.lines[d].kind==='rest')){toast('One planned rest day a week');return;}}
+    const first=!LP.starter&&!(LP.finished||[]).length&&!Object.keys(i.s.lines).length;
     i.s.lines[i.today]={kind,text:(lpT.text||'').trim(),ts:Date.now()};lpEvt(kind==='none'?'checkin_dark':'checkin',{});
+    if(first){LP.starter={n:LP_STARTER,day:i.today};LP.minted=LP.minted||{};LP.minted.birch=(LP.minted.birch||0)+LP_STARTER;lpNotify(LP_STARTER+' starter logs','For showing up on day one. Spend them on travel or seats. You can recognise people with them after 30 days.');setTimeout(()=>toast('+'+LP_STARTER+' starter logs for your first check-in'),900);}
     lpT.kind=null;lpT.text=''; lpSave(); go('lpAfter');
   },
   voice(){
@@ -2308,10 +2455,11 @@ function lpAfterScreen(){
     <hr class="lp-hr"/>
     ${s0hours(i)}${i.total>7?lpWeek(i):''}
     <p class="lp-small" style="margin-top:12px">Tomorrow’s check-in opens at 6am.</p>
+    <button class="lp-card lp-click lp-next lg-promo" style="margin-top:16px;width:100%" onclick="lpT.gameFrom='lpDock';go('lpGame')"><span class="lp-next-ic">${lpIcon('play')}</span><span style="flex:1"><b>A minute in the dark room</b><span class="lp-small">Lamplighter, Imposters, Questions. Points can earn a log today.</span></span><span class="lp-chev">▸</span></button>
     <div class="lp-stack" style="gap:10px;margin-top:16px"><button class="lp-btn lp-ghost" onclick="go('lpFocus')">${LP.focus?'Back to your torch':'Start a focus block'} · ${lpFocusMin()} min today</button><button class="lp-btn" onclick="go('lpHouse')">See your house</button>
       ${i.total>7?`<button class="lp-btn lp-ghost" onclick="go('lpWeekly')">Week ${i.week} check-in</button>`:''}</div>
     ${lpTodayPod(i)}
-    <div class="lp-pill-row" style="justify-content:center;margin-top:16px;gap:8px;flex-wrap:wrap"><button class="lp-btn lp-ghost lp-sm" onclick="go('lpFeed')">City feed</button><button class="lp-btn lp-ghost lp-sm" onclick="lpT.gameFrom='lpDock';go('lpGame')">A minute in the dark room</button></div>`,'dock');
+    <div class="lp-pill-row" style="justify-content:center;margin-top:16px;gap:8px;flex-wrap:wrap"><button class="lp-btn lp-ghost lp-sm" onclick="go('lpFeed')">City feed</button></div>`,'dock');
 }
 function lpWeeklyScreen(){
   lpEnsure(); const i=lpInfo(); if(!i) return lpNoSprint();
@@ -2739,7 +2887,7 @@ function lsBuild(){
   LS.walkers.forEach(w=>{w.tx=w.x;});
 }
 function lsTreeImg(seed){const k=seed%30,key='t'+k+'|'+((LP.user&&LP.user.sigil&&LP.user.sigil.t)||0);if(LS.imgs[key])return LS.imgs[key];
-  const im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(lpSigil('x',96,{k,t:(LP.user&&LP.user.sigil&&LP.user.sigil.t)||0}));LS.imgs[key]=im;return im;}
+  const im=new Image();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(lpTreeSVG(k,96));LS.imgs[key]=im;return im;}
 function lsFit(){const cv=LS.cv,w=Math.floor(cv.parentNode.clientWidth)||window.innerWidth||360,h=Math.floor(cv.parentNode.clientHeight)||window.innerHeight||640;
   LS.k=lpEnvK()||Math.min(2,window.devicePixelRatio||1);LS.z=Math.min(h/LS.H,Math.max(1,w/420),1.35);LS.vw=w/LS.z;LS.oy=h/LS.z-LS.H-56/LS.z;LS.topPad=(lpSafeTop()+96)/LS.z;
   cv.width=Math.round(w*LS.k);cv.height=Math.round(h*LS.k);LS.cw=w;LS.ch=h;}
@@ -3075,7 +3223,7 @@ function lpPodSettingsScreen(){
 
 Object.assign(lp,{
   recSheet(on){lpHost('lpRecHost',on?lpRecHTML():'');},
-  recognise(){const to=(document.getElementById('lpRecTo')||{}).value,why=((document.getElementById('lpRecWhy')||{}).value||'').trim();if(!to)return;if(why.length<6){toast('Say what they did');return;}if(lpLogBal().birch<3){toast('Recognising someone takes 3 logs');return;}
+  recognise(){const to=(document.getElementById('lpRecTo')||{}).value,why=((document.getElementById('lpRecWhy')||{}).value||'').trim();if(!to)return;if(why.length<6){toast('Say what they did');return;}if(lpLogBal().birch<3){toast('Recognising someone takes 3 logs');return;}if(lpLogBal().birch-lpStarterLocked()<3){toast('Starter logs can’t be used for recognitions in your first 30 days. Earn 3 more by showing up.');return;}
     LP.spent=LP.spent||{};LP.spent.birch=(LP.spent.birch||0)+3;(LP.recognised=LP.recognised||[]).unshift({to,why:why.slice(0,120),date:lpToday()});lpEvt('recognised',{});lpSave();lp.recSheet(false);toast(to+' will see it on their Passport');render();},
   nudge(n){const i=lpInfo();LP.nudges[n+'_'+i.week]=true;lpSave();toast('Nudge sent to '+n);render();},
   send(){const el=document.getElementById('lpMsg');const v=(el.value||'').trim();if(!v)return;const k=lpT.thread||'pod';(LP.chat[k]=LP.chat[k]||[]).push({who:lpName(),t:Date.now(),text:v});lpSave();render();setTimeout(()=>{window.scrollTo(0,document.body.scrollHeight);const m=document.getElementById('lpMsg');if(m)m.focus();},80);},
@@ -3279,13 +3427,13 @@ function lpPostCard(p,link){
 }
 function lpDiscCard(t){const b=LP_BOARDS.find(x=>x[0]===t.board)||['general','General'];
   return `<article class="lp-post lp-disc"><button class="lp-link lp-postbtn" onclick="lp.fOpen('${t.id}')"><div class="lp-small" style="margin-bottom:4px"><b>Discussion</b> · ${lpEsc(b[1])}${t.sample?' · sample':''}</div><div style="font-weight:600;font-size:16px;line-height:1.35">${lpEsc(t.title)}</div><div class="lp-small" style="margin-top:6px">${lpEsc(t.who)} · ${lpAgo(t.ts)} · ${t.replies.length} ${t.replies.length===1?'reply':'replies'}</div></button></article>`;}
-function lpFeedScreen(){
+function lpFeedScreen(){if((lpT.feedTab||'forum')==='forum')return lpForumHome();
   lpEnsure(); const hide=LP.feedHide||{}, pend=(lpT.livePend||[]).length, kinds=Object.keys(LP_PK),off=kinds.filter(k=>hide[k]).length+(hide.mine?1:0)+(hide.disc?1:0)+LP_BOARDS.filter(b=>hide['b:'+b[0]]).length;
   let posts=lpPosts().filter(p=>!hide[p.kind]&&!lpIsBlocked(p.who));if(hide.mine){const dn=lpMyDistrict()?lpMyDistrict().name:null;posts=posts.filter(p=>dn&&p.district===dn);}
   const disc=hide.disc||hide.mine?[]:lpFThreads().filter(t=>!hide['b:'+t.board]&&!lpIsBlocked(t.who)).map(t=>({disc:1,t,ts:lpFLast(t)}));
   const items=posts.map(p=>({p,ts:p.ts||0})).concat(disc).sort((a,b)=>b.ts-a.ts);
   const offB=LP_BOARDS.filter(b=>hide['b:'+b[0]]).length;
-  return lpShell(`${lpBar('CITY')}${lpNetSeg('lpFeed')}
+  return lpShell(`${lpBar('CITY')}${lpNetSeg('lpFeed')}${lpFeedTabs()}
     <div class="lp-row lp-between" style="margin-bottom:10px">${lpSamples()?'<span class="lp-preview"><i class="lp-live"></i>Live · sample posts</span>':'<span></span>'}<div class="lp-row" style="gap:6px"><button class="lp-btn lp-ghost lp-sm" onclick="lp.fNew()">Start a discussion</button><button class="lp-btn lp-sm" onclick="go('lpNewPost')">${lpIcon('plus').replace('<svg','<svg style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2"')} Post</button></div></div>
     <div class="lp-row" style="gap:8px;align-items:center"><button class="lp-fbtn ${off?'on':''}" aria-expanded="${!!lpT.feedOpen}" aria-controls="lpFeedF" onclick="lpT.feedOpen=!lpT.feedOpen;render()">Filter${off?' · '+off+' hidden':''}</button>${off?`<button class="lp-link" onclick="LP.feedHide={};lpSave();render()">Show everything</button>`:''}</div>
     ${lpT.feedOpen?`<div class="lp-fpanel" id="lpFeedF"><p class="lp-small" style="margin:0 0 8px">Tap to hide what you don’t want to see. Tap again to bring it back.</p><div class="lp-chips" style="display:flex;flex-wrap:wrap;gap:6px">${kinds.map(k=>`<button class="lp-fchip ${hide[k]?'':'on'}" aria-pressed="${!hide[k]}" onclick="lp.feedHide('${k}')">${hide[k]?'':'✓ '}${LP_PK[k].n}s</button>`).join('')}<button class="lp-fchip ${hide.mine?'on':''}" aria-pressed="${!!hide.mine}" onclick="lp.feedHide('mine')">${hide.mine?'✓ ':''}Only my district</button><button class="lp-fchip ${hide.disc?'':'on'}" aria-pressed="${!hide.disc}" onclick="lp.feedHide('disc')">${hide.disc?'':'✓ '}Discussions</button></div>${hide.disc?'':`<p class="lp-small" style="margin:10px 0 6px">Discussion topics</p><div style="display:flex;flex-wrap:wrap;gap:6px">${LP_BOARDS.map(b=>`<button class="lp-fchip ${hide['b:'+b[0]]?'':'on'}" aria-pressed="${!hide['b:'+b[0]]}" onclick="lp.feedHide('b:${b[0]}')">${hide['b:'+b[0]]?'':'✓ '}${lpEsc(b[1])}</button>`).join('')}</div>`}</div>`:''}
@@ -3293,6 +3441,21 @@ function lpFeedScreen(){
     <div class="lp-feed" aria-live="polite">${items.length?items.map(x=>x.disc?lpDiscCard(x.t):lpPostCard(x.p)).join(''):`<p class="lp-sub lp-center" style="padding:30px 0">Nothing here yet. Share a win, a lesson or an ask.</p>`}</div>
     <p class="lp-small lp-center" style="margin-top:16px">Every post carries a takeaway and a lesson. Offers are always labelled. Discussions follow the <button class="lp-link" onclick="lp.rulesSheet()">community rules</button>.</p>`,'town');
 }
+const LP_FCATS=[['Life and society',['general','politics','relationships']],['Work and money',['career','business','tech']],['Leisure',['sports','entertainment']]];
+function lpFeedTabs(){const t=lpT.feedTab||'forum';return `<div class="fm-tabs" role="tablist">${[['forum','Forum'],['posts','Wins, lessons & asks']].map(x=>`<button role="tab" aria-selected="${t===x[0]}" class="${t===x[0]?'on':''}" onclick="lpT.feedTab='${x[0]}';render()">${x[1]}</button>`).join('')}</div>`;}
+function lpFMeta(t){const last=t.replies.length?t.replies[t.replies.length-1]:null;return `by <b>${lpEsc(t.who)}</b> · ${t.replies.length} ${t.replies.length===1?'reply':'replies'} · ${t.views} views · ${lpAgo(lpFLast(t))}${last?' (last: '+lpEsc(last.who)+')':''}`;}
+function lpForumHome(){lpEnsure();const all=lpFThreads().filter(t=>!lpIsBlocked(t.who)),posts=lpPosts().filter(p=>!lpIsBlocked(p.who));
+  const nPosts=all.reduce((a,t)=>a+1+t.replies.length,0),here=lpSamples()?14+lpHash(lpToday())%30:0;
+  const front=all.slice().sort((a,b)=>(b.replies.length*3+b.views/100+(lpFLast(b)>Date.now()-864e5?4:0))-(a.replies.length*3+a.views/100+(lpFLast(a)>Date.now()-864e5?4:0))).slice(0,6);
+  const board=k=>{const b=LP_BOARDS.find(x=>x[0]===k),ts=all.filter(t=>t.board===k).sort((x,y)=>lpFLast(y)-lpFLast(x)),n=ts.reduce((a,t)=>a+1+t.replies.length,0),l=ts[0];
+    return `<button class="fm-board" onclick="lpT.board='${k}';go('lpBoard')"><span class="fm-bmain"><b class="fm-bn">${lpEsc(b[1])}</b><span class="fm-bd">${lpEsc(b[2])}</span>${l?`<span class="fm-last">Latest: ${lpEsc(l.title)} · ${lpEsc(l.who)} · ${lpAgo(lpFLast(l))}</span>`:'<span class="fm-last">No topics yet. Start the first.</span>'}</span><span class="fm-n"><b>${ts.length}</b> topics<br/><b>${n}</b> posts</span></button>`;};
+  return lpShell(`${lpBar('CITY')}${lpNetSeg('lpFeed')}${lpFeedTabs()}
+    <div class="fm-stats">${lpSamples()?'<span class="lp-preview"><i class="lp-live"></i>Sample forum</span> ':''}<span><b>${here}</b> here now</span><span><b>${all.length}</b> topics</span><span><b>${nPosts}</b> posts</span><span>${lpShortDate(lpToday())}</span></div>
+    <div class="lp-row" style="gap:8px;margin:12px 0 4px;flex-wrap:wrap"><button class="lp-btn lp-sm" onclick="lp.fNew()">New topic</button><button class="lp-btn lp-ghost lp-sm" onclick="go('lpNewPost')">Post a win or an ask</button><button class="lp-link" style="margin-left:auto" onclick="lp.rulesSheet()">Forum rules</button></div>
+    ${front.length?`<section class="fm-sec"><h2 class="fm-cath">Front page</h2><ol class="fm-front">${front.map(t=>{const b=LP_BOARDS.find(x=>x[0]===t.board);return `<li><button class="fm-t" onclick="lp.fOpen('${t.id}')">${lpEsc(t.title)}</button> <span class="fm-meta">in <button class="fm-bl" onclick="lpT.board='${t.board}';go('lpBoard')">${lpEsc(b?b[1]:'')}</button> · ${lpFMeta(t)}</span></li>`;}).join('')}</ol></section>`:''}
+    ${LP_FCATS.map(c=>`<section class="fm-sec"><h2 class="fm-cath">${c[0]}</h2>${c[1].map(board).join('')}</section>`).join('')}
+    <section class="fm-sec"><h2 class="fm-cath">From the sprints</h2><button class="fm-board" onclick="lpT.feedTab='posts';render();window.scrollTo(0,0)"><span class="fm-bmain"><b class="fm-bn">Wins, lessons & asks</b><span class="fm-bd">Short posts from people mid-sprint. Every post carries a takeaway; offers are labelled.</span>${posts[0]?`<span class="fm-last">Latest: ${lpEsc((posts[0].takeaway||'').slice(0,60))} · ${lpEsc(posts[0].who)}</span>`:''}</span><span class="fm-n"><b>${posts.length}</b> posts</span></button></section>
+    <p class="lp-small lp-center" style="margin-top:16px">Pick the board that fits before you post. Off-topic threads get moved, not deleted.</p>`,'town');}
 /* ---------- THE WORLD: a walkable network (replaces the dot map) ---------- */
 const LW_BW=760,LW_BH=600,LW_RD=80,LW_NC=8,LW_NR=6;
 const LW={W:LW_NC*LW_BW+(LW_NC-1)*LW_RD,H:LW_NR*LW_BH+(LW_NR-1)*LW_RD,cv:null,ctx:null,dk:null,dx:null,raf:0,k:1,z:1,vw:360,vh:520,t:0,last:0,
@@ -3939,11 +4102,13 @@ function lpBoardAd(b){const a=lpAdLive().find(x=>x.slot==='forum'&&x.board===b[0
   if(a)return `<div style="margin-top:14px;border-radius:14px;padding:12px 14px;background:${a.c};color:#fff;position:relative">${a.img?`<img src="${a.img}" alt="" style="width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:10px;display:block"/>`:''}<span style="position:absolute;top:8px;right:10px;font:700 10px system-ui;background:rgba(0,0,0,.35);padding:2px 6px;border-radius:4px">AD</span><div style="font-family:var(--serif);font-size:18px;line-height:1.2;padding-right:30px">${lpEsc(a.h)}</div>${a.s?`<div style="font-size:13px;opacity:.92;margin-top:2px">${lpEsc(a.s)}</div>`:''}<div style="font-size:11px;opacity:.85;margin-top:6px">Ad for this board · shown only on your device in the preview</div></div>`;
   return `<button class="lp-opt" style="margin-top:14px;border-style:dashed" onclick="lp.adSheet(true,'forum','${b[0]}')"><span><b>Advertise to this board</b><span class="lp-small" style="display:block">One marked ad slot. It has to fit ${lpEsc(b[1])}.</span></span><span class="lp-chev">▸</span></button>`;}
 function lpBoardScreen(){lpEnsure();const b=LP_BOARDS.find(x=>x[0]===lpT.board)||LP_BOARDS[0],ts=lpFThreads().filter(t=>t.board===b[0]).sort((x,y)=>lpFLast(y)-lpFLast(x));
-  return lpShell(`${lpHead('Feed','lpFeed')}
+  return lpShell(`${lpHead('Forum','lpFeed')}
+    <div class="lp-small" style="margin-top:4px">Forum › ${b[1]}</div>
     <h1 class="lp-h2" style="margin-top:6px">${b[1]}</h1><p class="lp-sub" style="margin-top:6px">${b[2]}</p>
     <button class="lp-btn" style="margin-top:14px" onclick="lp.fNew('${b[0]}')">Start a thread</button>
     ${lpBoardAd(b)}
-    <ul class="lp-list" style="margin-top:14px">${ts.map(t=>`<li><button class="lp-fb" onclick="lp.fOpen('${t.id}')"><div style="min-width:0"><b>${lpEsc(t.title)}</b><div class="lp-small">${lpEsc(t.who)} · ${lpAgo(t.ts)}${t.sample?' · sample':''}</div></div><span class="lp-small" style="white-space:nowrap">${t.replies.length} replies</span></button></li>`).join('')||'<li class="lp-small">No threads yet.</li>'}</ul>`,'town');}
+    <section class="fm-sec" style="margin-top:16px"><h2 class="fm-cath">${ts.length} ${ts.length===1?'topic':'topics'}</h2><ol class="fm-front">${ts.map(t=>`<li><button class="fm-t" onclick="lp.fOpen('${t.id}')">${lpEsc(t.title)}</button> <span class="fm-meta">${lpFMeta(t)}${t.sample?' · sample':''}</span></li>`).join('')||'<li class="lp-small">No topics yet.</li>'}</ol></section>
+    <div class="lp-eyebrow" style="margin:20px 0 8px">Other boards</div><div class="pf-chips">${LP_BOARDS.filter(x=>x[0]!==b[0]).map(x=>`<button class="pf-chip" onclick="lpT.board='${x[0]}';go('lpBoard')">${lpEsc(x[1])}</button>`).join('')}</div>`,'town');}
 function lpThreadScreen(){lpEnsure();const t=lpFThreads().find(x=>x.id===lpT.thread2);if(!t)return lpBoardScreen();const b=LP_BOARDS.find(x=>x[0]===t.board),up=(LP.forum&&LP.forum.up)||{};
   const post=(x,isOp)=>`<div class="lp-card" style="margin-top:10px"><div class="lp-row" style="gap:10px;align-items:center"><span class="lp-sigil" style="width:34px;height:34px">${lpSigil(x.who,26)}</span><div style="min-width:0"><button class="lp-link" style="font-weight:700;color:var(--lp-ink);padding:0" onclick="lp.person('${lpEsc(x.who)}')">${lpEsc(x.who)}</button><div class="lp-small">${lpAgo(x.ts)}${x.sample?' · sample':''}</div></div></div><p style="margin:10px 0 0;line-height:1.5;white-space:pre-wrap;word-break:break-word">${lpEsc(isOp?x.body:x.text)}</p>${lpFAtt(x)}
     <div class="lp-row" style="gap:12px;margin-top:10px;align-items:center"><span class="lp-react" style="margin:0">${lpLikeBtn(x.id,x.sample?lpLikeBase(x.id):0)}</span><button class="lp-link" aria-pressed="${!!up[x.id]}" onclick="lp.fUp('${x.id}')">${up[x.id]?'Helpful ✓':'Helpful'}</button><button class="lp-link" onclick="lp.fReport('${x.id}')">Report</button></div></div>`;
@@ -3956,10 +4121,10 @@ function lpThreadScreen(){lpEnsure();const t=lpFThreads().find(x=>x.id===lpT.thr
       <input class="lp-field" id="lpFRepL" placeholder="Video link (optional)" inputmode="url" aria-label="Video link"/>
       <button class="lp-btn" onclick="lp.fReply('${t.id}')">Reply</button></div>`,'town');}
 function lpNewThreadScreen(){lpEnsure();const f=lpT.fnew||(lpT.fnew={board:'general',title:'',body:'',link:'',file:null});
-  return lpShell(`${lpHead('Feed','lpFeed')}
-    <h1 class="lp-h2" style="margin-top:6px">Start a discussion</h1>
+  return lpShell(`${lpHead('Forum','lpFeed')}
+    <h1 class="lp-h2" style="margin-top:6px">New topic</h1>
     <div class="lp-card lp-stack" style="margin-top:14px;gap:12px">
-      <div><label class="lp-label" for="lpFB">Topic</label><select id="lpFB" class="lp-field" onchange="lpT.fnew.board=this.value">${LP_BOARDS.map(b=>`<option value="${b[0]}" ${f.board===b[0]?'selected':''}>${b[1]}</option>`).join('')}</select></div>
+      <div><div class="lp-label" id="lpFBl">Which board?</div><div class="fm-pick" role="radiogroup" aria-labelledby="lpFBl">${LP_BOARDS.map(b=>`<button type="button" role="radio" aria-checked="${f.board===b[0]}" class="fm-pk ${f.board===b[0]?'on':''}" onclick="lpT.fnew.board='${b[0]}';document.querySelectorAll('.fm-pk').forEach(e=>{const on=e===this;e.classList.toggle('on',on);e.setAttribute('aria-checked',on)})"><b>${b[1]}</b><span>${b[2]}</span></button>`).join('')}</div></div>
       <div><label class="lp-label" for="lpFT">Title</label><input id="lpFT" class="lp-field" maxlength="90" value="${lpEsc(f.title)}" oninput="lpT.fnew.title=this.value" placeholder="What do you want to talk about?"/></div>
       <div><label class="lp-label" for="lpFBody">Say more</label><textarea id="lpFBody" class="lp-field" maxlength="2000" oninput="lpT.fnew.body=this.value" placeholder="Give people enough to reply to.">${lpEsc(f.body)}</textarea></div>
       <div><label class="lp-label" for="lpFL">Video link <span class="lp-optl">optional</span></label><input id="lpFL" class="lp-field" inputmode="url" value="${lpEsc(f.link)}" oninput="lpT.fnew.link=this.value" placeholder="https://"/></div>
@@ -4154,7 +4319,7 @@ function lpProfileScreen(){
       :`<div class="pp-stamps me-empty"><div class="pp-stamp pp-focus" style="--c:var(--lp-faint);--r:-6deg;opacity:.5"><small>FOCUSED</small><b>25 MIN</b><small>your first</small></div><div><b>Your first stamp is 25 minutes away.</b><p class="lp-small" style="margin:4px 0 10px">Focus blocks, finished sprints, volunteering and trips all stamp your Passport.</p><button class="lp-btn lp-sm" onclick="go('lpFocus')">Start a focus block</button></div></div>`}
     <div class="lp-nexts" style="margin-top:18px">
       <button class="lp-card lp-click lp-next" onclick="go('lpHouse')"><span class="lp-next-ic">${lpIcon('home')}</span><span><b>Your house</b><span class="lp-small">${f.length} ${f.length===1?'room':'rooms'}, one per sprint</span></span></button>
-      <button class="lp-card lp-click lp-next" onclick="lpT.gameFrom='lpProfile';go('lpGame')"><span class="lp-next-ic">${lpIcon('moon')}</span><span><b>The dark room</b><span class="lp-small">Three one-minute games</span></span></button>
+      <button class="lp-card lp-click lp-next" onclick="lpT.gameFrom='lpProfile';go('lpGame')"><span class="lp-next-ic">${lpIcon('play')}</span><span><b>The dark room</b><span class="lp-small">Three one-minute games</span></span></button>
       <button class="lp-card lp-click lp-next" onclick="go('lpFocus')"><span class="lp-next-ic">${LP_FLAME}</span><span><b>Focus</b><span class="lp-small">${lpFocusMin()} min today</span></span></button>
       <button class="lp-card lp-click lp-next" onclick="go('lpLedger')"><span class="lp-next-ic">${lpIcon('pen')}</span><span><b>Passport</b><span class="lp-small">Your record, to share or print</span></span></button>
     </div>
@@ -4165,16 +4330,25 @@ function lpProfileScreen(){
     <div class="lp-row lp-between" style="align-items:center;gap:12px"><div><b>${LP.prefs.witnesses?`${lpMyWitnesses()} ${lpMyWitnesses()===1?'witness':'witnesses'}`:'Witnesses off'}</b><div class="lp-small">${LP.prefs.witnesses?'People can witness your starts and finishes.':'Turn on to let people witness your sprints.'} You witness ${(LP.witnessing||[]).length}.</div></div>${lpTog(LP.prefs.witnesses,'lp.witnessOpen()')}</div>`,'me');
 }
 function lpSigilSheet(){
-  const signup=lpT.sigFor==='signup', s=signup?lpT.sig:((LP.user&&LP.user.sigil)||{k:null,t:0}), nm=signup?(lpT.sigName||'?'):lpName(), cur=lpSigilIdx(nm,s);
-  return `<div class="lp-modal" onclick="if(event.target===this)lp.sigilSheet(false)"><div class="lp-sheet" role="dialog" aria-label="Choose your tree">
-    <div class="lp-title" style="margin-bottom:4px">Your picture</div>
-    <p class="lp-sub" style="margin-bottom:12px">A photo, or a tree. Photos are optional, and in this preview they stay on this device.</p>
-    <div class="lp-row" style="gap:12px;margin-bottom:14px"><span class="lp-sigil" style="width:64px;height:64px">${lpSigil(nm,56,s)}</span>
-      <div class="lp-stack" style="gap:6px"><label class="lp-btn lp-sm lp-ghost" style="cursor:pointer;display:inline-flex;align-items:center;justify-content:center">${s.photo?'Change photo':'Upload a photo'}<input type="file" accept="image/*" style="display:none" onchange="lp.sigilPhoto(this)"/></label>
-      ${s.photo?`<div class="lp-row" style="gap:12px"><button type="button" class="lp-link" onclick="lp.sigilUse(${s.use===false?'true':'false'})">${s.use===false?'Use my photo':'Use a tree instead'}</button><button type="button" class="lp-link" onclick="lp.sigilDropPhoto()">Remove</button></div>`:''}</div></div>
-    <div class="lp-eyebrow" style="margin-bottom:8px">Or a tree</div>
-    <div class="lg-trees">${LP_TREES.map((t,i)=>`<button type="button" class="lg-tree ${i===cur&&!(s.photo&&s.use!==false)?'sel':''}" aria-pressed="${i===cur}" aria-label="${t[0]}" onclick="lp.sigilPick(${i},undefined)"><span class="lp-sigil" style="width:50px;height:50px">${lpSigil(nm,44,{k:i,t:s.t||0})}</span><span>${t[0]}</span></button>`).join('')}</div>
-    <div class="lp-eyebrow" style="margin:14px 0 4px">Style</div><p class="lp-small" style="margin:0 0 8px">Applies to your picture and the city.</p><div class="lp-row" style="gap:6px;flex-wrap:wrap">${LP_TEX_ON.map(i=>`<button type="button" class="lp-chip ${(s.t||0)===i?'sel':''}" onclick="lp.sigilPick(null,${i})">${LP_TEX[i]}</button>`).join('')}</div>
+  const signup=lpT.sigFor==='signup', s=lp.sigilTarget(), nm=signup?(lpT.sigName||'?'):lpName(), o=sgOf(nm,s), photo=!!(s.photo&&s.use!==false), lk=lpT.sgLock||{}, fam=lpT.sgFam||sgFam(o.em||'lamp'), hist=(lpT.sgHist||[]).length, mk=signup?null:lpSigMarks();
+  const lock=k=>`<button type="button" class="sg-lock ${lk[k]?'on':''}" aria-pressed="${!!lk[k]}" aria-label="${lk[k]?'Unlock':'Lock'} ${k==='sh'?'shape':k==='pal'?'colours':k==='pat'?'pattern':'emblem'}" onclick="lp.sgLock('${k}')">${lk[k]?'🔒 Locked':'Lock'}</button>`;
+  const head=(t,k)=>`<div class="sg-h"><b>${t}</b>${lock(k)}</div>`;
+  const pick=(k,v,inner,label)=>`<button type="button" class="sg-pick ${!photo&&o[k]===v?'on':''}" aria-pressed="${!photo&&o[k]===v}" aria-label="${lpEsc(label)}" title="${lpEsc(label)}" onclick="lp.sgSet('${k}',${typeof v==='string'?`'${v}'`:v})">${inner}</button>`;
+  const emList=SG_EMKEYS.filter(k=>sgFam(k)===fam);
+  return `<div class="lp-modal" onclick="if(event.target===this)lp.sigilSheet(false)"><div class="lp-sheet sg-sheet" role="dialog" aria-label="Your sigil">
+    <div class="sg-top"><div class="lp-row lp-between"><div class="lp-title">Your sigil</div><button class="lp-link" aria-label="Close" onclick="lp.sigilSheet(false)">✕</button></div>
+      <div class="sg-prev"><span class="sg-big">${lpSigil(nm,104,s,mk)}</span>
+        <div class="lp-stack" style="gap:8px;flex:1;min-width:0"><button type="button" class="lp-btn lp-sm sg-spin" onclick="lp.sgSpin()"><span aria-hidden="true">⟳</span> Spin</button>
+          <div class="lp-row" style="gap:12px;flex-wrap:wrap"><button type="button" class="lp-link" ${hist?'':'disabled'} onclick="lp.sgBack()">↶ Back${hist?' ('+hist+')':''}</button>
+          <label class="lp-link" style="cursor:pointer">${s.photo?'Change photo':'Use a photo'}<input type="file" accept="image/*" style="display:none" onchange="lp.sigilPhoto(this)"/></label>
+          ${s.photo?`<button type="button" class="lp-link" onclick="lp.sigilUse(${photo?'false':'true'})">${photo?'Use the sigil':'Use my photo'}</button><button type="button" class="lp-link" onclick="lp.sigilDropPhoto()">Remove photo</button>`:''}</div>
+          <span class="lp-small">${photo?'Your photo is showing.':'Lock what you like, spin the rest.'}</span></div></div></div>
+    ${head('Shape','sh')}<div class="sg-grid">${SG_SHAPES.map((x,i)=>pick('sh',i,sgSVG({sh:i,pal:o.pal,pat:0,em:null},40),x.n)).join('')}</div>
+    ${head('Colours','pal')}<div class="sg-grid">${SG_PALS.map((x,i)=>pick('pal',i,`<span class="sg-sw" style="background:linear-gradient(135deg,${x[1]} 50%,${x[2]} 50%)"></span>`,x[0])).join('')}</div>
+    ${head('Pattern','pat')}<div class="sg-grid">${SG_PATS.map((x,i)=>pick('pat',i,sgSVG({sh:1,pal:o.pal,pat:i,em:null},40),x[0])).join('')}</div>
+    ${head('Emblem','em')}<div class="sg-fams" role="tablist">${SG_FAM.map(f=>`<button type="button" role="tab" aria-selected="${fam===f[0]}" class="${fam===f[0]?'on':''}" onclick="lpT.sgFam='${f[0]}';lp.sigilHost()">${f[1]}</button>`).join('')}</div>
+    <div class="sg-grid">${emList.map(k=>pick('em',k,sgSVG({sh:o.sh,pal:o.pal,pat:0,em:k},44),sgEmName(k))).join('')}</div>
+    <p class="lp-small" style="margin-top:14px">Earned, never chosen: a gold border after 3 finished sprints, and a star once you’ve anchored a pod.${mk?` You have ${mk.border&&mk.star?'both':mk.border?'the gold border':mk.star?'the star':'neither yet'}.`:''}</p>
     <button class="lp-btn lp-sm" style="margin-top:12px;width:100%" onclick="lp.sigilSheet(false)">Done</button></div></div>`;
 }
 function lpSettingsScreen(){
@@ -4189,6 +4363,7 @@ function lpSettingsScreen(){
     ${row('Status',lpEsc(lpStatus()||'Not set'),`<button class="lp-link" onclick="lp.statusSheet(true)">${lpStatus()?'Edit':'Set'}</button>`)}
     ${row('District','',`<button class="lp-link" onclick="go('lpDistricts')">${lpEsc(dist)}</button>`)}
     <div style="padding:14px 0;border-bottom:1px solid var(--lp-line)"><div class="lp-eyebrow" style="margin-bottom:10px">Where you are</div>${lpPlaceHTML('user')}</div>
+    ${row('Firefly guide','Short, friendly nudges. Never more than one a visit.',lpTog(LP.prefs.guide!==false,"LP.prefs.guide=LP.prefs.guide===false;lpSave();if(LP.prefs.guide===false)lpGuideClose();render()"))}
     <hr class="lp-hr"/><div class="lp-eyebrow">Privacy</div>
     ${row('Show my lamps in the city','',lpTog(pr.lamps,"lp.tog('prefs.lamps')"))}
     ${row('Show my daily lines to my pod','',lpTog(pr.lines,"lp.tog('prefs.lines')"))}
@@ -4599,7 +4774,7 @@ function lgFrame(){
 function lgLoop(){if(!LG.cv||!document.body.contains(LG.cv)){LG.raf=0;return;}lgFrame();LG.raf=requestAnimationFrame(lgLoop);}
 function lgFit(){
   const cv=LG.cv;if(!cv)return;
-  const w=Math.max(260,Math.min(800,Math.floor(cv.parentNode.clientWidth)||360)),h=Math.round(window.innerWidth<600?w*1.2:w*.75);
+  const st=cv.parentNode,full=!!st.closest('.lg-full'),w=Math.max(260,Math.floor(st.clientWidth)||360),h=full?Math.max(240,Math.floor(st.clientHeight)||480):Math.round(window.innerWidth<600?w*1.2:w*.75);
   LG.W=w;LG.H=h;LG.dpr=Math.min(2,window.devicePixelRatio||1);
   cv.width=Math.round(w*LG.dpr);cv.height=Math.round(h*LG.dpr);cv.style.height=h+'px';
   LG.dark.width=cv.width;LG.dark.height=cv.height;LG.baseR=window.innerWidth<600?104:135;LG.mouse.r=LG.baseR*LG.rad;
@@ -4610,7 +4785,7 @@ function lgStop(){if(LG.raf)cancelAnimationFrame(LG.raf);LG.raf=0;LG.timers.forE
 function lgMount(){
   const cv=document.getElementById('lgCanvas');if(!cv)return;
   lgStop();LG.cv=cv;LG.ctx=cv.getContext('2d');LG.dark=document.createElement('canvas');LG.dctx=LG.dark.getContext('2d');
-  try{const g=LP.game||{};LG.rad=g.rad||1;LG.spd=g.spd||1;LG.light=g.light!==false;}catch(e){}lgFit();LG.mouse.x=LG.W/2;LG.mouse.y=LG.H*.75;if(!LG_Q.queue.length)lgFetchQs();
+  try{const g=LP.game||{};LG.rad=g.rad||1;LG.spd=g.spd||1;LG.light=g.light!=null?g.light!==false:LP.theme!=='dark';}catch(e){}lgFit();LG.mouse.x=LG.W/2;LG.mouse.y=LG.H*.75;if(!LG_Q.queue.length)lgFetchQs();
   cv.addEventListener('pointermove',e=>lgPoint(e));
   cv.addEventListener('pointerdown',e=>{lgPoint(e);try{cv.setPointerCapture(e.pointerId);}catch(_){}lgAct();});
   cv.addEventListener('keydown',e=>{const st=28,m=LG.mouse;
@@ -4688,9 +4863,12 @@ function lpSnSheetHTML(){const S=lpSn(),b=(k,v,l,on)=>`<button type="button" cla
     <button class="lp-btn lp-sm" style="margin-top:18px;width:100%" onclick="lp.snSheet(false)">Done</button></div></div>`;}
 
 /* ---------- LOGS (currency) ---------- */
+const LP_STARTER=10;
 const LP_LOGS=[
- {k:'birch',n:'Logs',role:'Earned by doing the work',how:'One for every day you show up, 1 per 25 minutes of focus (up to 4 a day), 3 per Give back action, 1 per volunteer hour, 2 when something you shared in the Hub helps 3 people, 1 per lead you check, plus one a day from the dark room',c:['#F6EEDA','#C9B58C','#EADFC2'],rg:'#B9A57E'}];
+ {k:'birch',n:'Logs',role:'Earned by doing the work',how:'One for every day you show up, 1 per 25 minutes of focus (up to 4 a day), 3 per Give back action, 1 per volunteer hour, 2 when something you shared in the Hub helps 3 people, 1 per lead you check, plus one a day from the dark room, and '+LP_STARTER+' starter logs with your first check-in',c:['#F6EEDA','#C9B58C','#EADFC2'],rg:'#B9A57E'}];
 /* One kind of log. Earned only, never sold, never sent. Spent on travel, seat reservations and recognising people. */
+/* Starter logs can't be spent recognising someone in the first 30 days, so new accounts can't be used to pad someone's Passport. */
+function lpStarterLocked(){const st=LP.starter;return st&&lpDiff(st.day,lpToday())<30?st.n:0;}
 function lpLogEarned(){const e={birch:0};(LP.finished||[]).forEach(f=>{e.birch+=f.lit||0;});const i=lpInfo();if(i)e.birch+=i.lit;return e;}
 function lpLogBal(){const e=lpLogEarned(),m=LP.minted||{},sp=LP.spent||{},o={};LP_LOGS.forEach(l=>o[l.k]=Math.max(0,(e[l.k]||0)+(m[l.k]||0)-(sp[l.k]||0)));return o;}
 function lpLogTotal(){return lpLogBal().birch;}
@@ -4880,7 +5058,50 @@ function lwRefreshOwned(){(LW.blds||[]).forEach(b=>{if(b.vid){const o=LP.owned&&
 function lpCityGateHTML(){return `<div class="lp-modal"><div class="lp-sheet" role="dialog" aria-label="Choose your city">
   <div class="lp-title">Choose your city</div><p class="lp-small" style="margin:6px 0 12px">Your city is shared with the people who live there and built in your region’s style. You can change it later in Settings.</p>
   ${lpPlaceHTML('user')}</div></div>`;}
+/* The firefly: a guide with pre-written lines. Rules: never guilt, one unprompted line per visit, always a next step,
+   quiet from midnight to 6am, quiet on rest days, quotes your goal at most once a day, and can be switched off in Settings. */
+const LP_GUIDE_NAME='Firefly';
+const LP_GUIDE={
+ welcome:{lines:['Hi, I’m the firefly. I turn up now and then, never more than once a visit. Tap ✕ and I’ll go.'],acts:[]},
+ checkin:{lines:['Lamp lit. That’s the whole job today. Anything else is extra.','Done. Your pod can see you showed up.','Lit. Go and have a normal evening.'],acts:[['Focus for 25 min',"lp.focusQuick(25)"]]},
+ game:{lines:['{n} minutes of lamps. {goal} is still sitting there looking at me. Ten minutes on it, then come back?','You’re getting good at this. Suspiciously good. Ten minutes on {goal}?','The lamps will still be here. Ten minutes of the real thing first?'],acts:[['Start 10 min',"lp.focusQuick(10)"],['One more round',"lpGuideClose()"]]},
+ missed:{lines:['Yesterday happened. Today’s lamp is still unlit, and that’s fixable.','A missed day is one day. Write one line and we’re square.'],acts:[['Write today’s line',"lpGuideClose();lpGuideToLine()"]]},
+ city:{lines:['You’ve walked half the city. Want to walk back to {goal}?','Lovely evening for a stroll. Lovelier for ten focused minutes.'],acts:[['Start 10 min',"lp.focusQuick(10)"]]},
+ finished:{lines:['You finished. Not many people do. Sit with that for a minute.','A whole room, built by you. Take tonight off.'],acts:[]},
+ late:{lines:['It’s late. A two-line check-in counts. Sleep counts more.','Still up? One line, then bed.'],acts:[['Write one line',"lpGuideClose();lpGuideToLine()"]]},
+ back:{lines:['You’re back. No speeches. Pick up where you left off, or start smaller.','Welcome back. Your house kept the lights on.'],acts:[['Today',"lpGuideClose();go('lpDock')"]]}};
+const LP_FLY_SVG='<svg viewBox="-20 -24 40 44" width="40" height="44" aria-hidden="true"><ellipse cx="-7" cy="-8" rx="9" ry="5" transform="rotate(-30 -7 -8)" fill="#CFE3F2" opacity=".75"/><ellipse cx="7" cy="-8" rx="9" ry="5" transform="rotate(30 7 -8)" fill="#CFE3F2" opacity=".75"/><circle cy="-14" r="4.5" fill="#2A2A2A"/><ellipse cy="-4" rx="4.5" ry="7.5" fill="#3A3A3A"/><circle class="fly-glow" cy="9" r="12" fill="#FFD36B" opacity=".35"/><circle cy="9" r="6.5" fill="#FFC23A"/><path d="M-2-18-6-23M2-18 6-23" stroke="#2A2A2A" stroke-width="1.4" stroke-linecap="round"/></svg>';
+function lpGuideOn(){return !!(LP.user&&LP.prefs.guide!==false&&(!(LP.demo||lpT.review)||lpT.guideForce));}
+function lpGuideGoal(){const i=lpInfo(),g=i&&i.s.goals[0]&&i.s.goals[0].t;if(!g||(LP.guide&&LP.guide.goalDay===lpToday()))return null;return g;}
+function lpGuideShow(key,vars){if(document.getElementById('lpGuide'))return;const G=LP_GUIDE[key];if(!G)return;LP.guide=LP.guide||{i:{},last:{}};
+  const n=(LP.guide.i[key]||0),line0=G.lines[n%G.lines.length];LP.guide.i[key]=n+1;LP.guide.last[key]=lpToday();lpT.guideShown=key;
+  let goal=line0.includes('{goal}')?lpGuideGoal():null;if(goal)LP.guide.goalDay=lpToday();
+  const line=line0.replace('{goal}',goal?'“'+goal+'”':'your goal').replace('{n}',(vars&&vars.n)||'A few');lpSave();lpEvt('guide',{key});
+  const d=document.createElement('div');d.id='lpGuide';d.className='fly';d.setAttribute('role','status');d.dataset.screen=state.screen;
+  d.innerHTML=`<div class="fly-in">${LP_FLY_SVG}<div class="fly-body"><p>${lpEsc(line)}</p>${G.acts.length?`<div class="fly-acts">${G.acts.map((a,k)=>`<button class="lp-btn lp-sm ${k?'lp-ghost':''}" onclick="${a[1]}">${a[0]}</button>`).join('')}</div>`:''}</div><button class="fly-x" aria-label="Dismiss the firefly" onclick="lpGuideClose()">✕</button></div>`;
+  document.body.appendChild(d);}
+function lpGuideClose(){const d=document.getElementById('lpGuide');if(d)d.remove();}
+function lpGuideToLine(){go('lpDock');}
+/* Decides whether the firefly has something to say. Called after each screen and every 15 seconds. */
+function lpGuideCheck(){
+  const d=document.getElementById('lpGuide');if(d&&d.dataset.screen!==state.screen)d.remove();
+  if(!lpGuideOn()||document.getElementById('lpGuide'))return;const sc=state.screen,h=new Date().getHours(),t=lpToday(),i=lpInfo(),G=LP.guide||{last:{}},once=k=>(G.last||{})[k]!==t;
+  if(sc==='lpRoom'&&lpT.flash&&once('finished')){lpGuideShow('finished');return;}
+  if(lpT.guideShown||h<6)return;
+  if(i&&i.logged&&i.logged.kind==='rest')return;
+  if(sc==='lpDock'){
+    if(!(G.last||{}).welcome){lpGuideShow('welcome');return;}
+    if(lpT.prevSeen&&Date.now()-lpT.prevSeen>7*864e5){lpGuideShow('back');return;}
+    if(i&&!i.logged&&i.day>1&&!i.s.lines[lpAdd(i.today,-1)]&&once('missed')){lpGuideShow('missed');return;}
+    if(i&&!i.logged&&h>=22&&once('late')){lpGuideShow('late');return;}}
+  if(sc==='lpAfter'&&once('checkin')){lpGuideShow('checkin');return;}
+  const on=Date.now()-(lpT.scrAt||Date.now());
+  if(sc==='lpGame'&&on>6*60e3&&once('game')){lpGuideShow('game',{n:Math.round(on/60e3)});return;}
+  if(sc==='lpWorld'&&on>8*60e3&&once('city')){lpGuideShow('city');return;}}
+(function(){try{lpT.prevSeen=LP.lastSeen||0;LP.lastSeen=Date.now();lpSave();}catch(e){}setInterval(()=>{try{lpGuideCheck();}catch(e){}},15000);})();
 function lpAfterRender(){
+  if(lpT.scrFor!==state.screen){lpT.scrFor=state.screen;lpT.scrAt=Date.now();}
+  setTimeout(()=>{try{lpGuideCheck();}catch(e){}},700);
   if(state.screen==='lpFocus')requestAnimationFrame(lpTorchMount);
   if(state.screen!=='lpFocus'){const a=document.getElementById('lpFocusAsk');if(a)a.remove();}
   if(LP.user&&LP.onboarded&&!LP.user.city&&!LP.demo&&LP_SCREENS[state.screen]&&!['lpHelp','lpTerms','lpPrivacy','lpSettings'].includes(state.screen)){if(!document.getElementById('lpCityHost'))lpHost('lpCityHost',lpCityGateHTML());}else{const g=document.getElementById('lpCityHost');if(g)g.remove();}
@@ -4895,29 +5116,30 @@ function lpAfterRender(){
   else if(LG.cv){lgStop();LG.cv=null;}
 }
 function lpGameScreen(){
-  lpEnsure(); const gi=lpInfo();
-  if(!LP.demo&&!(gi&&gi.logged)){const fr=lpT.gameFrom||'lpHouse';return lpShell(`<div class="lp-top"><button class="lp-back" onclick="go('${fr}')">← Back</button><span class="lp-title">The dark room</span></div>
-    <div class="lp-card lp-center" style="margin-top:20px;padding:30px 20px;background:#1B160F;color:#E8DCC4;border-color:#3A3024"><div style="font:600 22px var(--serif)">The dark room opens after today’s line</div><p style="margin:10px 0 18px;color:#BFAF92">Work first, play after. It’s a minute, and it’s yours once you’ve shown up.</p>
-    ${gi?`<button class="lp-btn" onclick="go('lpDock')">Write today’s line</button>`:`<button class="lp-btn" onclick="go('lpGoals')">Start a sprint</button>`}</div>`,'town');}
-  const from=lpT.gameFrom||'lpHouse', tab=(from==='lpDock'||from==='lpFocus')?'dock':from==='lpProfile'?'me':(from==='lpWorld'||from==='lpMore')?'town':'street';
+  lpEnsure(); const gi=lpInfo(), g=LP.game||{}, dark=g.light!=null?g.light===false:LP.theme==='dark';
+  const from=lpT.gameFrom||'lpDock', tab=(from==='lpDock'||from==='lpFocus')?'dock':from==='lpProfile'?'me':(from==='lpWorld'||from==='lpMore'||from==='lpFeed')?'town':from==='lpHub'?'hub':(from==='lpPodTab'||from==='lpPod')?'pod':'dock';
   const mb=(m,l)=>`<button class="lg-mode ${LG.mode===m?'on':''}" data-m="${m}" aria-pressed="${LG.mode===m}" onclick="lgMode('${m}')">${l}</button>`;
-  return lpShell(`<div class="lp-top"><button class="lp-back" onclick="go('${from}')">← ${from==='lpFocus'?'Focus':from==='lpProfile'?'Me':from==='lpDock'?'Today':(from==='lpWorld'||from==='lpMore')?'City':'House'}</button><span class="lp-title">The dark room</span></div>
-    <h1 class="lp-h2">A minute in the dark</h1>
-    <div class="lg-modes">${mb('lamps','Lamplighter')}${mb('imposter','Imposters')}${mb('puzzle','Questions')}</div>
+  return lpShell(`<div class="lg-full" role="region" aria-label="The dark room">
+    <div class="lg-bar"><button class="lg-x" aria-label="Leave the game" onclick="go('${from}')"><span aria-hidden="true">←</span></button>
+      <div class="lg-modes">${mb('lamps','<span class="lg-long">Lamplighter</span><span class="lg-short">Lamps</span>')}${mb('imposter','Imposters')}${mb('puzzle','Questions')}</div>
+      <button class="lg-x" aria-label="Game settings" aria-controls="lgSet" onclick="lgSheet('lgSet')">${lpIcon('gear')}</button><button class="lg-x" aria-label="How to play" aria-controls="lgHow" onclick="lgSheet('lgHow')"><b aria-hidden="true">?</b></button></div>
     <div class="lg-panel"><div id="lgQ" class="lg-q"></div><div id="lgSlots" class="lg-slots lg-slotsnote"></div><div class="lg-stats"><span id="lgA"></span><span id="lgB"></span></div><div id="lgE" class="lg-earn" aria-live="polite"></div></div>
-    <div class="lg-stage" style="background:${(LP.game&&LP.game.light===false)?'#2B2418':'#F8F5EE'}"><canvas id="lgCanvas" tabindex="0" aria-label="Flashlight game. Move the light with the arrow keys and press space to select."></canvas><div id="lgToast" class="lg-toast" role="status" aria-live="polite"></div>${lpT.lgSeen?'':`<div class="lg-intro" id="lgIntro" onclick="lpT.lgSeen=true;this.remove();document.getElementById('lgCanvas').focus({preventScroll:true})"><b>Move the light</b><span>Drag your finger, or use the arrow keys. Tap to begin.</span><i></i></div>`}</div>
-    <div class="lg-ctl">
-      <label><span>Light size <b id="lgRadV">${Math.round(((LP.game&&LP.game.rad)||1)*100)}%</b></span><input type="range" min="40" max="220" step="5" value="${Math.round(((LP.game&&LP.game.rad)||1)*100)}" oninput="lgSet('rad',+this.value)" aria-label="Light size"/></label>
-      <label><span>Speed <b id="lgSpdV">${Math.round(((LP.game&&LP.game.spd)||1)*100)}%</b></span><input type="range" min="20" max="250" step="5" value="${Math.round(((LP.game&&LP.game.spd)||1)*100)}" oninput="lgSet('spd',+this.value)" aria-label="Speed"/></label>
-      <div class="lg-roomrow"><span>Room</span><button type="button" class="lg-room ${(LP.game&&LP.game.light===false)?'':'on'}" data-l="1" aria-pressed="${!(LP.game&&LP.game.light===false)}" onclick="lgSet('light',1)">Light</button><button type="button" class="lg-room ${(LP.game&&LP.game.light===false)?'on':''}" data-l="0" aria-pressed="${!!(LP.game&&LP.game.light===false)}" onclick="lgSet('light',0)">Dark</button></div></div>
-    <details class="lg-how" ${lpT.lgSeen?'':'open'}><summary>How to play</summary>
-      <ol><li><b>Move the light.</b> Drag on the dark room, or use the arrow keys. Things brighten when your light touches them. Tap, or press space, to act.</li>
-      <li><b>Lamplighter.</b> You have a minute to keep a row of dark lamps lit. Lamps burn down, faster in a gust of wind. Move your light over a lamp and tap to relight it. Distractions drift toward your light; if one reaches it your light shrinks for a few seconds, so move away or tap it to dismiss it. Your score is how much of the street you kept lit.</li>
-      <li><b>Imposters.</b> Twenty-five shapes drift in the dark. Five are imposters, and they turn red when your light finds them. Tap each one before it reaches the core in the middle.</li>
-      <li><b>Questions.</b> Read the question. Four answers drift around the room. Light them to read them clearly, then tap the one you think is right. If you get it wrong, the right answer is shown.</li></ol>
-      <div class="lg-key"><span><i style="background:#E8A33D"></i>your light</span><span><i style="background:#E5484D"></i>lamp about to go out</span><span><i style="background:#8A7CF0"></i>distraction</span><span><i style="background:#2E9E5B"></i>correct answer</span></div></details>
-    <p class="lp-small" style="margin-top:12px">Every 25% of the lamps you keep lit in Lamplighter, and every question you get right, is a point. Once today’s line is in, three points earn one log, one a day. Showing up always earns more than playing.</p>`,tab);
+    <div class="lg-stage" style="background:${dark?'#2B2418':'#F8F5EE'}"><canvas id="lgCanvas" tabindex="0" aria-label="Flashlight game. Move the light with the arrow keys and press space to select."></canvas><div id="lgToast" class="lg-toast" role="status" aria-live="polite"></div>${lpT.lgSeen?'':`<div class="lg-intro" id="lgIntro" onclick="lpT.lgSeen=true;this.remove();document.getElementById('lgCanvas').focus({preventScroll:true})"><b>Move the light</b><span>Drag your finger, or use the arrow keys. Tap to begin.</span><i></i></div>`}</div>
+    <div class="lg-sheet" id="lgSet" hidden><div class="lp-row lp-between"><b>Settings</b><button class="lp-link" aria-label="Close" onclick="lgSheet('')">✕</button></div>
+      <div class="lg-ctl">
+      <label><span>Light size <b id="lgRadV">${Math.round((g.rad||1)*100)}%</b></span><input type="range" min="40" max="220" step="5" value="${Math.round((g.rad||1)*100)}" oninput="lgSet('rad',+this.value)" aria-label="Light size"/></label>
+      <label><span>Speed <b id="lgSpdV">${Math.round((g.spd||1)*100)}%</b></span><input type="range" min="20" max="250" step="5" value="${Math.round((g.spd||1)*100)}" oninput="lgSet('spd',+this.value)" aria-label="Speed"/></label>
+      <div class="lg-roomrow"><span>Room</span><button type="button" class="lg-room ${dark?'':'on'}" data-l="1" aria-pressed="${!dark}" onclick="lgSet('light',1)">Light</button><button type="button" class="lg-room ${dark?'on':''}" data-l="0" aria-pressed="${dark}" onclick="lgSet('light',0)">Dark</button></div></div></div>
+    <div class="lg-sheet" id="lgHow" hidden><div class="lp-row lp-between"><b>How to play</b><button class="lp-link" aria-label="Close" onclick="lgSheet('')">✕</button></div>
+      <ol class="lg-howl"><li><b>Move the light.</b> Drag on the room, or use the arrow keys. Things brighten when your light touches them. Tap, or press space, to act.</li>
+      <li><b>Lamplighter.</b> A minute to keep a row of lamps lit. Lamps burn down, faster in a gust. Move your light over a lamp and tap to relight it. Distractions drift toward your light; if one reaches it your light shrinks for a few seconds.</li>
+      <li><b>Imposters.</b> Five of the shapes are imposters. They turn red when your light finds them. Tap each one before it reaches the core.</li>
+      <li><b>Questions.</b> Four answers drift around the room. Light them to read them, then tap the right one.</li></ol>
+      <div class="lg-key"><span><i style="background:#E8A33D"></i>your light</span><span><i style="background:#E5484D"></i>about to go out</span><span><i style="background:#8A7CF0"></i>distraction</span><span><i style="background:#2E9E5B"></i>correct</span></div>
+      <p class="lp-small" style="margin:10px 0 0">Play any time. Points turn into logs once today’s line is in: three points, one log, one a day. Showing up always earns more than playing.</p></div>
+  </div>`,tab);
 }
+function lgSheet(id){['lgSet','lgHow'].forEach(k=>{const e=document.getElementById(k);if(e)e.hidden=k!==id||!e.hidden;});}
 Object.assign(LP_SCREENS,{lpGame:lpGameScreen});
 Object.assign(LP_SCREENS,{lpFocus:lpFocusScreen});
 Object.assign(lp,{
@@ -4933,6 +5155,7 @@ Object.assign(lp,{
     const u=URL.createObjectURL(new Blob([csv],{type:'text/csv'})),l=document.createElement('a');l.href=u;l.download='merroes-passport.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);},
   focusStart(m){if(LP.focus)return go('lpFocus');lpT.fdone=null;lpT.fdoneSeen=0;const t=((document.getElementById('lpFT')||{}).value||'').trim()||'my sprint';LP.focus={start:Date.now(),mins:m,task:t.slice(0,60),cracks:0};lpEvt('focus_start',{mins:m});lpSave();go('lpFocus',{force:true});},
   focusCrack(){const f=LP.focus;if(!f)return;f.cracks=(f.cracks||0)+1;lpSave();if(f.cracks>=3){lpFocusFinish(false);toast('The torch went out. Relight it when you’re ready.');go('lpFocus',{force:true});return;}toast(f.cracks===1?'The torch cracked. Back to it.':'Two cracks. One more and it goes out.');go('lpFocus',{force:true});},
+  focusQuick(m){lpGuideClose();if(LP.focus)return go('lpFocus');const i=lpInfo();lpT.fdone=null;LP.focus={start:Date.now(),mins:m,task:((i&&i.s.goals[0]&&i.s.goals[0].t)||'my sprint').slice(0,60),cracks:0};lpEvt('focus_start',{mins:m,from:'guide'});lpSave();go('lpFocus',{force:true});},
   focusAgain(){const x=lpT.fdone||{};lpT.fdone=null;lpT.fdoneSeen=0;lp.focusBreak(false,1);LP.focus={start:Date.now(),mins:x.mins>=25?x.mins:25,task:(x.task||'my sprint').slice(0,60),cracks:0};lpEvt('focus_start',{mins:LP.focus.mins,again:1});lpSave();go('lpFocus',{force:true});},
   focusNote(){const el=document.getElementById('lpFNote2'),l=(LP.focusLog||[])[0];if(!el||!l)return;l.note=el.value.replace(/\s+/g,' ').trim().slice(0,120);lpSave();toast(l.note?'Saved to your focus log':'Cleared');},
   focusBreak(on,quiet){clearInterval(lpT.brkTm);if(!on){lpT.brk=null;if(!quiet)render();return;}lpT.brk={end:Date.now()+5*60000};render();
