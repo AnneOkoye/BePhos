@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>BePhos voice test</title>
+<style>
+:root{--bg:#141312;--sf:#222120;--sf2:#2C2A28;--ln:#3A3938;--ink:#F7F5F2;--soft:#B8B1A9;--acc:#FF7A1A;--on:#120B05;--accs:rgba(255,122,26,.14);--ok:#7FD6A8;--bad:#FF9A9A}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px 16px 60px}
+.w{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1{font:600 30px/1.15 'EB Garamond',Georgia,serif;margin:8px 0 0}
+h2{font:600 16px Inter,sans-serif;margin:0}
+p{margin:0}.mut{color:var(--soft);font-size:13.5px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+label{font:600 12px Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+input,select,textarea{width:100%;border:1.5px solid var(--ln);background:#0F0E0D;color:var(--ink);border-radius:12px;padding:11px 12px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:480px){.g2{grid-template-columns:1fr}}
+.seg{display:flex;gap:6px;background:var(--sf2);border-radius:999px;padding:4px}
+.seg button{flex:1;border:0;border-radius:999px;padding:10px;background:transparent;color:var(--soft);font:600 14px Inter,sans-serif;cursor:pointer}
+.seg button.on{background:var(--acc);color:var(--on)}
+.btn{display:flex;justify-content:center;align-items:center;gap:8px;min-height:48px;border-radius:999px;border:0;background:var(--acc);color:var(--on);font:600 15px Inter,sans-serif;cursor:pointer;padding:0 18px;width:100%}
+.btn.gh{background:transparent;color:var(--ink);border:1.5px solid var(--ln)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;align-items:center}.btw{justify-content:space-between}
+.err{color:var(--bad);font-size:14px;min-height:1px}
+.ppl{display:flex;flex-wrap:wrap;gap:10px}
+.pp{display:flex;align-items:center;gap:8px;background:var(--sf2);border-radius:999px;padding:6px 12px 6px 6px;font-size:13.5px;border:2px solid transparent}
+.pp i{width:26px;height:26px;border-radius:50%;background:var(--ln);display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700}
+.pp.talk{border-color:var(--ok)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st{background:var(--sf2);border-radius:12px;padding:10px}.st b{display:block;font:600 22px 'EB Garamond',serif}.st span{font-size:12px;color:var(--soft)}
+.st.good b{color:var(--ok)}.st.warn b{color:#FFC36B}.st.poor b{color:var(--bad)}
+.ptt{min-height:72px;font-size:17px;border-radius:24px;user-select:none;-webkit-user-select:none;touch-action:none}
+.ptt.live{background:var(--ok)}
+.rate{display:flex;gap:6px}.rate button{flex:1;border:1.5px solid var(--ln);background:transparent;color:var(--ink);border-radius:12px;padding:10px 0;font:600 15px Inter,sans-serif;cursor:pointer}.rate button.on{border-color:var(--acc);background:var(--accs)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--ln)}th{color:var(--soft);font-weight:600}
+ol{margin:0;padding-left:20px;color:var(--soft);font-size:13.5px}ol li{margin:3px 0}
+[hidden]{display:none!important}
+</style>
+<script>
+/* Capture every WebRTC connection either provider opens, so both are measured the same way. Must run before the SDKs load. */
+window.VT_PCS=new Set();
+(function(){const O=window.RTCPeerConnection;if(!O)return;window.RTCPeerConnection=class extends O{constructor(...a){super(...a);VT_PCS.add(this);this.addEventListener('connectionstatechange',()=>{if(this.connectionState==='closed')VT_PCS.delete(this);});}};})();
+</script>
+</head>
+<body>
+<div class="w">
+  <div><p class="mut">BePhos · voice test</p><h1>Help us pick a voice service</h1>
+  <p class="mut" style="margin-top:6px">You’ll join a voice-only room twice, once on each service, for about 10 minutes each. Nothing is recorded and there’s no video. At the end, copy your results and send them back.</p></div>
+
+  <div class="card" id="setup">
+    <div class="g2">
+      <div><label for="nm">Callsign</label><input id="nm" maxlength="12" placeholder="AMAKA" autocomplete="off"/></div>
+      <div><label for="code">Test passcode</label><input id="code" placeholder="From the invite" autocomplete="off"/></div>
+      <div><label for="ct">Where you are</label><input id="ct" placeholder="Lagos, Nigeria"/></div>
+      <div><label for="net">Your connection</label><select id="net"><option value="">Choose one</option><option>Wi-Fi at home</option><option>Wi-Fi at work or school</option><option>Mobile data 4G</option><option>Mobile data 5G</option><option>Mobile data 3G</option><option>Other</option></select></div>
+    </div>
+    <div><label for="car">Network provider (optional)</label><input id="car" placeholder="MTN, Airtel, Glo, Vodafone, Verizon…"/></div>
+    <label>Service</label>
+    <div class="seg" role="group" aria-label="Service"><button id="pLK" class="on" onclick="VT.pick('livekit')">Service A · LiveKit</button><button id="pDY" onclick="VT.pick('daily')">Service B · Daily</button></div>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn" id="go" onclick="VT.join()">Join with mic off</button>
+    <p class="mut">Your browser will ask to use the microphone. It stays off until you hold the talk button.</p>
+  </div>
+
+  <div class="card" id="call" hidden>
+    <div class="row btw"><h2 id="callTitle">In the test room</h2><span class="mut" id="clock">0:00</span></div>
+    <div class="ppl" id="ppl"></div>
+    <button class="btn ptt" id="ptt">Hold to talk</button>
+    <div class="row btw"><span class="mut">Keep mic on</span><input type="checkbox" id="openmic" style="width:22px;height:22px;accent-color:var(--acc)" onchange="VT.openMic(this.checked)"/></div>
+    <div class="stats">
+      <div class="st" id="sRtt"><b>–</b><span>Delay (ms)</span></div>
+      <div class="st" id="sJit"><b>–</b><span>Jitter (ms)</span></div>
+      <div class="st" id="sLoss"><b>–</b><span>Audio lost</span></div>
+      <div class="st"><b id="sKb">–</b><span>Upload kbps</span></div>
+      <div class="st"><b id="sRelay">–</b><span>Route</span></div>
+      <div class="st"><b id="sRegion" style="font-size:16px">–</b><span>Server region</span></div>
+    </div>
+    <p class="mut">Delay under 150 ms feels natural. Over 300 ms people start talking over each other.</p>
+    <label>How did voices sound?</label>
+    <div class="rate" id="rate"></div>
+    <textarea id="notes" placeholder="Anything odd: echo, robotic voice, dropouts, people cutting out…" rows="2"></textarea>
+    <button class="btn gh" onclick="VT.leave()">Leave and save this result</button>
+  </div>
+
+  <div class="card" id="results" hidden>
+    <h2>Your results</h2>
+    <div style="overflow-x:auto"><table id="tbl"></table></div>
+    <button class="btn" onclick="VT.copy()">Copy results</button>
+    <button class="btn gh" onclick="VT.csv()">Download as a spreadsheet file</button>
+    <button class="btn gh" onclick="VT.clear()">Clear my results</button>
+  </div>
+
+  <div class="card">
+    <h2>How to run the test</h2>
+    <ol><li>Join with a friend or another tester at the same time, ideally in a different country.</li>
+    <li>Stay about 10 minutes on Service A. Take turns talking for a minute each.</li>
+    <li>Rate how voices sounded, then tap Leave.</li><li>Do the same on Service B.</li>
+    <li>Copy your results and send them to the BePhos team.</li></ol>
+  </div>
+  <p class="mut" style="text-align:center">We measure delay, jitter and lost audio from your browser. We don’t record or keep anyone’s voice.</p>
+</div>
+
+<script>
+const LK_SRC='https://cdn.jsdelivr.net/npm/livekit-client@2.22.4/dist/livekit-client.umd.js';
+const DY_SRC='https://cdn.jsdelivr.net/npm/@daily-co/daily-js@0.93.0/dist/daily.js';
+const $=id=>document.getElementById(id);
+const esc=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+const store={get(){try{return JSON.parse(localStorage.getItem('bephos_vt')||'[]')}catch(e){return[]}},set(v){try{localStorage.setItem('bephos_vt',JSON.stringify(v))}catch(e){}}};
+const med=a=>{if(!a.length)return null;const s=a.slice().sort((x,y)=>x-y);return s[Math.floor(s.length/2)]};
+const p90=a=>{if(!a.length)return null;const s=a.slice().sort((x,y)=>x-y);return s[Math.min(s.length-1,Math.floor(s.length*.9))]};
+function load(src){return new Promise((ok,no)=>{if(document.querySelector(`script[src="${src}"]`))return ok();const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>no(new Error('Couldn’t load the voice library. Check your connection.'));document.head.appendChild(s);});}
+
+const VT={prov:'livekit',room:null,call:null,me:null,people:new Map(),talking:new Set(),t0:0,tick:0,stat:0,S:null,rating:0,micOn:false,
+
+  pick(p){VT.prov=p;$('pLK').classList.toggle('on',p==='livekit');$('pDY').classList.toggle('on',p==='daily');},
+
+  async join(){const err=$('err');err.textContent='';const name=$('nm').value.trim(),code=$('code').value.trim();
+    if(!name){err.textContent='Add a callsign.';return;}if(!code){err.textContent='Add the test passcode.';return;}if(!$('ct').value.trim()){err.textContent='Say roughly where you are, like a city and country.';return;}
+    const b=$('go');b.disabled=true;b.textContent='Connecting…';
+    try{const r=await fetch('/api/voice-token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({provider:VT.prov,name,code})});
+      const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||'The test server didn’t answer.');
+      VT.S={rtt:[],jit:[],lost:0,recv:0,base:null,kb:[],relay:null,region:null};VT.people.clear();VT.talking.clear();VT.rating=0;
+      if(VT.prov==='livekit')await VT.joinLK(d);else await VT.joinDY(d);
+      VT.me=d.name;VT.t0=Date.now();$('setup').hidden=true;$('call').hidden=false;$('callTitle').textContent=(VT.prov==='livekit'?'Service A · LiveKit':'Service B · Daily');
+      VT.drawRate();VT.draw();VT.tick=setInterval(()=>{const s=Math.floor((Date.now()-VT.t0)/1000);$('clock').textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0');},1000);VT.stat=setInterval(VT.measure,2000);
+    }catch(e){err.textContent=e.message||String(e);}finally{b.disabled=false;b.textContent='Join with mic off';}},
+
+  async joinLK(d){await load(LK_SRC);const L=window.LivekitClient;const room=new L.Room({adaptiveStream:true,dynacast:true});VT.room=room;
+    const sync=()=>{VT.people.clear();VT.people.set(room.localParticipant.identity,{name:(room.localParticipant.name||VT.me)+' (you)'});room.remoteParticipants.forEach(p=>VT.people.set(p.identity,{name:p.name||p.identity}));VT.draw();};
+    room.on(L.RoomEvent.ParticipantConnected,sync).on(L.RoomEvent.ParticipantDisconnected,sync)
+      .on(L.RoomEvent.ActiveSpeakersChanged,sp=>{VT.talking=new Set(sp.map(p=>p.identity));VT.draw();})
+      .on(L.RoomEvent.TrackSubscribed,(t)=>{if(t.kind==='audio'){const el=t.attach();el.dataset.vt='1';document.body.appendChild(el);}})
+      .on(L.RoomEvent.TrackUnsubscribed,(t)=>{t.detach().forEach(el=>el.remove());})
+      .on(L.RoomEvent.Disconnected,()=>{if(VT.room)VT.leave(true);});
+    await room.connect(d.url,d.token);await room.startAudio();await room.localParticipant.setMicrophoneEnabled(false);
+    VT.S.region=(room.serverInfo&&room.serverInfo.region)||null;sync();VT.setMic=on=>room.localParticipant.setMicrophoneEnabled(on);},
+
+  async joinDY(d){await load(DY_SRC);const call=window.Daily.createCallObject({audioSource:true,videoSource:false,subscribeToTracksAutomatically:true});VT.call=call;
+    const audio=new Map();
+    const sync=()=>{VT.people.clear();Object.values(call.participants()).forEach(p=>VT.people.set(p.session_id,{name:(p.user_name||'Guest')+(p.local?' (you)':'')}));VT.draw();};
+    call.on('participant-joined',sync).on('participant-left',e=>{const el=audio.get(e.participant.session_id);if(el){el.remove();audio.delete(e.participant.session_id);}sync();}).on('participant-updated',sync)
+      .on('active-speaker-change',e=>{VT.talking=new Set(e.activeSpeaker&&e.activeSpeaker.peerId?[e.activeSpeaker.peerId]:[]);VT.draw();})
+      .on('track-started',e=>{if(e.track.kind==='audio'&&e.participant&&!e.participant.local){let el=audio.get(e.participant.session_id);if(!el){el=document.createElement('audio');el.autoplay=true;el.dataset.vt='1';document.body.appendChild(el);audio.set(e.participant.session_id,el);}el.srcObject=new MediaStream([e.track]);el.play().catch(()=>{});}})
+      .on('left-meeting',()=>{if(VT.call)VT.leave(true);});
+    await call.join({url:d.url,token:d.token,startVideoOff:true,startAudioOff:true});sync();VT.setMic=on=>call.setLocalAudio(on);},
+
+  draw(){$('ppl').innerHTML=[...VT.people.entries()].map(([id,p])=>`<span class="pp${VT.talking.has(id)?' talk':''}"><i>${esc(p.name.slice(0,2))}</i>${esc(p.name)}</span>`).join('')||'<span class="mut">Just you so far.</span>';},
+  drawRate(){$('rate').innerHTML=['Bad','Poor','OK','Good','Clear'].map((t,i)=>`<button class="${VT.rating===i+1?'on':''}" onclick="VT.rating=${i+1};VT.drawRate()">${i+1}<br><small style="font-weight:500;color:var(--soft)">${t}</small></button>`).join('');},
+  async mic(on){if(VT.micOn===on||!VT.setMic)return;VT.micOn=on;$('ptt').classList.toggle('live',on);$('ptt').textContent=on?'Talking…':'Hold to talk';try{await VT.setMic(on);}catch(e){$('err').textContent='Microphone blocked. Allow it in your browser settings.';}},
+  openMic(on){VT.mic(on);$('ptt').disabled=on;},
+
+  async measure(){const S=VT.S;if(!S)return;let rtt=null,jit=[],lost=0,recv=0,bytes=0,relay=null;
+    for(const pc of VT_PCS){if(pc.connectionState==='closed')continue;let rep;try{rep=await pc.getStats();}catch(e){continue;}const cand={};rep.forEach(s=>{if(s.type==='local-candidate')cand[s.id]=s;});
+      rep.forEach(s=>{if(s.type==='candidate-pair'&&(s.nominated||s.selected)&&s.state==='succeeded'){if(s.currentRoundTripTime!=null)rtt=Math.max(rtt||0,s.currentRoundTripTime*1000);const lc=cand[s.localCandidateId];if(lc)relay=relay||lc.candidateType==='relay';}
+        if(s.type==='inbound-rtp'&&s.kind==='audio'){if(s.jitter!=null)jit.push(s.jitter*1000);lost+=s.packetsLost||0;recv+=s.packetsReceived||0;}
+        if(s.type==='outbound-rtp'&&s.kind==='audio')bytes+=s.bytesSent||0;});}
+    if(rtt!=null)S.rtt.push(rtt);if(jit.length)S.jit.push(Math.max(...jit));if(relay!=null)S.relay=relay;
+    if(!S.base)S.base={lost,recv,bytes,t:Date.now()};S.lost=lost-S.base.lost;S.recv=recv-S.base.recv;
+    const kb=S.prevBytes!=null?((bytes-S.prevBytes)*8/1000/2):null;S.prevBytes=bytes;if(kb!=null&&VT.micOn)S.kb.push(kb);
+    const lossPct=S.lost+S.recv>0?100*S.lost/(S.lost+S.recv):null;
+    const set=(id,v,good,warn,fmt)=>{const el=$(id);el.querySelector('b').textContent=v==null?'–':fmt(v);el.className='st'+(v==null?'':v<=good?' good':v<=warn?' warn':' poor');};
+    set('sRtt',med(S.rtt.slice(-5)),150,300,v=>Math.round(v));set('sJit',med(S.jit.slice(-5)),30,60,v=>Math.round(v));set('sLoss',lossPct,1,3,v=>v.toFixed(1)+'%');
+    $('sKb').textContent=kb==null||!VT.micOn?'–':Math.round(kb);$('sRelay').textContent=S.relay==null?'–':(S.relay?'Relayed':'Direct');$('sRegion').textContent=S.region||(VT.prov==='daily'?'Not shown':'–');},
+
+  async leave(silent){clearInterval(VT.tick);clearInterval(VT.stat);await VT.measure().catch(()=>{});const S=VT.S||{rtt:[],jit:[],kb:[]};
+    const rec={when:new Date().toISOString().slice(0,16).replace('T',' '),service:VT.prov==='livekit'?'A LiveKit':'B Daily',where:$('ct').value.trim(),network:$('net').value,provider:$('car').value.trim(),
+      minutes:Math.round((Date.now()-VT.t0)/6e4*10)/10,people:VT.people.size,delay_ms:med(S.rtt)==null?'':Math.round(med(S.rtt)),delay_p90_ms:p90(S.rtt)==null?'':Math.round(p90(S.rtt)),jitter_ms:med(S.jit)==null?'':Math.round(med(S.jit)),
+      lost_pct:S.lost+S.recv>0?(100*S.lost/(S.lost+S.recv)).toFixed(1):'',route:S.relay==null?'':(S.relay?'relayed':'direct'),region:S.region||'',rating:VT.rating||'',notes:$('notes').value.trim()};
+    try{if(VT.room){const r=VT.room;VT.room=null;await r.disconnect();}if(VT.call){const c=VT.call;VT.call=null;await c.leave();await c.destroy();}}catch(e){}
+    document.querySelectorAll('[data-vt]').forEach(el=>el.remove());VT.setMic=null;VT.micOn=false;$('openmic').checked=false;$('ptt').disabled=false;$('ptt').classList.remove('live');$('ptt').textContent='Hold to talk';
+    if(VT.t0){const all=store.get();all.push(rec);store.set(all);}VT.t0=0;$('notes').value='';$('call').hidden=true;$('setup').hidden=false;VT.pick(VT.prov==='livekit'?'daily':'livekit');VT.table();},
+
+  cols:['when','service','where','network','provider','minutes','people','delay_ms','delay_p90_ms','jitter_ms','lost_pct','route','region','rating','notes'],
+  table(){const all=store.get();$('results').hidden=!all.length;if(!all.length)return;const show=['service','where','network','delay_ms','jitter_ms','lost_pct','rating'];
+    $('tbl').innerHTML='<tr>'+['Service','Where','Network','Delay','Jitter','Lost %','Rating'].map(h=>`<th>${h}</th>`).join('')+'</tr>'+all.map(r=>'<tr>'+show.map(k=>`<td>${esc(r[k])}</td>`).join('')+'</tr>').join('');},
+  text(){return store.get().map(r=>VT.cols.map(k=>k+': '+(r[k]===''?'–':r[k])).join(' | ')).join('\n');},
+  async copy(){const t='BePhos voice test results\n'+VT.text();try{await navigator.clipboard.writeText(t);alertBox('Copied. Paste it into a message to the BePhos team.');}catch(e){prompt('Copy this:',t);}},
+  csv(){const all=store.get(),q=v=>'"'+String(v).replace(/"/g,'""')+'"';const csv=[VT.cols.join(',')].concat(all.map(r=>VT.cols.map(k=>q(r[k])).join(','))).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='bephos-voice-test.csv';a.click();},
+  clear(){store.set([]);VT.table();}
+};
+function alertBox(m){const e=$('err');e.style.color='var(--ok)';e.textContent=m;setTimeout(()=>{e.textContent='';e.style.color='';},4000);}
+/* hold to talk: mouse, touch and keyboard (space) */
+const P=$('ptt');P.addEventListener('pointerdown',e=>{e.preventDefault();if(!P.disabled)VT.mic(true);});['pointerup','pointerleave','pointercancel'].forEach(ev=>P.addEventListener(ev,()=>{if(!$('openmic').checked)VT.mic(false);}));
+P.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat){e.preventDefault();VT.mic(true);}});P.addEventListener('keyup',e=>{if(e.code==='Space'&&!$('openmic').checked)VT.mic(false);});
+try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';if(tz)$('ct').placeholder=tz.split('/').pop().replace(/_/g,' ');}catch(e){}
+VT.table();
+</script>
+</body></html>

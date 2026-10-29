@@ -1,11 +1,20 @@
-// Merros service worker — app shell caching for fast loads and basic offline access.
-const CACHE_NAME = 'merros-cache-v1';
+// BePhos service worker — app shell caching for fast loads and basic offline access.
+// v2 (Oct 2026): v1 listed /icon.svg and /manifest.json, which didn't exist, so cache.addAll()
+// failed and the worker never installed. Every file below now exists in the repo.
+const CACHE_NAME = 'bephos-cache-v6';
 const CORE_ASSETS = [
   '/',
   '/index.html',
-  '/merros-client.js',
+  '/bephos-client.js',
+  '/bephos-marks.js',
+  '/marks-emblems.js',
+  '/marks-colour.js',
   '/manifest.json',
-  '/icon.svg'
+  '/icon-192.png',
+  '/bephos-mark.png',
+  '/vendor/supabase-js-2.117.3.js',
+  '/fonts/figtree-latin.woff2',
+  '/fonts/bricolage-latin.woff2'
 ];
 
 self.addEventListener('install', (event) => {
@@ -60,6 +69,6 @@ self.addEventListener('fetch', (event) => {
       })
     );
   }
-  // Cross-origin requests (Supabase API, Google Fonts, jsdelivr CDN) are left
+  // Cross-origin requests (the Supabase API) are left
   // to the network as-is — they're either dynamic data or already CDN-cached.
 });
